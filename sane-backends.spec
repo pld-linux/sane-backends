@@ -37,6 +37,7 @@ BuildRequires:	libusb-devel
 %{!?_without_dist_kernel:BuildRequires: kernel-headers}
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
+BuildRequires:	gettext-devel
 PreReq:		rc-inetd
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
