@@ -9,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.7
-Release:	2.9
+Release:	2.10
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
@@ -136,13 +136,42 @@ Summary:	Plustek scanner driver
 Summary(pl):	Sterownik do skanerów Plustek
 Group:		Applications/System
 Requires:	%{name} = %{version}
-%{!?_without_dist_kernel:%requires_releq_kernel_up}
 PreReq:		/sbin/depmod
 
 %description plustek
-This package contains kernel module which drives Plustek scanners.
+This package contains driver for Plustek scanners.
 
 %description plustek -l pl
+Pakiet zawiera sterownik dla skanerów Plustek.
+
+%package -n kernel-char-plustek
+Summary:	Plustek scanner kernel module
+Summary(pl):	Modu³ j±dra dla skanerów Plustek
+Group:		Applications/System
+Requires:	%{name} = %{version}
+Requires:	%{name}-plustek
+%{!?_without_dist_kernel:%requires_releq_kernel_up}
+PreReq:		/sbin/depmod
+
+%description -n kernel-char-plustek
+This package contains kernel module which drives Plustek scanners.
+
+%description -n kernel-char-plustek -l pl
+Pakiet zawiera modu³ steruj±cy skanerami Plustek.
+
+%package -n kernel-smp-char-plustek
+Summary:	Plustek scanner kernel module (SMP)
+Summary(pl):	Modu³ j±dra dla skanerów Plustek (SMP)
+Group:		Applications/System
+Requires:	%{name} = %{version}
+Requires:	%{name}-plustek
+%{!?_without_dist_kernel:%requires_releq_kernel_up}
+PreReq:		/sbin/depmod
+
+%description -n kernel-smp-char-plustek
+This package contains kernel module which drives Plustek scanners.
+
+%description -n kernel-smp-char-plustek -l pl
 Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 
 %prep
@@ -242,10 +271,16 @@ if [ "$1" = "0" ]; then
 fi
 /sbin/ldconfig
 
-%post plustek
+%post -n kernel-char-plustek
 /sbin/depmod -a
 
-%postun plustek
+%post -n kernel-smp-char-plustek
+/sbin/depmod -a
+
+%postun -n kernel-char-plustek
+/sbin/depmod -a
+
+%postun -n kernel-smp-char-plustek
 /sbin/depmod -a
 
 %files
@@ -286,5 +321,12 @@ fi
 %defattr(644,root,root,755)
 %doc backend/plustek_driver/README backend/plustek_driver/TODO
 %doc backend/plustek_driver/FAQ backend/plustek_driver/ChangeLog
-/lib/modules/*/misc/*
 %{_mandir}/man5/sane-plustek*
+
+%files -n kernel-char-plustek
+%defattr(644,root,root,755)
+/lib/modules/%{_kernel_ver}/misc/*
+
+%files -n kernel-smp-char-plustek
+%defattr(644,root,root,755)
+/lib/modules/%{_kernel_ver}smp/misc/*
