@@ -150,11 +150,23 @@ gzip -9nf AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ "$1" = 1 ]; then
-	getgid saned >/dev/null 2>&1 || %{_sbindir}/groupadd -g 90 -f saned
-	id -u saned >/dev/null 2>&1 || %{_sbindir}/useradd -g saned -u 90 \
-		-c "SANE remote scanning daemon" saned
+if [ -n "`getgid saned`" ]; then
+        if [ "`getgid saned`" != "90" ]; then
+                echo "Warning: group saned haven't gid=90. Correct this before installing sane" 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/groupadd -g 90 -r -f saned
 fi
+if [ -n "`id -u saned 2>/dev/null`" ]; then
+        if [ "`id -u saned`" != "90" ]; then
+                echo "Warning: user saned haven't uid=90. Correct this before installing sane" 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/useradd -u 90 -r -d /no/home -s /bin/false -c "SANE remote scanning daemon" -g saned saned 1>&2
+fi
+
 
 %post
 /sbin/ldconfig
