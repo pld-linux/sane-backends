@@ -53,7 +53,7 @@ Inne:    Connectix, QuickCams
 
 oraz inne urz±dzenia dostêpne przez sieæ.
 
-%package devel
+%package -n sane-devel
 Summary:	Development part of SANE 
 Summary(pl):	Czê¶æ SANE przeznaczona dla programistów
 Group:		Development/Libraries
@@ -62,25 +62,25 @@ Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
 
-%description devel
+%description -n sane-devel
 Development part of SANE.
 
-%description devel -l pl
+%description -l pl -n sane-devel
 Czê¶æ SANE dla programistów.
 
-%package static
+%package -n sane-static
 Summary:	Static SANE libraries
 Summary(pl):	statyczne biblioteki SANE
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
-Requires:	%{name} = %{version}
+Requires:	sane-devel = %{version}
 
-%description static
+%description -n sane-static
 Static SANE libraries.
 
-%description static -l pl
+%description -l pl -n sane-static
 Biblioteki statyczne SANE.
 
 %package -n sane-mustek600IIN
@@ -179,7 +179,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*
 %{_mandir}/man5/*
 
-%files devel
+%files -n sane-devel
 %defattr(644,root,root,755)
 %{_includedir}/sane
 %attr(755,root,root) %{_bindir}/sane-config
@@ -188,7 +188,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/sane/lib*.la
 %attr(755,root,root) %{_libdir}/sane/lib*.so
 
-%files static
+%files -n sane-static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
 %{_libdir}/sane/lib*.a
