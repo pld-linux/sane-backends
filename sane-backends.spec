@@ -138,20 +138,30 @@ gzip -9nf AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-GROUP=saned; GID=90; %groupadd
-USER=saned; UID=90; COMMENT="SANE remote scanning daemon"; SHELL=/bin/bash
-%useradd
+if [ "$1" = 1 ]; then
+	getgid saned >/dev/null 2>&1 || %{_sbindir}/groupadd -g 90 -f saned
+	id -u saned >/dev/null 2>&1 || %{_sbindir}/useradd -g saned -u 90 \
+		-c "SANE remote scanning daemon" saned
+fi
 
 %post
 /sbin/ldconfig
-%rc_inetd_post
+if [ -f /var/lock/subsys/rc-inetd ]; then
+        /etc/rc.d/init.d/rc-inetd reload
+else
+        echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet sever" 1>&2
+fi
 
 %preun
-USER=saned; %userdel
-GROUP=saned; %groupdel
+if [ "$1" = "0" ]; then
+        %{_sbindir}/userdel saned 2>/dev/null
+        %{_sbindir}/groupdel saned 2>/dev/null
+fi
 
 %postun
-%rc_inetd_postun
+if [ -f /var/lock/subsys/rc-inetd ]; then
+        /etc/rc.d/init.d/rc-inetd reload
+fi
 /sbin/ldconfig
  
 %files
