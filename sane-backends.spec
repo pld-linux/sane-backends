@@ -18,21 +18,18 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.12
-Release:	0.pre1.1
+Release:	1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
-#Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
-Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}-pre1.tar.gz
-# Source0-md5: 2dada41d86de9500b9be648bf1bbfe44
+# Source0-md5:	28d4d7469cd688dac94c7a415a81a6bb
+Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
-Patch4:		%{name}-DESTDIR.patch
-#Patch4:		%{name}-acinclude.patch
-Patch5:		%{name}-pmake.patch
+Patch4:		%{name}-pmake.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -231,17 +228,16 @@ SANE backend for Microtek scanners with M011 USB chip.
 Sterownik SANE dla skanerów Microteka z uk³adem USB M011.
 
 %prep
-%setup -q -n %{name}-%{version}-pre1
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 %build
 # kill libtool.m4 copy
-head -456 acinclude.m4 > acinclude.m4.tmp
+head -459 acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
 rm -f missing
 %{__libtoolize}

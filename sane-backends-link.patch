@@ -18,9 +18,9 @@ diff -Nur sane-backends-1.0.10.orig/acinclude.m4 sane-backends-1.0.10/acinclude.
      ],)
    ],)
 +  AC_SUBST(IEEE1284_LIBS)
- ])
- 
- 
+   if test "$sane_cv_use_libieee1284" = "yes" ; then
+     AC_DEFINE(HAVE_LIBIEEE1284,1,[Define to 1 if you have the `ieee1284' library (-lcam).])
+   fi
 @@ -220,6 +222,7 @@
  # GPHOTO2 backends.
  AC_DEFUN([SANE_CHECK_JPEG],
