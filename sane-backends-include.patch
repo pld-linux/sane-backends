@@ -1,0 +1,10 @@
+--- sane-backends-1.0.10/backend/fujitsu.c~	Mon Sep  8 00:35:34 2003
++++ sane-backends-1.0.10/backend/fujitsu.c	Mon Sep  8 00:35:34 2003
+@@ -116,6 +116,7 @@
+ #include <time.h>
+ 
+ #include <sys/types.h>
++#include <sys/stat.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
+ #ifdef HAVE_LIBC_H
