@@ -3,14 +3,7 @@
 %bcond_without	gphoto	# no gphoto backend (which requires libgphoto2)
 %bcond_without	lpt	# no parallel port backends (which require libieee1284)
 %bcond_without	usb	# without USB scanners support (which requires libusb)
-%bcond_with 	rts88xx # rts88xx scanner support (hp4400/4470)
-#
-# TODO:
-# - separate usb drivers (which depend on libusb)?
-#	usb-only: artec_eplus48u,canon630u,gt68xx,mustek_usb,umax1220u
-#	usb/scsi: coolscan2,hp,snapscan,umax
-#	usb/scsi/pp: epson
-#   what about sane-find-scanner tool? (linked with libusb)
+%bcond_without 	rts88xx # rts88xx scanner support (hp4400/4470)
 #
 %ifarch sparc sparc64 sparcv9
 %undefine	with_usb
@@ -25,22 +18,25 @@ Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
 Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.14
-Release:	2
+Version:	1.0.15
+Release:	1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	7ae5bf91aea34ef7956df6f53cf073bd
+# Source0-md5:	3b804f35cdfbc5ad2d201ffe078bbac9
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
-Source3:	http://home.foni.net/~johanneshub/sane_hp_rts88xx-0.17k.tar.gz
-# Source3-md5:	e47e94a665fc9baa4fddb7819dd646e2
+# http://hp44x0backend.sourceforge.net/
+Source3:	http://dl.sourceforge.net/hp44x0backend/sane_hp_rts88xx-0.17n.tar.gz
+# Source3-md5:	01cae741a347fc73eeaf32aeb731d9af
+#Source3:	http://home.foni.net/~johanneshub/sane_hp_rts88xx-0.17k.tar.gz
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
 Patch4:		%{name}-pmake.patch
 Patch5:		%{name}-locale-names.patch
+Patch6:		%{name}-hp_rts88xx-fixes.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -50,6 +46,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 %{?with_usb:BuildRequires:	libusb-devel}
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.159
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
@@ -220,7 +217,7 @@ Starowniki SANE dla skanerów pod³±czanych do portu równoleg³ego:
 %prep
 %setup -q -a3
 # kill libtool.m4 copy
-head -n506 acinclude.m4 > acinclude.m4.tmp
+head -n 522 acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
 %patch0 -p1
 %patch1 -p1
@@ -229,9 +226,10 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch4 -p1
 %patch5 -p1
 %if %{with rts88xx}
-cd sane_hp_rts88xx-0.17k/sane_hp_rts88xx/
-sh -x patch-sane.sh `pwd`/../../
-cd ../../
+%patch6 -p1
+cd sane_hp_rts88xx/sane_hp_rts88xx
+sh -x patch-sane.sh `pwd`/../..
+cd ../..
 %endif
 mv -f po/sane-backends.{no,nb}.po
 
@@ -387,7 +385,7 @@ fi
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rc-inetd/saned
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/saned.conf
 %attr(755,root,root) %{_sbindir}/saned
-%{_mandir}/man1/saned.1*
+%{_mandir}/man8/saned.8*
 
 %ifarch %{ix86}
 %files -n sane-mustek600IIN
