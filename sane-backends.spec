@@ -30,6 +30,7 @@ Patch4:		%{name}-acinclude.patch
 Patch5:		%{name}-plustek-Makefile.patch
 Patch6:		%{name}-alpha.patch
 Patch7:		%{name}-ac.patch
+Patch8:		%{name}-include.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -270,6 +271,7 @@ Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 #%%patch5 -p1
 #%%patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %build
 rm -f missing
