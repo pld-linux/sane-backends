@@ -390,7 +390,7 @@ fi
 %{_libdir}/lib*.a
 %{_libdir}/sane/lib*.a
 
-%ifnarch ppc
+%ifarch %{ix86}
 %files canon_pp
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon_pp.conf
