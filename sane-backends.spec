@@ -1,7 +1,7 @@
 # conditional build
 # _without_dist_kernel		without kernel from distribution
 
-%define		_plustek_ver	0_42_5
+%define		_plustek_ver	0_43_7
 
 Summary:	SANE - Easy local and networked scanner access
 Summary(es):	SANE - acceso a scanners en red y locales
@@ -9,13 +9,13 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.8
-%define	rel	9
+%define	rel	10
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
-Source2:	http://home.t-online.de/home/g-jaeger/current/plustek-sane-%{_plustek_ver}.tar.gz
+Source2:	http://www.gjaeger.de/scanner/current/plustek-sane-%{_plustek_ver}.tar.gz
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
