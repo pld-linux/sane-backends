@@ -191,6 +191,8 @@ Obsoletes:	sane-backends-canon_pp
 Obsoletes:	sane-backends-hpsj5s
 # in case sb used parport scanner
 Obsoletes:	sane-backends-plustek
+Obsoletes:	kernel-char-plustek
+Obsoletes:	kernel-smp-char-plustek
 
 %description pp
 SANE backends for parallel port scanners. It includes the following
