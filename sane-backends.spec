@@ -201,8 +201,8 @@ cd ..
 rm -f missing
 libtoolize --copy --force
 aclocal
-automake -a -c -f --foreign ||
-autoconf
+%{__automake} ||
+%{__autoconf}
 %configure
 %{__make}
 
