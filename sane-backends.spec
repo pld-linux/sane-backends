@@ -17,6 +17,7 @@ Patch2:		%{name}-includes.patch
 Patch3:		%{name}-mustek-gamma.patch
 Patch4:		%{name}-mustek-path.patch
 URL:		http://www.mostang.com/sane/
+BuildRequires:	autoconf
 BuildRequires:	libjpeg-devel
 Prereq:		/sbin/ldconfig
 Prereq:		sh-utils
@@ -112,7 +113,6 @@ Ten program wymaga uprawnieñ roota albo dostêpu do /dev/port.
 %patch4 -p1
 
 %build
-; export LDFLAGS
 autoconf
 %configure
 %{__make}
