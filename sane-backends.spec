@@ -1,7 +1,4 @@
-# conditional build
-# _without_dist_kernel		without kernel from distribution
 # TODO: 
-# - write kernel-plustek.spec (with kernel{,-smp}-char-plustek packages)
 # - separate usb drivers (which depend on libusb)?
 #	usb-only: artec_eplus48u,canon630u,gt68xx,mustek_usb,umax1220u
 #	usb/scsi: coolscan2,hp,snapscan,umax
@@ -25,24 +22,21 @@ Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
 Patch4:		%{name}-acinclude.patch
-Patch5:		%{name}-plustek-Makefile.patch
-Patch6:		%{name}-alpha.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	gettext-devel
 BuildRequires:	libgphoto2-devel >= 2.0.1
-BuildRequires:	libjpeg-devel
-BuildRequires:	libtool
 %ifarch %{ix86}
 BuildRequires:	libieee1284-devel
 %endif
+BuildRequires:	libjpeg-devel
+BuildRequires:	libtool
 %ifnarch sparc sparc64 sparcv9
 BuildRequires:	libusb-devel
 %endif
-%{!?_without_dist_kernel:BuildRequires: kernel-headers}
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
-BuildRequires:	gettext-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	sane
 
@@ -225,47 +219,13 @@ SANE backend for Microtek scanners with M011 USB chip.
 %description sm3600 -l pl
 Sterownik SANE dla skanerów Microteka z uk³adem USB M011.
 
-%package -n kernel-char-plustek
-Summary:	Plustek scanner kernel module
-Summary(pl):	Modu³ j±dra dla skanerów Plustek
-Release:	%{rel}@%{_kernel_ver_str}
-Group:		Applications/System
-%{!?_without_dist_kernel:%requires_releq_kernel_up}
-Requires(post,postun):	/sbin/depmod
-Requires:	%{name} = %{version}
-Requires:	%{name}-plustek = %{version}
-
-%description -n kernel-char-plustek
-This package contains kernel module which drives Plustek scanners.
-
-%description -n kernel-char-plustek -l pl
-Pakiet zawiera modu³ steruj±cy skanerami Plustek.
-
-%package -n kernel-smp-char-plustek
-Summary:	Plustek scanner kernel module (SMP)
-Summary(pl):	Modu³ j±dra dla skanerów Plustek (SMP)
-Release:	%{rel}@%{_kernel_ver_str}
-Group:		Applications/System
-%{!?_without_dist_kernel:%requires_releq_kernel_smp}
-Requires(post,postun):	/sbin/depmod
-Requires:	%{name} = %{version}
-Requires:	%{name}-plustek = %{version}
-
-%description -n kernel-smp-char-plustek
-This package contains kernel module which drives Plustek scanners.
-
-%description -n kernel-smp-char-plustek -l pl
-Pakiet zawiera modu³ steruj±cy skanerami Plustek.
-
 %prep
 %setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1 -b .wiget
-#%%patch5 -p1
-#%%patch6 -p1
+%patch4 -p1
 
 %build
 rm -f missing
