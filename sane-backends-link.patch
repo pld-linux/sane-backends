@@ -62,10 +62,9 @@ diff -Nur sane-backends-1.0.10.orig/acinclude.m4 sane-backends-1.0.10/acinclude.
  ])
  
  #
-diff -Nur sane-backends-1.0.12-pre1.orig/backend/Makefile.in sane-backends-1.0.12-pre1/backend/Makefile.in
---- sane-backends-1.0.12-pre1.orig/backend/Makefile.in	Mon Jan 13 22:38:09 2003
-+++ sane-backends-1.0.12-pre1/backend/Makefile.in	Sun Feb  2 00:38:28 2003
-@@ -148,6 +148,116 @@
+--- sane-backends-1.0.13/backend/Makefile.in.orig	Mon Nov 10 19:15:47 2003
++++ sane-backends-1.0.13/backend/Makefile.in	Fri Nov 28 13:29:02 2003
+@@ -153,6 +153,131 @@
  
  .PHONY: all clean depend dist distclean install uninstall
  
@@ -149,6 +148,16 @@ diff -Nur sane-backends-1.0.12-pre1.orig/backend/Makefile.in sane-backends-1.0.1
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
++libsane-mustek_pp.la: mustek_pp.lo mustek_pp-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @IEEE1284_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-mustek_pp_ccd.la: mustek_pp_ccd.lo mustek_pp_ccd-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @IEEE1284_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-mustek_usb.la: mustek_usb.lo mustek_usb-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
@@ -156,6 +165,11 @@ diff -Nur sane-backends-1.0.12-pre1.orig/backend/Makefile.in sane-backends-1.0.1
 +
 +libsane-plustek.la: plustek.lo plustek-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-plustek_pp.la: plustek_pp.lo plustek_pp-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @IEEE1284_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
@@ -181,13 +195,13 @@ diff -Nur sane-backends-1.0.12-pre1.orig/backend/Makefile.in sane-backends-1.0.1
 +
  libsane-%.la: %.lo %-s.lo $(EXTRA) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) \
- 	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
-@@ -233,7 +323,7 @@
+ 	$(LDFLAGS) $(BACKENDLIBS) $^ @LIBTOOL_LINK_EXTRA@ -rpath $(libsanedir) \
+@@ -244,7 +354,7 @@
  
  libsane.la: dll.lo dll-s.lo $(EXTRA) $(addsuffix .lo,$(DLL_PRELOAD)) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -o $@ $(LDFLAGS) $(BACKENDLIBS)  $^ \
--		$(addsuffix .lo,$(DLL_PRELOAD_EXTRAS)) \
-+		$(addsuffix .lo,$(DLL_PRELOAD_EXTRAS)) @JPEG_LIBS@ \
+-		$(addsuffix .lo,$(DLL_PRELOAD_EXTRAS)) @LIBTOOL_LINK_EXTRA@ \
++		$(addsuffix .lo,$(DLL_PRELOAD_EXTRAS)) @LIBTOOL_LINK_EXTRA@ @LIBJPEG@ \
  		-rpath $(libdir) -version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
  
  # additional dependencies
@@ -210,13 +224,12 @@ diff -Nur sane-backends-1.0.12-pre1.orig/configure.in sane-backends-1.0.12-pre1/
  fi
  
  dnl disable Linux SCSI generic version 3 to avoid 32/64 bit problems
-diff -Nur sane-backends-1.0.10.orig/tools/Makefile.in sane-backends-1.0.10/tools/Makefile.in
---- sane-backends-1.0.10.orig/tools/Makefile.in	Sun Aug 25 15:40:35 2002
-+++ sane-backends-1.0.10/tools/Makefile.in	Sun Feb  2 00:31:11 2003
+--- sane-backends-1.0.13/tools/Makefile.in.orig	Fri Jul 18 14:11:01 2003
++++ sane-backends-1.0.13/tools/Makefile.in	Fri Nov 28 13:27:02 2003
 @@ -92,7 +92,7 @@
- sane-find-scanner: sane-find-scanner.o ../backend/sane_strstatus.lo \
+ sane-find-scanner: sane-find-scanner.o check-usb-chip.o ../backend/sane_strstatus.lo \
  	../sanei/sanei_scsi.lo ../sanei/sanei_usb.lo ../sanei/sanei_init_debug.lo
- 	@$(LIBTOOL) $(MLINK) $(LINK) sane-find-scanner.o \
+ 	@$(LIBTOOL) $(MLINK) $(LINK) sane-find-scanner.o check-usb-chip.o \
 -	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS)
 +	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS) @USB_LIBS@
  
