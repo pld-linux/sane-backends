@@ -54,10 +54,8 @@ Digital cameras: Kodak, Polaroid, Connectix QuickCam
 
 and other SANE devices via network.
 
-%description -l pt_BR
-O SANE (Scanner Access Now Easy) é uma interface simples para scanners
-e outros dispositivos de captura de imagens como câmeras fotográficas
-digitais e de vídeo conectados diretamente ou através da rede.
+%description -l es
+SANE - acceso a scanners en red y locales.
 
 %description -l pl
 SANE (Scanner Access Now Easy) jest rozs±dnym i prostym insterfejsem
@@ -73,8 +71,10 @@ Aparaty cyfrowe: Kodak, Polaroid, Connectix QuickCam
 
 oraz inne urz±dzenia dostêpne przez sieæ.
 
-%description -l es
-SANE - acceso a scanners en red y locales.
+%description -l pt_BR
+O SANE (Scanner Access Now Easy) é uma interface simples para scanners
+e outros dispositivos de captura de imagens como câmeras fotográficas
+digitais e de vídeo conectados diretamente ou através da rede.
 
 %package devel
 Summary:	Development part of SANE
@@ -128,7 +128,7 @@ and can't be turned off by (x)scanimage in normal way.
 Note: this program needs root privileges or access to /dev/port.
 
 %description -n sane-mustek600IIN -l pl
-Narzêdzie wymuszaj±ce wy³±czyczenie skanera Mustek 600 II N. Czasem
+Narzêdzie wymuszaj±ce wy³±czenie skanera Mustek 600 II N. Czasem
 skaner zawiesza siê i nie jest mo¿liwe wy³±czenie go zwyk³ym sposobem
 przez program (x)scanimage.
 
