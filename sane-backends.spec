@@ -10,8 +10,16 @@ Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
 Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-no_libs.patch
+Patch2:		%{name}-includes.patch
+Patch3:		%{name}-mustek-gamma.patch
+Patch4:		%{name}-mustek-path.patch
 URL:		http://www.mostang.com/sane/
+BuildConflicts:	sane
+BuildRequires:	libjpeg-devel
 Prereq:		/sbin/ldconfig
+Prereq:		sh-utils
+Prereq:		shadow
+Prereq:		grep
 Requires:	rc-inetd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -65,18 +73,47 @@ Requires:	%{name} = %{version}
 Static SANE libraries.
 
 %description static -l pl
-Biblioteki statyczne SANE
+Biblioteki statyczne SANE.
+
+%package -n sane-mustek600IIN
+Summary:	Mustek 600 II N scanner tool
+Summary(pl):	Narzêdzie do skanera Mustek 600 II N
+Group:		Applications/System
+Group(de):	Applikationen/System
+Group(pl):	Aplikacje/System
+Requires:	%{name}
+
+%description -n sane-mustek600IIN
+Tool which turns Mustek 600 II N scanner off. Sometimes scanner hangs and
+can't be turned off by (x)scanimage in normal way.
+
+Note: this program needs root privileges or access to /dev/port.
+
+%description -n sane-mustek600IIN -l pl
+Narzêdzie wymuszaj±ce wy³±czyczenie skanera Mustek 600 II N. Czasem skaner
+zawiesza siê i nie jest mo¿liwe wy³±czenie go zwyk³ym sposobem przez
+program (x)scanimage.
+
+Ten program wymaga uprawnieñ roota albo dostêpu do /dev/port.
 
 %prep
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
 LDFLAGS="-s" ; export LDFLAGS
 autoconf
 %configure
 %{__make}
+
+(cd tools
+%{__cc} -DHAVE_SYS_IO_H $CFLAGS $LDFLAGS -I../include -o mustek600iin-off \
+	mustek600iin-off.c
+)
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -85,6 +122,8 @@ install -d $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 
+install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
+
 gzip -9nf AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog
 
 %pre
@@ -92,6 +131,8 @@ if [ "$1" = 1 ]; then
     getgid saned >/dev/null 2>&1 || %{_sbindir}/groupadd -g 90 -f saned
     id -u saned >/dev/null 2>&1 || %{_sbindir}/useradd -g saned -M -u 90 \
       -c "SANE remote scanning daemon" saned
+    grep -q '^sane' /etc/services || echo -e \
+      'sane\t\t6566/tcp\t\t\t#network scanner daemon' >>/etc/services
 fi
 
 %post
@@ -144,3 +185,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
 %{_libdir}/sane/lib*.a
+
+%files -n sane-mustek600IIN
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/mustek600iin-off
