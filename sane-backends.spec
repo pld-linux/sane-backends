@@ -4,7 +4,7 @@ Summary(pl):	SANE - Prosta obsЁuga skanerСw lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.6
-Release:	6
+Release:	7
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Group(de):	Libraries
@@ -88,7 +88,6 @@ Group(pt_BR):	Desenvolvimento/Bibliotecas
 Group(ru):	Разработка/Библиотеки
 Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name} = %{version}
-Requires:	libusb-devel
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
 
