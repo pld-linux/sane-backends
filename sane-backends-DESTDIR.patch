@@ -6,22 +6,9 @@ diff -Nur sane-backends-1.0.5.orig/Makefile.in sane-backends-1.0.5/Makefile.in
  PACKAGE = @PACKAGE@
  VERSION = @VERSION@
 +DESTDIR =
+ distdir = $(PACKAGE)-$(VERSION)
  
  prefix = @prefix@
- exec_prefix = @exec_prefix@
-@@ -48,10 +49,10 @@
- lsm: $(PACKAGE)-$(VERSION).lsm
- 
- install: install-recursive
--	$(MKDIR) $(includedir)/sane
-+	$(MKDIR) $(DESTDIR)$(includedir)/sane
- 	@list="$(INSTALLED_INCLUDES)"; for file in $$list; do \
- 	  echo installing $${file} in $(includedir)/sane...; \
--	  $(INSTALL_DATA) $${file} $(includedir)/sane || exit 1; \
-+	  $(INSTALL_DATA) $${file} $(DESTDIR)$(includedir)/sane || exit 1; \
- 	done
- 
- uninstall: uninstall-recursive
 diff -Nur sane-backends-1.0.5.orig/backend/Makefile.in sane-backends-1.0.5/backend/Makefile.in
 --- sane-backends-1.0.5.orig/backend/Makefile.in	Sat Jun  9 21:54:30 2001
 +++ sane-backends-1.0.5/backend/Makefile.in	Mon Jul  2 14:03:24 2001
@@ -31,7 +18,7 @@ diff -Nur sane-backends-1.0.5.orig/backend/Makefile.in sane-backends-1.0.5/backe
  
  VPATH = @srcdir@
  srcdir = @srcdir@
-@@ -91,16 +92,16 @@
+@@ -147,16 +148,16 @@
  all:	$(LIBS) libsane.la
  
  install:
@@ -52,7 +39,7 @@ diff -Nur sane-backends-1.0.5.orig/backend/Makefile.in sane-backends-1.0.5/backe
  	  file=libsane-$${be}.$$dllend.$(V_MAJOR); \
  	  lib=`grep dlname= libsane-$${be}.la | cut -f2 -d"'"`; \
  	  if test ! -f $${file} -a -n "$${lib}"; then \
-@@ -109,22 +110,19 @@
+@@ -165,22 +166,19 @@
  	done
  	@# Assume the dll name without any versions is last
  	@dllend=`../tools/libtool-get-dll-ext libsane-dll.la`; \
@@ -92,7 +79,7 @@ diff -Nur sane-backends-1.0.5.orig/doc/Makefile.in sane-backends-1.0.5/doc/Makef
  
  VPATH = @srcdir@
  srcdir = @srcdir@
-@@ -67,37 +68,37 @@
+@@ -95,37 +96,37 @@
  	@echo Generating manpage $@...
  
  install: all
@@ -139,7 +126,7 @@ diff -Nur sane-backends-1.0.5.orig/doc/Makefile.in sane-backends-1.0.5/doc/Makef
  	  done
  
  uninstall:
-@@ -148,22 +149,22 @@
+@@ -176,22 +177,22 @@
  
  install-mostang: html sane.ps sane.ps.gz
  	@echo Installing html manpages in $(WWW_PATH)/man...
@@ -179,7 +166,7 @@ diff -Nur sane-backends-1.0.5.orig/frontend/Makefile.in sane-backends-1.0.5/fron
  
  VPATH = @srcdir@
  srcdir = @srcdir@
-@@ -61,14 +62,14 @@
+@@ -70,14 +71,14 @@
  all: $(PROGRAMS)
  
  install: $(PROGRAMS)
@@ -242,3 +229,20 @@ diff -Nur sane-backends-1.0.5.orig/tools/Makefile.in sane-backends-1.0.5/tools/M
  
  uninstall: 
  	rm -f $(bindir)/sane-config $(bindir)/sane-find-scanner
+diff -urN sane-backends-1.0.7.orig/include/Makefile.in sane-backends-1.0.7/include/Makefile.in
+--- sane-backends-1.0.7.orig/include/Makefile.in	Fri Jan 11 16:51:15 2002
++++ sane-backends-1.0.7/include/Makefile.in	Tue Mar 12 20:58:45 2002
+@@ -59,10 +59,10 @@
+ 	rm -f *~ sane/*~ sane/config.h
+ 
+ install:
+-	$(MKDIR) $(includedir)/sane
++	$(MKDIR) $(DESTDIR)$(includedir)/sane
+ 	@list="$(INSTALLED_INCLUDES)"; for file in $$list; do \
+-	  echo installing $${file} in $(includedir)/sane...; \
+-	  $(INSTALL_DATA) $${file} $(includedir)/sane || exit 1; \
++	  echo installing $${file} in $(DESTDIR)$(includedir)/sane...; \
++	  $(INSTALL_DATA) $${file} $(DESTDIR)$(includedir)/sane || exit 1; \
+ 	done
+ 
+ uninstall:
