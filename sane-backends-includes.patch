@@ -1,0 +1,10 @@
+--- sane-1.0.3/sanei/linux_sg3_err.h.orig	Sun Aug 13 10:02:18 2000
++++ sane-1.0.3/sanei/linux_sg3_err.h	Mon Jan 22 20:54:20 2001
+@@ -1,7 +1,5 @@
+ #ifndef SG_ERR_H
+ #define SG_ERR_H
+-#include <linux/../scsi/scsi.h> /* cope with silly includes */
+-#include <linux/../scsi/sg.h>
+ 
+ /* Feel free to copy and modify this GPL-ed code into your applications. */
+ 
