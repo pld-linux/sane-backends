@@ -2,7 +2,7 @@ Summary:	SANE --- Easy local and networked scanner access
 Summary(pl):	SANE --- Prosta obs³uga skanerów lokalnych i sieciowych
 Name:		sane-backends
 Version:	1.0.4
-Release:	1
+Release:	2
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Group(de):	Libraries
@@ -53,7 +53,7 @@ Inne:    Connectix, QuickCams
 
 oraz inne urz±dzenia dostêpne przez sieæ.
 
-%package sane-devel
+%package devel
 Summary:	Development part of SANE 
 Summary(pl):	Czê¶æ SANE przeznaczona dla programistów
 Group:		Development/Libraries
@@ -61,6 +61,8 @@ Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
+Obsoletes:	sane-backends-sane-devel
+Obsoletes:	sane-backends-sane-static
 
 %description sane-devel
 Development part of SANE.
@@ -68,7 +70,7 @@ Development part of SANE.
 %description -l pl sane-devel
 Czê¶æ SANE dla programistów.
 
-%package sane-static
+%package static
 Summary:	Static SANE libraries
 Summary(pl):	statyczne biblioteki SANE
 Group:		Development/Libraries
@@ -76,6 +78,7 @@ Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
+Obsoletes:	sane-backends-sane-static
 
 %description sane-static
 Static SANE libraries.
@@ -89,7 +92,7 @@ Summary(pl):	Narzêdzie do skanera Mustek 600 II N
 Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
-Requires:	%{name}
+Requires:	%{name} = %{version}
 
 %description -n sane-mustek600IIN
 Tool which turns Mustek 600 II N scanner off. Sometimes scanner hangs
