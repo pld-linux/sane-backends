@@ -142,8 +142,6 @@ if [ "$1" = 1 ]; then
 	getgid saned >/dev/null 2>&1 || %{_sbindir}/groupadd -g 90 -f saned
 	id -u saned >/dev/null 2>&1 || %{_sbindir}/useradd -g saned -u 90 \
 		-c "SANE remote scanning daemon" saned
-	grep -q '^sane' /etc/services || echo -e \
-		'sane\t\t6566/tcp\t\t\t#network scanner daemon' >>/etc/services
 fi
 
 %post
