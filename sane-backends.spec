@@ -3,9 +3,12 @@ Summary(pl):	SANE --- Prosta obs³uga skanerów lokalnych i sieciowych
 Name:		sane-backends
 Version:	1.0.4
 Release:	1
-Group:		Libraries
-Group(pl):	Biblioteki
 License:	relaxed LGPL (libraries), and public domain (docs)
+Group:		Libraries
+Group(de):	Libraries
+Group(es):	Bibliotecas
+Group(fr):	Librairies
+Group(pl):	Biblioteki
 Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
 Patch0:		%{name}-DESTDIR.patch
@@ -53,6 +56,8 @@ oraz inne urz±dzenia dostêpne przez sieæ.
 Summary:	Development part of SANE 
 Summary(pl):	Czê¶æ SANE przeznaczona dla programistów
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
+Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
 
@@ -66,6 +71,8 @@ Czê¶æ SANE dla programistów.
 Summary:	Static SANE libraries
 Summary(pl):	statyczne biblioteki SANE
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
+Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
 
@@ -84,15 +91,15 @@ Group(pl):	Aplikacje/System
 Requires:	%{name}
 
 %description -n sane-mustek600IIN
-Tool which turns Mustek 600 II N scanner off. Sometimes scanner hangs and
-can't be turned off by (x)scanimage in normal way.
+Tool which turns Mustek 600 II N scanner off. Sometimes scanner hangs
+and can't be turned off by (x)scanimage in normal way.
 
 Note: this program needs root privileges or access to /dev/port.
 
 %description -n sane-mustek600IIN -l pl
-Narzêdzie wymuszaj±ce wy³±czyczenie skanera Mustek 600 II N. Czasem skaner
-zawiesza siê i nie jest mo¿liwe wy³±czenie go zwyk³ym sposobem przez
-program (x)scanimage.
+Narzêdzie wymuszaj±ce wy³±czyczenie skanera Mustek 600 II N. Czasem
+skaner zawiesza siê i nie jest mo¿liwe wy³±czenie go zwyk³ym sposobem
+przez program (x)scanimage.
 
 Ten program wymaga uprawnieñ roota albo dostêpu do /dev/port.
 
@@ -105,14 +112,14 @@ Ten program wymaga uprawnieñ roota albo dostêpu do /dev/port.
 %patch4 -p1
 
 %build
-LDFLAGS="-s" ; export LDFLAGS
+; export LDFLAGS
 autoconf
 %configure
 %{__make}
 
 (cd tools
-%{__cc} -DHAVE_SYS_IO_H $CFLAGS $LDFLAGS -I../include -o mustek600iin-off \
-	mustek600iin-off.c
+%{__cc} -DHAVE_SYS_IO_H %{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} \
+	-I../include -o mustek600iin-off mustek600iin-off.c
 )
 
 %install
@@ -120,19 +127,19 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 
 gzip -9nf AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog
 
 %pre
 if [ "$1" = 1 ]; then
-    getgid saned >/dev/null 2>&1 || %{_sbindir}/groupadd -g 90 -f saned
-    id -u saned >/dev/null 2>&1 || %{_sbindir}/useradd -g saned -M -u 90 \
-      -c "SANE remote scanning daemon" saned
-    grep -q '^sane' /etc/services || echo -e \
-      'sane\t\t6566/tcp\t\t\t#network scanner daemon' >>/etc/services
+	getgid saned >/dev/null 2>&1 || %{_sbindir}/groupadd -g 90 -f saned
+	id -u saned >/dev/null 2>&1 || %{_sbindir}/useradd -g saned -M -u 90 \
+		-c "SANE remote scanning daemon" saned
+	grep -q '^sane' /etc/services || echo -e \
+		'sane\t\t6566/tcp\t\t\t#network scanner daemon' >>/etc/services
 fi
 
 %post
