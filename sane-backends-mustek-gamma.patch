@@ -1,0 +1,83 @@
+--- sane-backends-1.0.4/backend/mustek.c.orig	Tue Dec 12 19:31:17 2000
++++ sane-backends-1.0.4/backend/mustek.c	Sat Feb 10 20:06:54 2001
+@@ -2302,6 +2302,7 @@
+ gamma_correction (Mustek_Scanner *s, SANE_Int color_code)
+ {
+   SANE_Int i, j, table = 0, len, bytes_per_channel, num_channels = 1;
++  SANE_Int inc_table = 1;
+   SANE_Byte gamma[4096+10], val, *cp;  /* for Paragon models 3 x 256 is the
+ 					 maximum. Pro needs 4096 bytes */
+ 
+@@ -2351,6 +2352,14 @@
+ 	    table = color_code;
+ 	}
+     }
++  else
++    if (s->hw->flags & MUSTEK_FLAG_N)
++      {
++	/* it seems 600 II N (firmware 1.x at least) wants 768 bytes in
++	 * gray mode too */
++	num_channels = 3;
++	inc_table = 0;
++      }
+ 
+   memset (gamma, 0, sizeof (gamma));
+   gamma[0] = MUSTEK_SCSI_LOOKUP_TABLE;
+@@ -2370,29 +2379,45 @@
+ 	  gamma[9] = 0x80; /* grayscale/lineart */
+ 	  DBG(5, "gamma_correction: sending brightness information\n");
+ 	}
++      gamma[7] = (len >> 8) & 0xff;	/* big endian! */
++      gamma[8] = (len >> 0) & 0xff;
+     }
+   else
+     {
+       bytes_per_channel = 256;
+       gamma[2] = 0x27;		/* indicate user-selected gamma table */
+-      gamma[9] = (color_code << 6);
++      if (s->hw->flags & MUSTEK_FLAG_N)
++	{
++	  // 600 II N always uses 6-byte cdb
++	  gamma[3] = (len >> 8) & 0xff;	/* big endian! */
++	  gamma[4] = (len >> 0) & 0xff;
++	  // no way to pass color_code (?)
++	}
++      else
++	{
++	  gamma[7] = (len >> 8) & 0xff;	/* big endian! */
++	  gamma[8] = (len >> 0) & 0xff;
++	  gamma[9] = (color_code << 6);
++	}
+       len = num_channels * bytes_per_channel;
+     }
+-  gamma[7] = (len >> 8) & 0xff;	/* big endian! */
+-  gamma[8] = (len >> 0) & 0xff;
+ 
+   if (len > 0)
+     {
+       cp = gamma + 10;
+-      for (j = 0; j < num_channels; ++j, ++table)
+-	for (i = 0; i < bytes_per_channel; ++i)
+-	  {
+-	    val = s->gamma_table[table][i * 256 / bytes_per_channel];
+-	       if (s->mode & MUSTEK_MODE_COLOR)
+-		 /* compose intensity gamma and color channel gamma: */
+-		 val = s->gamma_table[0][val];
+-	    *cp++ = val;
+-	  }
++      for (j = 0; j < num_channels; ++j)
++	{
++	  for (i = 0; i < bytes_per_channel; ++i)
++	    {
++	      val = s->gamma_table[table][i * 256 / bytes_per_channel];
++	      if (s->mode & MUSTEK_MODE_COLOR)
++		/* compose intensity gamma and color channel gamma: */
++		val = s->gamma_table[0][val];
++	      *cp++ = val;
++	    }
++	  if (inc_table)
++	    table++;
++	}
+     }
+   DBG(5, "gamma_correction: sending gamma table of %d bytes\n", len);
+   return dev_cmd (s, gamma, 10 + len, 0, 0);

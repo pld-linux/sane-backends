@@ -1,27 +1,35 @@
-# conditional build
-# _without_dist_kernel		without kernel from distribution
-
+#
+# Conditional Build:
+# _without_dist_kernel	- without kernel from distribution
+#
 %define		_plustek_ver	0_43_7
-
-Summary:	SANE - Easy local and networked scanner access
+Summary:	SANE - easy local and networked scanner access
 Summary(es):	SANE - acceso a scanners en red y locales
-Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
+Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
+Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.8
-%define	rel	10
+%define	rel	19
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	10785bf9a87e0f45ad445e34a8529a3d
 Source1:	%{name}.rc-inetd
 Source2:	http://www.gjaeger.de/scanner/current/plustek-sane-%{_plustek_ver}.tar.gz
+# Source2-md5:	faac1da4f3b55a0de9d71460d1787a29
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
 Patch4:		%{name}-acinclude.patch
 Patch5:		%{name}-plustek-Makefile.patch
+Patch6:		%{name}-alpha.patch
+Patch7:		%{name}-autoload.patch
+Patch8:		%{name}-rpath.patch
+Patch9:		%{name}-saned.patch
+Patch10:	%{name}-de.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -246,6 +254,7 @@ Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch10 -p1
 
 mkdir tmp-plustek_driver
 cd tmp-plustek_driver
@@ -256,11 +265,21 @@ cp -Rf * ..
 cd ..
 
 %patch5 -p1
+%patch6 -p1
+# from RH - Make sure to load SCSI modules if not already loaded (bug #59979):
+cd sanei
+%patch7 -p0
+cd ..
+%patch8 -p1
+%patch9 -p1
+
+# from RH (fix bug #62847):
+perl -pi -e 's,/dev/usbscanner0?,/dev/usb/scanner0,' backend/*.conf
 
 %build
 rm -f missing
 %{__libtoolize}
-aclocal
+%{__aclocal}
 %{__autoconf}
 %configure \
 	--enable-static \
@@ -291,7 +310,8 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 %ifnarch sparc sparc64 sparcv9
 install  backend/plustek_driver/pt_drv.o.smp	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/pt_drv.o
@@ -308,6 +328,9 @@ install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
 
 %pre saned
 if [ -n "`getgid saned`" ]; then
@@ -328,7 +351,6 @@ else
 fi
 
 %post saned
-/sbin/ldconfig
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 else
@@ -347,7 +369,6 @@ if [ "$1" = "0" ]; then
 		/etc/rc.d/init.d/rc-inetd reload
 	fi
 fi
-/sbin/ldconfig
 
 %post -n kernel-char-plustek
 /sbin/depmod -a

@@ -1,0 +1,28 @@
+diff -Nur sane-backends-1.0.6.orig/backend/Makefile.in sane-backends-1.0.6/backend/Makefile.in
+--- sane-backends-1.0.6.orig/backend/Makefile.in	Fri Dec  7 22:56:20 2001
++++ sane-backends-1.0.6/backend/Makefile.in	Fri Dec  7 23:02:24 2001
+@@ -71,6 +71,11 @@
+         strdup strndup strsep usleep vsyslog
+ LIBOBJS = $(addprefix ../lib/,$(addsuffix .lo,$(LIBLIB_FUNCS)))
+ 
++libsane-sm3600.la: sm3600.lo sm3600-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) -lusb \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
++
+ libsane-%.la: %.lo %-s.lo $(EXTRA) $(LIBOBJS)
+ 	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) \
+ 	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
+diff -Nur sane-backends-1.0.6.orig/configure.in sane-backends-1.0.6/configure.in
+--- sane-backends-1.0.6.orig/configure.in	Fri Dec  7 22:56:20 2001
++++ sane-backends-1.0.6/configure.in	Fri Dec  7 22:57:48 2001
+@@ -179,7 +179,9 @@
+ AC_CHECK_LIB(m,sqrt)
+ AC_CHECK_LIB(scsi, scsireq_enter)	# FreeBSD needs this
+ AC_CHECK_LIB(cam, cam_open_device)      # FreeBSD 3+ needs this
++save_LIBS="$LIBS"
+ AC_CHECK_LIB(usb, usb_open)
++LIBS="$save_LIBS"
+ 
+ SANE_CHECK_JPEG
+ 
