@@ -17,18 +17,20 @@ Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
 Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.11
-Release:	2
+Version:	1.0.12
+Release:	0.pre1.1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
-Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
+#Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}-pre1.tar.gz
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
-Patch4:		%{name}-acinclude.patch
+Patch4:		%{name}-DESTDIR.patch
+#Patch4:		%{name}-acinclude.patch
 Patch5:		%{name}-pmake.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf >= 2.54
@@ -228,7 +230,7 @@ SANE backend for Microtek scanners with M011 USB chip.
 Sterownik SANE dla skanerów Microteka z uk³adem USB M011.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}-pre1
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -237,6 +239,9 @@ Sterownik SANE dla skanerów Microteka z uk³adem USB M011.
 %patch5 -p1
 
 %build
+# kill libtool.m4 copy
+head -456 acinclude.m4 > acinclude.m4.tmp
+mv -f acinclude.m4.tmp acinclude.m4
 rm -f missing
 %{__libtoolize}
 %{__aclocal}
@@ -268,6 +273,9 @@ install %{SOURCE2} $RPM_BUILD_ROOT%{_aclocaldir}
 %ifarch %{ix86}
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %endif
+
+# only shared modules - shut up check-files
+rm -f $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la,a}
 
 %find_lang %{name} --all-name
 
@@ -327,6 +335,7 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon630u.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gt68xx.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp5400.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/p[!l]*
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/s[!a]*
 %dir %{_libdir}/sane
@@ -337,6 +346,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-canon630u.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-gt68xx.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-hp5400.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-p[!l]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-s[!m]*.so.*
 %attr(755,root,root) %{_bindir}/sane-find-scanner
@@ -352,6 +362,7 @@ fi
 %{_mandir}/man5/sane-canon630u.5*
 %{_mandir}/man5/sane-gt68xx.5*
 %{_mandir}/man5/sane-hp.5*
+%{_mandir}/man5/sane-hp5400.5*
 %{_mandir}/man5/sane-p[!l]*
 %{_mandir}/man5/sane-s[!m]*
 %{_mandir}/man7/*

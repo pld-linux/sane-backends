@@ -62,14 +62,19 @@ diff -Nur sane-backends-1.0.10.orig/acinclude.m4 sane-backends-1.0.10/acinclude.
  ])
  
  #
-diff -Nur sane-backends-1.0.10.orig/backend/Makefile.in sane-backends-1.0.10/backend/Makefile.in
---- sane-backends-1.0.10.orig/backend/Makefile.in	Mon Jan 13 22:38:09 2003
-+++ sane-backends-1.0.10/backend/Makefile.in	Sun Feb  2 00:38:28 2003
-@@ -148,6 +148,96 @@
+diff -Nur sane-backends-1.0.12-pre1.orig/backend/Makefile.in sane-backends-1.0.12-pre1/backend/Makefile.in
+--- sane-backends-1.0.12-pre1.orig/backend/Makefile.in	Mon Jan 13 22:38:09 2003
++++ sane-backends-1.0.12-pre1/backend/Makefile.in	Sun Feb  2 00:38:28 2003
+@@ -148,6 +148,116 @@
  
  .PHONY: all clean depend dist distclean install uninstall
  
 +libsane-artec_eplus48u.la: artec_eplus48u.lo artec_eplus48u-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-avision.la: avision.lo avision-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
@@ -109,6 +114,11 @@ diff -Nur sane-backends-1.0.10.orig/backend/Makefile.in sane-backends-1.0.10/bac
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
++libsane-fujitsu.la: fujitsu.lo fujitsu-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-gphoto2.la: gphoto2.lo gphoto2-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @GPHOTO2_LIBS@ @JPEG_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
@@ -124,8 +134,18 @@ diff -Nur sane-backends-1.0.10.orig/backend/Makefile.in sane-backends-1.0.10/bac
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
++libsane-hp5400.la: hp5400.lo hp5400-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-hpsj5s.la: hpsj5s.lo hpsj5s-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @IEEE1284_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-ma1509.la: ma1509.lo ma1509-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
@@ -171,13 +191,13 @@ diff -Nur sane-backends-1.0.10.orig/backend/Makefile.in sane-backends-1.0.10/bac
  		-rpath $(libdir) -version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
  
  # additional dependencies
-diff -Nur sane-backends-1.0.10.orig/configure.in sane-backends-1.0.10/configure.in
---- sane-backends-1.0.10.orig/configure.in	Sat Feb  1 23:31:50 2003
-+++ sane-backends-1.0.10/configure.in	Sun Feb  2 00:31:03 2003
+diff -Nur sane-backends-1.0.12-pre1.orig/configure.in sane-backends-1.0.12-pre1/configure.in
+--- sane-backends-1.0.12-pre1.orig/configure.in	Sat Feb  1 23:31:50 2003
++++ sane-backends-1.0.12-pre1/configure.in	Sun Feb  2 00:31:03 2003
 @@ -203,10 +203,15 @@
- fi
+ 
  dnl we need both libusb header and a libusb providing usb_get_busses
- if test "${ac_cv_header_usb_h}" = "yes" ; then
+ if test "${ac_cv_header_usb_h}" = "yes" && test "$USE_LIBUSB" = "yes" ; then
 +  USB_LIBS=""
 +  save_LIBS="$LIBS"
    AC_CHECK_LIB(usb, usb_get_busses)
