@@ -25,7 +25,7 @@ Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.14
-Release:	1
+Release:	2
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
@@ -37,6 +37,7 @@ Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
 Patch4:		%{name}-pmake.patch
+Patch5:		%{name}-locale-names.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -220,6 +221,9 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+
+mv -f po/sane-backends.{no,nb}.po
 
 %build
 %{__libtoolize}
