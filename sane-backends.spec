@@ -50,6 +50,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 %{?with_usb:BuildRequires:	libusb-devel}
+BuildRequires:	rpmbuild(macros) >= 1.159
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-latex-psnfss
@@ -143,9 +144,11 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(post,postun):	/sbin/ldconfig
-Requires(preun):	/usr/sbin/userdel
 Requires(preun):	/usr/sbin/groupdel
+Requires(preun):	/usr/sbin/userdel
 Requires:	%{name} = %{version}-%{release}
+Provides:	group(saned)
+Provides:	user(saned)
 
 %description saned
 saned is the SANE (Scanner Access Now Easy) daemon that allows remote
@@ -277,21 +280,22 @@ rm -rf $RPM_BUILD_ROOT
 %postun	-p /sbin/ldconfig
 
 %pre saned
-if [ -n "`getgid saned`" ]; then
-        if [ "`getgid saned`" != "90" ]; then
+if [ -n "`/usr/bin/getgid saned`" ]; then
+        if [ "`/usr/bin/getgid saned`" != "90" ]; then
                 echo "Error: group saned doesn't have gid=90. Correct this before installing sane." 1>&2
                 exit 1
         fi
 else
-        /usr/sbin/groupadd -g 90 -r -f saned
+        /usr/sbin/groupadd -g 90 saned 1>&2
 fi
-if [ -n "`id -u saned 2>/dev/null`" ]; then
-        if [ "`id -u saned`" != "90" ]; then
+if [ -n "`/bin/id -u saned 2>/dev/null`" ]; then
+        if [ "`/bin/id -u saned`" != "90" ]; then
                 echo "Error: user saned doesn't have uid=90. Correct this before installing sane." 1>&2
                 exit 1
         fi
 else
-        /usr/sbin/useradd -u 90 -r -d /no/home -s /bin/false -c "SANE remote scanning daemon" -g saned saned 1>&2
+        /usr/sbin/useradd -u 90 -d /usr/share/empty -s /bin/false \
+		-c "SANE remote scanning daemon" -g saned saned 1>&2
 fi
 
 %post saned
@@ -301,17 +305,13 @@ else
         echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server" 1>&2
 fi
 
-%preun saned
-if [ "$1" = "0" ]; then
-	/usr/sbin/userdel saned 2>/dev/null
-	/usr/sbin/groupdel saned 2>/dev/null
-fi
-
 %postun saned
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/rc-inetd ]; then
 		/etc/rc.d/init.d/rc-inetd reload
 	fi
+	%userremove saned
+	%groupremove saned
 fi
 
 %files -f %{name}.lang
