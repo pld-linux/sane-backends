@@ -9,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.8
-%define	rel	6
+%define	rel	7
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
@@ -38,13 +38,6 @@ BuildRequires:	libusb-devel
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	gettext-devel
-Requires(pre):	/bin/id
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
-Requires(post,postun):	/sbin/ldconfig
-Requires(preun):	/usr/sbin/userdel
-Requires(preun):	/usr/sbin/groupdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	sane
 
@@ -128,6 +121,13 @@ Summary:	SANE network daemon
 Summary(pl):	Demon sieciowy SANE
 Group:		Networking/Daemons
 PreReq:         rc-inetd
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(post,postun):	/sbin/ldconfig
+Requires(preun):	/usr/sbin/userdel
+Requires(preun):	/usr/sbin/groupdel
 Requires:	%{name} = %{version}
 
 %description saned
