@@ -11,7 +11,7 @@ Name:		sane-backends
 Version:	1.0.8
 %define	rel	7
 Release:	%{rel}
-License:	relaxed LGPL (libraries), and public domain (docs)
+License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
