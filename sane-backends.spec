@@ -9,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.7
-Release:	2.10
+Release:	2.11
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
@@ -319,8 +319,7 @@ fi
 
 %files plustek
 %defattr(644,root,root,755)
-%doc backend/plustek_driver/README backend/plustek_driver/TODO
-%doc backend/plustek_driver/FAQ backend/plustek_driver/ChangeLog
+%doc backend/plustek_driver/README backend/plustek_driver/*.gz
 %{_mandir}/man5/sane-plustek*
 
 %files -n kernel-char-plustek
