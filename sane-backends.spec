@@ -1,6 +1,6 @@
-Summary:	SANE --- Easy local and networked scanner access
+Summary:	SANE - Easy local and networked scanner access
 Summary(es):	SANE - acceso a scanners en red y locales
-Summary(pl):	SANE --- Prosta obs³uga skanerów lokalnych i sieciowych
+Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.6
@@ -23,8 +23,10 @@ Patch3:		%{name}-format.patch
 Patch4:		%{name}-scsi.patch
 Patch5:		%{name}-microtek2.patch
 Patch6:		%{name}-spatc.patch
+Patch7:		%{name}-libusb-link.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-devel
@@ -92,18 +94,18 @@ Obsoletes:	sane-backends-sane-static
 %description devel
 Development part of SANE.
 
-%description -l es devel
+%description devel -l es
 Archivos necesarios para el desarrollo de programas que usen SANE.
 
-%description -l pl devel
+%description devel -l pl
 Czê¶æ SANE dla programistów.
 
-%description -l pt_BR devel
+%description devel -l pt_BR
 Arquivos necessários ao desenvolvimento de programas que usem o SANE.
 
 %package static
 Summary:	Static SANE libraries
-Summary(pl):	statyczne biblioteki SANE
+Summary(pl):	Statyczne biblioteki SANE
 Summary(pt_BR):	Ferramentas de desenvolvimento para o SANE (bibliotecas estáticas)
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
@@ -119,10 +121,10 @@ Obsoletes:	sane-backends-sane-static
 %description static
 Static SANE libraries.
 
-%description -l pl static
+%description static -l pl
 Biblioteki statyczne SANE.
 
-%description -l pt_BR static
+%description static -l pt_BR
 Bibliotecas estáticas para desenvolvimento de módulos do SANE.
 
 %package -n sane-mustek600IIN
@@ -155,6 +157,7 @@ Ten program wymaga uprawnieñ roota albo dostêpu do /dev/port.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 libtoolize --copy --force
@@ -199,7 +202,6 @@ if [ -n "`id -u saned 2>/dev/null`" ]; then
 else
         /usr/sbin/useradd -u 90 -r -d /no/home -s /bin/false -c "SANE remote scanning daemon" -g saned saned 1>&2
 fi
-
 
 %post
 /sbin/ldconfig
