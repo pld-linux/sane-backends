@@ -14,3 +14,24 @@ diff -urN sane-backends-1.0.7.orig/backend/plustek_driver/Makefile sane-backends
  
  #
  # add the following to get assembly listing
+@@ -72,9 +72,9 @@
+ endif
+ 
+ ifeq ($(DEBUG),y)
+-  DEBFLAGS = -O -g -DDEBUG # "-O" is needed to expand inlines
++  DEBFLAGS = $(OPT_FLASG) -DDEBUG # "-O" is needed to expand inlines
+ else
+-  DEBFLAGS = -O2
++  DEBFLAGS = $(OPT_FLAGS)
+ endif
+ 
+ #
+@@ -118,7 +118,7 @@
+ MODLIB    = /lib/modules/$(LINUXVERSION)
+ 
+ ifdef SMP
+-CFLAGS += -D__SMP__
++CFLAGS += -D__SMP__ -DCONFIG_X86_LOCAL_APIC
+ 
+ ifdef SMP_PROF
+ CFLAGS += -D__SMP_PROF__
