@@ -9,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.8
-%define	rel	4
+%define	rel	5
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
@@ -123,6 +123,21 @@ Biblioteki statyczne SANE.
 
 %description static -l pt_BR
 Bibliotecas estáticas para desenvolvimento de módulos do SANE.
+
+%package saned
+Summary:	SANE network daemon
+Summary(pl):	Demon sieciowy SANE
+Group:		Networking/Daemons
+Requires:	%{name} = %{version}
+
+%description saned
+saned is the SANE (Scanner Access Now Easy) daemon that allows remote
+clients to access image acquisition devices available on the local
+host.
+      
+%description saned -l pl
+saned to demon SANE pozwalaj±cy zdalnym klientom na dostêp do
+urz±dzeñ odczytuj±cych obraz pod³±czonych lokalnie.
 
 %package -n sane-mustek600IIN
 Summary:	Mustek 600 II N scanner tool
@@ -294,7 +309,7 @@ install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
+%pre saned
 if [ -n "`getgid saned`" ]; then
         if [ "`getgid saned`" != "90" ]; then
                 echo "Error: group saned doesn't have gid=90. Correct this before installing sane." 1>&2
@@ -312,7 +327,7 @@ else
         /usr/sbin/useradd -u 90 -r -d /no/home -s /bin/false -c "SANE remote scanning daemon" -g saned saned 1>&2
 fi
 
-%post
+%post saned
 /sbin/ldconfig
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
@@ -320,13 +335,13 @@ else
         echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server" 1>&2
 fi
 
-%preun
+%preun saned
 if [ "$1" = "0" ]; then
 	/usr/sbin/userdel saned 2>/dev/null
 	/usr/sbin/groupdel saned 2>/dev/null
 fi
 
-%postun
+%postun saned
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/rc-inetd ]; then
 		/etc/rc.d/init.d/rc-inetd reload
@@ -352,11 +367,11 @@ fi
 %doc doc/canon doc/matsushita doc/mustek doc/mustek_usb doc/sceptre
 %doc doc/teco doc/umax
 %dir %{_sysconfdir}/sane.d
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/[^cg]*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/[^cgs]*
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/c[^a]*
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon630u.conf
-%config %{_sysconfdir}/sysconfig/rc-inetd/saned
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/s[^a]*
 %dir %{_libdir}/sane
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(755,root,root) %{_libdir}/sane/libsane-[^cgs]*.so.*
@@ -364,10 +379,10 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-canon.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon630u.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-s[^m]*.so.*
-%attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/sane-find-scanner
-%attr(755,root,root) %{_sbindir}/saned
-%{_mandir}/man1/*
+%attr(755,root,root) %{_bindir}/scanimage
+%{_mandir}/man1/sane-find-scanner.1*
+%{_mandir}/man1/scanimage.1*
 %{_mandir}/man5/sane-[^cgps]*
 %{_mandir}/man5/sane-c[^a]*
 %{_mandir}/man5/sane-canon.5*
@@ -391,6 +406,19 @@ fi
 %{_libdir}/lib*.a
 %{_libdir}/sane/lib*.a
 
+%files saned
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/rc-inetd/saned
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/saned.conf
+%attr(755,root,root) %{_sbindir}/saned
+%{_mandir}/man1/saned.1*
+
+%ifarch %{ix86}
+%files -n sane-mustek600IIN
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/mustek600iin-off
+%endif
+
 %ifarch %{ix86}
 %files canon_pp
 %defattr(644,root,root,755)
@@ -409,12 +437,6 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/sane/libsane-sm3600.so.*
 %{_mandir}/man5/sane-sm3600.5*
-
-%ifarch %{ix86}
-%files -n sane-mustek600IIN
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/mustek600iin-off
-%endif
 
 %files plustek
 %defattr(644,root,root,755)
