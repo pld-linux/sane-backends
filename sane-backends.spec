@@ -262,7 +262,7 @@ cd ..
 %build
 rm -f missing
 %{__libtoolize}
-aclocal
+%{__aclocal}
 %{__autoconf}
 %configure \
 	--enable-static \
