@@ -23,6 +23,7 @@ License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 #Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
 Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}-pre1.tar.gz
+# Source0-md5: 2dada41d86de9500b9be648bf1bbfe44
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-no_libs.patch
