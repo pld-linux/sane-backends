@@ -1,0 +1,11 @@
+--- sane-backends-1.0.8/po/snapscan.de.po~	Sat Oct 11 21:46:25 2003
++++ sane-backends-1.0.8/po/snapscan.de.po	Sat Oct 11 21:46:25 2003
+@@ -9,7 +9,7 @@
+ "Last-Translator: Oliver Schwartz <Oliver.Schwartz@gmx.de>\n"
+ "Language-Team:\n"
+ "MIME-Version: 1.0\n"
+-"Content-Type: text/plain charset=iso-8859-1\n"
++"Content-Type: text/plain; charset=iso-8859-1\n"
+ "Content-Transfer-Encoding: 8bit\n"
+ 
+ #snapscan.c:217
