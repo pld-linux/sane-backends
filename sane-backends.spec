@@ -393,7 +393,6 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-#%doc doc/sane.ps
 %{_includedir}/sane
 %attr(755,root,root) %{_bindir}/sane-config
 %attr(755,root,root) %{_libdir}/*.so
