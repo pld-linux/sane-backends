@@ -8,27 +8,28 @@ Summary(es):	SANE - acceso a scanners en red y locales
 Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.7
-%define	rel	2.21
+Version:	1.0.8
+%define	rel	1
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
 Source2:	http://home.t-online.de/home/g-jaeger/current/plustek-sane-%{_plustek_ver}.tar.gz
-Patch0:		%{name}-DESTDIR.patch
-Patch1:		%{name}-no_libs.patch
-Patch2:		%{name}-mustek-path.patch
-Patch3:		%{name}-spatc.patch
-Patch4:		%{name}-libusb-link.patch
-Patch5:		%{name}-acinclude.patch
-Patch6:		%{name}-plustek-Makefile.patch
+Patch0:		%{name}-no_libs.patch
+Patch1:		%{name}-mustek-path.patch
+Patch2:		%{name}-spatc.patch
+Patch3:		%{name}-libusb-link.patch
+Patch4:		%{name}-acinclude.patch
+Patch5:		%{name}-plustek-Makefile.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
+%ifnarch sparc sparc64 sparcv9
 BuildRequires:	libusb-devel
+%endif
 %{!?_without_dist_kernel:BuildRequires: kernel-headers}
 PreReq:		rc-inetd
 Requires(pre):	/usr/bin/getgid
@@ -203,22 +204,25 @@ libtoolize --copy --force
 aclocal
 %{__automake} ||
 %{__autoconf}
-%configure
+%configure \
+	--enable-static
 %{__make}
 
-%ifnarch ppc
+%ifarch %{ix86}
 cd tools
 %{__cc} -DHAVE_SYS_IO_H %{rpmcflags} \
 	-I../include -o mustek600iin-off mustek600iin-off.c
 cd ..
 %endif
 
+%ifnarch sparc sparc64 sparcv9
 cd backend/plustek_driver
 %{__make} all BUILD_SMP=1 OPT_FLAGS="%{rpmcflags}"
 mv -f pt_drv.o{,.smp}
 %{__make} clean
-%{__make} all OPT_FLAGS="%{rpmcflags}"
+%{__make} all OPT_FLAGS="%{rpmcflags}" CC=%{kgcc}
 cd ..
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -226,12 +230,15 @@ install -d $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
+
+%ifnarch sparc sparc64 sparcv9
 install  backend/plustek_driver/pt_drv.o.smp	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/pt_drv.o
 install  backend/plustek_driver/pt_drv.o	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
+%endif
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 
-%ifnarch ppc
+%ifarch %{ix86}
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %endif
 
@@ -324,7 +331,7 @@ fi
 %{_libdir}/lib*.a
 %{_libdir}/sane/lib*.a
 
-%ifnarch ppc
+%ifarch %{ix86}
 %files -n sane-mustek600IIN
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mustek600iin-off
@@ -335,6 +342,7 @@ fi
 %doc backend/plustek_driver/*.gz
 %{_mandir}/man5/sane-plustek*
 
+%ifnarch sparc sparc64 sparcv9
 %files -n kernel-char-plustek
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/misc/*
@@ -342,3 +350,4 @@ fi
 %files -n kernel-smp-char-plustek
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}smp/misc/*
+%endif
