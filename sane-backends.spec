@@ -410,7 +410,7 @@ fi
 
 %files saned
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/rc-inetd/saned
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rc-inetd/saned
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/saned.conf
 %attr(755,root,root) %{_sbindir}/saned
 %{_mandir}/man1/saned.1*
