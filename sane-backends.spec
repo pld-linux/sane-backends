@@ -21,7 +21,10 @@ Patch6:		%{name}-spatc.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	libjpeg-devel
+BuildRequires:	libtool
+%ifnarch sparc sparc64 alpha
 BuildRequires:	libusb-devel
+%endif
 Prereq:		/sbin/ldconfig
 Prereq:		grep
 Prereq:		sh-utils
