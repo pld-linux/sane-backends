@@ -1,8 +1,7 @@
+# conditional build
+# _without_dist_kernel		without kernel form ditribution
 
 %define		_plustek_ver	0_42_5
-
-%define		_kernel_ver %(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
-%define		_kernel_ver_str	%(echo %{_kernel_ver} | sed s/-/_/g)
 
 Summary:	SANE - Easy local and networked scanner access
 Summary(es):	SANE - acceso a scanners en red y locales
@@ -10,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.7
-Release:	2
+Release:	2.1
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
@@ -22,12 +21,14 @@ Patch2:		%{name}-mustek-path.patch
 Patch3:		%{name}-spatc.patch
 Patch4:		%{name}-libusb-link.patch
 Patch5:		%{name}-acinclude.patch
+Patch6:		%{name}-plustek-up_smp_switch.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-devel
+%{!?_without_dist_kernel:BuildRequires: kernel-headers}
 Prereq:		/sbin/ldconfig
 Prereq:		grep
 Prereq:		sh-utils
@@ -135,6 +136,7 @@ Summary:	Plustek scanner driver
 Summary(pl):	Sterownik do skanerów Plustek
 Group:		Applications/System
 Requires:	%{name} = %{version}
+%{!?_without_dist_kernel:%requires_releq_kernel_up}
 PreReq:		/sbin/depmod
 
 %description plustek
@@ -161,6 +163,8 @@ Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 	cp -Rf * ..
 )
 
+%patch6 -p1
+
 %build
 libtoolize --copy --force
 aclocal
@@ -168,12 +172,19 @@ autoconf
 %configure
 %{__make}
 
-(cd tools
-%{__cc} -DHAVE_SYS_IO_H %{rpmcflags} \
-	-I../include -o mustek600iin-off mustek600iin-off.c
+(
+	cd tools
+	%{__cc} -DHAVE_SYS_IO_H %{rpmcflags} \
+		-I../include -o mustek600iin-off mustek600iin-off.c
 )
 
-%{__make} all -C backend/plustek_driver
+(
+	cd backend/plustek_driver
+	%{__make} all BUILD_SMP=1
+	mv pt_drv.o{,.smp}
+	%{__make} clean
+	%{__make} all
+)
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -181,7 +192,8 @@ install -d $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
-install  backend/plustek_driver/pt_drv.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
+install  backend/plustek_driver/pt_drv.o.smp	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/pt_drv.o
+install  backend/plustek_driver/pt_drv.o	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
@@ -251,7 +263,8 @@ fi
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_sbindir}/saned
 %{_mandir}/man1/*
-%{_mandir}/man5/*
+%{_mandir}/man5/sane-[!p]*
+%{_mandir}/man5/sane-p[!l]*
 
 %files devel
 %defattr(644,root,root,755)
@@ -271,9 +284,10 @@ fi
 %files -n sane-mustek600IIN
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mustek600iin-off
-%doc backend/plustek_driver/README backend/plustek_driver/TODO
-%doc backend/plustek_driver/FAQ backend/plustek_driver/ChangeLog
 
 %files plustek
 %defattr(644,root,root,755)
+%doc backend/plustek_driver/README backend/plustek_driver/TODO
+%doc backend/plustek_driver/FAQ backend/plustek_driver/ChangeLog
 /lib/modules/%{_kernel_ver}/misc/*
+%{_mandir}/man5/sane-plustek*
