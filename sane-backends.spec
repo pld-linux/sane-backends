@@ -48,6 +48,7 @@ BuildRequires:	libtool
 %{?with_usb:BuildRequires:	libusb-devel}
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
+BuildRequires:	tetex-latex-psnfss
 Obsoletes:	sane
 Obsoletes:	sane-backends-sm3600
 Conflicts:	sane-backends-plustek
