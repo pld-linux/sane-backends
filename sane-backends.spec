@@ -8,8 +8,8 @@
 %ifarch sparc sparc64 sparcv9
 %undefine	with_usb
 %endif
-# XXX: really only x86?
-%ifnarch %{ix86}
+# XXX: really only x86*?
+%ifnarch %{ix86} amd64
 %undefine	with_lpt
 %endif
 Summary:	SANE - easy local and networked scanner access
