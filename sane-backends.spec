@@ -4,7 +4,7 @@
 # _without_lpt		- no parallel port backends (only those which require libieee1284)
 # _without_usb		- without USB scanners support (which requires libusb)
 #
-# TODO: 
+# TODO:
 # - separate usb drivers (which depend on libusb)?
 #	usb-only: artec_eplus48u,canon630u,gt68xx,mustek_usb,umax1220u
 #	usb/scsi: coolscan2,hp,snapscan,umax
@@ -141,7 +141,7 @@ Requires:	%{name} = %{version}
 saned is the SANE (Scanner Access Now Easy) daemon that allows remote
 clients to access image acquisition devices available on the local
 host.
-      
+
 %description saned -l pl
 saned to demon SANE pozwalaj±cy zdalnym klientom na dostêp do
 urz±dzeñ odczytuj±cych obraz pod³±czonych lokalnie.
