@@ -3,6 +3,7 @@
 %bcond_without	gphoto	# no gphoto backend (which requires libgphoto2)
 %bcond_without	lpt	# no parallel port backends (which require libieee1284)
 %bcond_without	usb	# without USB scanners support (which requires libusb)
+%bcond_with 	rts88xx # rts88xx scanner support (hp4400/4470)
 #
 # TODO:
 # - separate usb drivers (which depend on libusb)?
@@ -32,6 +33,8 @@ Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.ta
 # Source0-md5:	7ae5bf91aea34ef7956df6f53cf073bd
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
+Source3:	http://home.foni.net/~johanneshub/sane_hp_rts88xx-0.17k.tar.gz
+# Source3-md5:	e47e94a665fc9baa4fddb7819dd646e2
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
@@ -212,7 +215,7 @@ Starowniki SANE dla skanerów pod³±czanych do portu równoleg³ego:
 - plustek_pp (Plustek)
 
 %prep
-%setup -q
+%setup -q -a3
 # kill libtool.m4 copy
 head -n506 acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
@@ -222,7 +225,11 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-
+%if %{with rts88xx}
+cd sane_hp_rts88xx-0.17k/sane_hp_rts88xx/
+sh -x patch-sane.sh `pwd`/../../
+cd ../../
+%endif
 mv -f po/sane-backends.{no,nb}.po
 
 %build
@@ -325,6 +332,7 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/mustek_usb.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/p[!l]*
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/plustek.conf
+%{?with_rts88xx:%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp_rt* }
 %dir %{_libdir}/sane
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(755,root,root) %{_libdir}/sane/libsane-[!cghmp]*.so.*
@@ -339,6 +347,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek_usb.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-p[!l]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-plustek.so.*
+%{?with_rts88xx:%attr(755,root,root) %{_libdir}/sane/libsane-hp_rts88xx.so.* }
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/gamma4scanimage
@@ -358,6 +367,7 @@ fi
 %{_mandir}/man5/sane-mustek_usb.5*
 %{_mandir}/man5/sane-p[!l]*
 %{_mandir}/man5/sane-plustek.5*
+%{?with_rts88xx:%{_mandir}/man5/sane-hp_rts88xx* }
 %{_mandir}/man7/*
 
 %files devel
