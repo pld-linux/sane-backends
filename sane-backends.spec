@@ -38,7 +38,6 @@ BuildRequires:	libusb-devel
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	gettext-devel
-PreReq:		rc-inetd
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
@@ -128,6 +127,7 @@ Bibliotecas estáticas para desenvolvimento de módulos do SANE.
 Summary:	SANE network daemon
 Summary(pl):	Demon sieciowy SANE
 Group:		Networking/Daemons
+PreReq:         rc-inetd
 Requires:	%{name} = %{version}
 
 %description saned
