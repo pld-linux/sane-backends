@@ -1,5 +1,16 @@
 --- sane-backends-1.0.15/sane_hp_rts88xx/sane_hp_rts88xx/patch-sane.sh.orig	2004-10-22 20:08:26.000000000 +0200
-+++ sane-backends-1.0.15/sane_hp_rts88xx/sane_hp_rts88xx/patch-sane.sh	2004-11-08 01:04:11.290976768 +0100
++++ sane-backends-1.0.15/sane_hp_rts88xx/sane_hp_rts88xx/patch-sane.sh	2004-11-08 08:25:50.114543264 +0100
+@@ -75,8 +75,8 @@
+ 
+ # Modifies the Makefile.in files (this is hairy stuff)
+ echo -n "Modifying doc/Makefile.in..."
+-sed "s/sane-dll.5/& sane_hp_rts88xx.5/g" $sane/doc/Makefile.in | \
+-    sed "s/sane-dll.man/& sane_hp_rts88xx.man/g" > $sane/doc/tmp~
++sed "s/sane-dll.5/& sane-hp_rts88xx.5/g" $sane/doc/Makefile.in | \
++    sed "s/sane-dll.man/& sane-hp_rts88xx.man/g" > $sane/doc/tmp~
+ evaluate_retval
+ 
+ echo -n "Modifying backend/Makefile.in..."
 @@ -85,7 +85,14 @@
          sed 's%libsane-abaton.la: ../sanei/sanei_scsi.lo%& \
  libsane-hp_rts88xx.la: ../sanei/sanei_config2.lo \
