@@ -14,11 +14,11 @@ Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
 Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.10
+Version:	1.0.11
 Release:	1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
-Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
