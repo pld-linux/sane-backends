@@ -28,7 +28,9 @@ BuildRequires:	automake
 #BuildRequires:	gphoto2-lib-devel >= 2.0.1
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
+%ifnarch ppc
 BuildRequires:	libieee1284-devel
+%endif
 %ifnarch sparc sparc64 sparcv9
 BuildRequires:	libusb-devel
 %endif
@@ -388,11 +390,13 @@ fi
 %{_libdir}/lib*.a
 %{_libdir}/sane/lib*.a
 
+%ifnarch ppc
 %files canon_pp
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon_pp.conf
 %attr(755,root,root) %{_libdir}/sane/libsane-canon_pp.so.*
 %{_mandir}/man5/sane-canon_pp.5*
+%endif
 
 #%files gphoto2
 #%defattr(644,root,root,755)
