@@ -1,5 +1,5 @@
 # conditional build
-# _without_dist_kernel		without kernel form ditribution
+# _without_dist_kernel		without kernel from distribution
 
 %define		_plustek_ver	0_42_5
 
@@ -9,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.7
-Release:	2.1
+Release:	2.9
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
@@ -21,7 +21,7 @@ Patch2:		%{name}-mustek-path.patch
 Patch3:		%{name}-spatc.patch
 Patch4:		%{name}-libusb-link.patch
 Patch5:		%{name}-acinclude.patch
-Patch6:		%{name}-plustek-up_smp_switch.patch
+Patch6:		%{name}-plustek-Makefile.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -154,14 +154,13 @@ Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 %patch4 -p1
 %patch5 -p1
 
-(
-	mkdir tmp-plustek_driver
-	cd tmp-plustek_driver
-	tar xfz %{SOURCE2}
-	# NOTE: we need original dll.conf!
-	rm backend/dll.conf
-	cp -Rf * ..
-)
+mkdir tmp-plustek_driver
+cd tmp-plustek_driver
+tar xfz %{SOURCE2}
+# NOTE: we need original dll.conf!
+rm backend/dll.conf
+cp -Rf * ..
+cd ..
 
 %patch6 -p1
 
@@ -172,24 +171,22 @@ autoconf
 %configure
 %{__make}
 
-(
-	cd tools
-	%{__cc} -DHAVE_SYS_IO_H %{rpmcflags} \
-		-I../include -o mustek600iin-off mustek600iin-off.c
-)
+cd tools
+%{__cc} -DHAVE_SYS_IO_H %{rpmcflags} \
+	-I../include -o mustek600iin-off mustek600iin-off.c
+cd ..
 
-(
-	cd backend/plustek_driver
-	%{__make} all BUILD_SMP=1
-	mv pt_drv.o{,.smp}
-	%{__make} clean
-	%{__make} all
-)
+cd backend/plustek_driver
+%{__make} all BUILD_SMP=1 OPT_FLAGS=$RPM_OPT_FLAGS
+mv pt_drv.o{,.smp}
+%{__make} clean
+%{__make} all
+cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
+	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 install  backend/plustek_driver/pt_drv.o.smp	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/pt_drv.o
@@ -289,5 +286,5 @@ fi
 %defattr(644,root,root,755)
 %doc backend/plustek_driver/README backend/plustek_driver/TODO
 %doc backend/plustek_driver/FAQ backend/plustek_driver/ChangeLog
-/lib/modules/%{_kernel_ver}/misc/*
+/lib/modules/*/misc/*
 %{_mandir}/man5/sane-plustek*
