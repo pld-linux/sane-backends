@@ -3,7 +3,7 @@
 # TODO: 
 # - write kernel-chat-plustek.spec
 
-%define		pre	pre2
+%define		pre	pre3
 
 Summary:	SANE - Easy local and networked scanner access
 Summary(es):	SANE - acceso a scanners en red y locales
