@@ -28,7 +28,7 @@ BuildRequires:	automake
 #BuildRequires:	gphoto2-lib-devel >= 2.0.1
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
-%ifnarch ppc
+%ifarch %{ix86}
 BuildRequires:	libieee1284-devel
 %endif
 %ifnarch sparc sparc64 sparcv9
