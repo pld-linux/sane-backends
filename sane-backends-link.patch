@@ -1,6 +1,5 @@
-diff -Nur sane-backends-1.0.10.orig/acinclude.m4 sane-backends-1.0.10/acinclude.m4
---- sane-backends-1.0.10.orig/acinclude.m4	Sat Feb  1 23:31:50 2003
-+++ sane-backends-1.0.10/acinclude.m4	Sun Feb  2 00:26:23 2003
+--- sane-backends-1.0.14/acinclude.m4.orig	2004-05-15 01:14:41.589083432 +0200
++++ sane-backends-1.0.14/acinclude.m4	2004-05-15 01:17:12.697111520 +0200
 @@ -202,16 +202,18 @@
  # Checks for ieee1284 library, needed for canon_pp backend.
  AC_DEFUN([SANE_CHECK_IEEE1284],
@@ -21,7 +20,7 @@ diff -Nur sane-backends-1.0.10.orig/acinclude.m4 sane-backends-1.0.10/acinclude.
    if test "$sane_cv_use_libieee1284" = "yes" ; then
      AC_DEFINE(HAVE_LIBIEEE1284,1,[Define to 1 if you have the `ieee1284' library (-lcam).])
    fi
-@@ -220,6 +222,7 @@
+@@ -243,6 +243,7 @@
  # GPHOTO2 backends.
  AC_DEFUN([SANE_CHECK_JPEG],
  [
@@ -29,7 +28,7 @@ diff -Nur sane-backends-1.0.10.orig/acinclude.m4 sane-backends-1.0.10/acinclude.
    AC_CHECK_LIB(jpeg,jpeg_start_decompress, 
    [
      AC_CHECK_HEADER(jconfig.h, 
-@@ -231,10 +234,11 @@
+@@ -254,10 +255,11 @@
          #if JPEG_LIB_VERSION >= 61
            sane_correct_jpeg_lib_version_found
          #endif
@@ -42,29 +41,30 @@ diff -Nur sane-backends-1.0.10.orig/acinclude.m4 sane-backends-1.0.10/acinclude.
  ])
  
  dnl
-@@ -323,7 +327,7 @@
- 	  AC_HELP_STRING([--with-gphoto2],
-                          [include the gphoto2 backend]),
- [
--	
+@@ -351,7 +353,7 @@
+ 	# as "$with_gphoto2" will be set to "no"
+ 
+ 	])
+-
 +	GPHOTO2_LIBS=""
- 	if test "$with_gphoto2" = "no" ; then
- 		echo disabling GPHOTO2
- 	else
-@@ -338,9 +342,9 @@
+ 	# If --with-gphoto2=yes (or not supplied), then enable it
+ 	# if gphoto2-config can be found
+ 	if test "$with_gphoto2" != "no" ; then 
+@@ -364,10 +366,9 @@
  			CPPFLAGS="${CPPFLAGS} `gphoto2-config --cflags`"
  			GPHOTO2_LIBS="`gphoto2-config --libs`"
  			SANE_EXTRACT_LDFLAGS(LDFLAGS, GPHOTO2_LIBS)
 -			LIBS="${LIBS} ${GPHOTO2_LIBS}"
  		fi
- ])	fi
+ 	fi
+-
 +	AC_SUBST(GPHOTO2_LIBS)
  ])
  
  #
---- sane-backends-1.0.13/backend/Makefile.in.orig	Mon Nov 10 19:15:47 2003
-+++ sane-backends-1.0.13/backend/Makefile.in	Fri Nov 28 13:29:02 2003
-@@ -153,6 +153,131 @@
+--- sane-backends-1.0.14/backend/Makefile.in.orig	Mon Nov 10 19:15:47 2003
++++ sane-backends-1.0.14/backend/Makefile.in	Fri Nov 28 13:29:02 2003
+@@ -153,6 +153,136 @@
  
  .PHONY: all clean depend dist distclean install uninstall
  
@@ -148,12 +148,12 @@ diff -Nur sane-backends-1.0.10.orig/acinclude.m4 sane-backends-1.0.10/acinclude.
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
-+libsane-mustek_pp.la: mustek_pp.lo mustek_pp-s.lo $(EXTRA) $(LIBOBJS)
++libsane-mustek.la: mustek.lo mustek-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @IEEE1284_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
-+libsane-mustek_pp_ccd.la: mustek_pp_ccd.lo mustek_pp_ccd-s.lo $(EXTRA) $(LIBOBJS)
++libsane-mustek_pp.la: mustek_pp.lo mustek_pp-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @IEEE1284_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
@@ -179,6 +179,11 @@ diff -Nur sane-backends-1.0.10.orig/acinclude.m4 sane-backends-1.0.10/acinclude.
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-snapscan.la: snapscan.lo snapscan-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-u12.la: u12.lo u12-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
@@ -231,7 +236,7 @@ diff -Nur sane-backends-1.0.12-pre1.orig/configure.in sane-backends-1.0.12-pre1/
  	../sanei/sanei_scsi.lo ../sanei/sanei_usb.lo ../sanei/sanei_init_debug.lo
  	@$(LIBTOOL) $(MLINK) $(LINK) sane-find-scanner.o check-usb-chip.o \
 -	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS)
-+	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS) @USB_LIBS@
++	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS) @USB_LIBS@ @IEEE1284_LIBS@
  
  gamma4scanimage: gamma4scanimage.o
  	@$(LIBTOOL) $(MLINK) $(LINK) gamma4scanimage.o -lm
