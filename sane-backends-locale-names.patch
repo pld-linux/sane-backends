@@ -1,0 +1,11 @@
+--- sane-backends-1.0.14/po/Makefile.in.orig	Wed Apr 14 19:35:27 2004
++++ sane-backends-1.0.14/po/Makefile.in	Thu Jul 22 11:14:52 2004
+@@ -2,7 +2,7 @@
+ #
+ # See po/README for documentation.
+ 
+-ALL_LINGUAS = bg cs da de es fr it nl no pt ru sv 
++ALL_LINGUAS = bg cs da de es fr it nl nb pt ru sv 
+ 
+ SRC_FILES = ../include/sane/saneopts.h ../backend/artec_eplus48u.c \
+   ../backend/avision.h \
