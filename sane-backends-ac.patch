@@ -1,0 +1,11 @@
+--- sane-backends-1.0.10/configure.in.old	Mon Sep  8 00:05:48 2003
++++ sane-backends-1.0.10/configure.in	Mon Sep  8 00:08:22 2003
+@@ -64,7 +64,7 @@
+ dnl ***********************************************************************
+ dnl Checks for unix variants
+ dnl ***********************************************************************
+-AC_GNU_SOURCE
++dnl AC_GNU_SOURCE
+ AC_AIX
+ AC_MINIX
+ AC_ISC_POSIX
