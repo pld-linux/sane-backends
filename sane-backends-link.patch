@@ -1,9 +1,9 @@
-diff -Nur sane-backends-1.0.8.orig/acinclude.m4 sane-backends-1.0.8/acinclude.m4
---- sane-backends-1.0.8.orig/acinclude.m4	Sun Jun 16 18:23:57 2002
-+++ sane-backends-1.0.8/acinclude.m4	Sun Jun 16 18:50:07 2002
-@@ -101,16 +101,18 @@
+diff -Nur sane-backends-1.0.10.orig/acinclude.m4 sane-backends-1.0.10/acinclude.m4
+--- sane-backends-1.0.10.orig/acinclude.m4	Sat Feb  1 23:31:50 2003
++++ sane-backends-1.0.10/acinclude.m4	Sun Feb  2 00:26:23 2003
+@@ -202,16 +202,18 @@
  # Checks for ieee1284 library, needed for canon_pp backend.
- AC_DEFUN(SANE_CHECK_IEEE1284,
+ AC_DEFUN([SANE_CHECK_IEEE1284],
  [
 +  IEEE1284_LIBS=""
    AC_CHECK_HEADER(ieee1284.h, [
@@ -21,20 +21,20 @@ diff -Nur sane-backends-1.0.8.orig/acinclude.m4 sane-backends-1.0.8/acinclude.m4
  ])
  
  
-@@ -119,6 +121,7 @@
+@@ -220,6 +222,7 @@
  # GPHOTO2 backends.
- AC_DEFUN(SANE_CHECK_JPEG,
+ AC_DEFUN([SANE_CHECK_JPEG],
  [
 +  JPEG_LIBS=""
    AC_CHECK_LIB(jpeg,jpeg_start_decompress, 
    [
      AC_CHECK_HEADER(jconfig.h, 
-@@ -130,10 +133,11 @@
+@@ -231,10 +234,11 @@
          #if JPEG_LIB_VERSION >= 61
            sane_correct_jpeg_lib_version_found
          #endif
 -      ],[sane_cv_use_libjpeg="yes"; LIBS="${LIBS} -ljpeg"; 
-+      ],[sane_cv_use_libjpeg="yes"; JPEG_LIBS="-ljpeg";
++      ],[sane_cv_use_libjpeg="yes"; JPEG_LIBS="-ljpeg"; 
        AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
      ],)
    ],)
@@ -42,56 +42,127 @@ diff -Nur sane-backends-1.0.8.orig/acinclude.m4 sane-backends-1.0.8/acinclude.m4
  ])
  
  dnl
-@@ -237,7 +241,7 @@
+@@ -323,7 +327,7 @@
+ 	  AC_HELP_STRING([--with-gphoto2],
+                          [include the gphoto2 backend]),
+ [
+-	
++	GPHOTO2_LIBS=""
+ 	if test "$with_gphoto2" = "no" ; then
+ 		echo disabling GPHOTO2
+ 	else
+@@ -338,9 +342,9 @@
  			CPPFLAGS="${CPPFLAGS} `gphoto2-config --cflags`"
  			GPHOTO2_LIBS="`gphoto2-config --libs`"
  			SANE_EXTRACT_LDFLAGS(LDFLAGS, GPHOTO2_LIBS)
 -			LIBS="${LIBS} ${GPHOTO2_LIBS}"
-+			AC_SUBST(GPHOTO2_LIBS)
- 			;;
- 		* ) 
- 			echo 
-diff -Nur sane-backends-1.0.8.orig/backend/Makefile.in sane-backends-1.0.8/backend/Makefile.in
---- sane-backends-1.0.8.orig/backend/Makefile.in	Mon May 27 21:19:55 2002
-+++ sane-backends-1.0.8/backend/Makefile.in	Sun Jun 16 18:50:19 2002
-@@ -127,6 +127,36 @@
+ 		fi
+ ])	fi
++	AC_SUBST(GPHOTO2_LIBS)
+ ])
+ 
+ #
+diff -Nur sane-backends-1.0.10.orig/backend/Makefile.in sane-backends-1.0.10/backend/Makefile.in
+--- sane-backends-1.0.10.orig/backend/Makefile.in	Mon Jan 13 22:38:09 2003
++++ sane-backends-1.0.10/backend/Makefile.in	Sun Feb  2 00:38:28 2003
+@@ -148,6 +148,96 @@
  
  .PHONY: all clean depend dist distclean install uninstall
  
++libsane-artec_eplus48u.la: artec_eplus48u.lo artec_eplus48u-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-canon630u.la: canon630u.lo canon630u-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-canon_pp.la: canon_pp.lo canon_pp-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @IEEE1284_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
-+	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-coolscan2.la: coolscan2.lo coolscan2-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-dc210.la: dc210.lo dc210-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @JPEG_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
-+	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-dc240.la: dc240.lo dc240-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @JPEG_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
-+	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-dll.la: dll.lo dll-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @JPEG_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
-+	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-epson.la: epson.lo epson-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-gphoto2.la: gphoto2.lo gphoto2-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @GPHOTO2_LIBS@ @JPEG_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
-+	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-gt68xx.la: gt68xx.lo gt68xx-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-hp.la: hp.lo hp-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-hpsj5s.la: hpsj5s.lo hpsj5s-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @IEEE1284_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-mustek_usb.la: mustek_usb.lo mustek_usb-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-plustek.la: plustek.lo plustek-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-sm3600.la: sm3600.lo sm3600-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) -lusb \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
-+	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-snapscan.la: snapscan.lo snapscan-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-umax.la: umax.lo umax-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-umax1220u.la: umax1220u.lo umax1220u-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
  libsane-%.la: %.lo %-s.lo $(EXTRA) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) \
  	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
-@@ -214,7 +244,7 @@
+@@ -233,7 +323,7 @@
  
  libsane.la: dll.lo dll-s.lo $(EXTRA) $(addsuffix .lo,$(DLL_PRELOAD)) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -o $@ $(LDFLAGS) $(BACKENDLIBS)  $^ \
@@ -100,16 +171,34 @@ diff -Nur sane-backends-1.0.8.orig/backend/Makefile.in sane-backends-1.0.8/backe
  		-rpath $(libdir) -version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
  
  # additional dependencies
-diff -Nur sane-backends-1.0.8.orig/configure.in sane-backends-1.0.8/configure.in
---- sane-backends-1.0.8.orig/configure.in	Sun Jun 16 18:23:57 2002
-+++ sane-backends-1.0.8/configure.in	Sun Jun 16 18:26:30 2002
-@@ -206,7 +206,9 @@
- AC_CHECK_LIB(m,sqrt)
- AC_CHECK_LIB(scsi, scsireq_enter)	# FreeBSD needs this
- AC_CHECK_LIB(cam, cam_open_device)      # FreeBSD 3+ needs this
-+save_LIBS="$LIBS"
- AC_CHECK_LIB(usb, usb_open)
-+LIBS="$save_LIBS"
+diff -Nur sane-backends-1.0.10.orig/configure.in sane-backends-1.0.10/configure.in
+--- sane-backends-1.0.10.orig/configure.in	Sat Feb  1 23:31:50 2003
++++ sane-backends-1.0.10/configure.in	Sun Feb  2 00:31:03 2003
+@@ -203,10 +203,15 @@
+ fi
+ dnl we need both libusb header and a libusb providing usb_get_busses
+ if test "${ac_cv_header_usb_h}" = "yes" ; then
++  USB_LIBS=""
++  save_LIBS="$LIBS"
+   AC_CHECK_LIB(usb, usb_get_busses)
++  LIBS="$save_LIBS"
+   if test "${ac_cv_lib_usb_usb_get_busses}" = "yes" ; then
+     HAVE_LIBUSB="yes"
++    USB_LIBS="-lusb"
+   fi
++  AC_SUBST(USB_LIBS)
+ fi
  
- SANE_CHECK_JPEG
+ dnl disable Linux SCSI generic version 3 to avoid 32/64 bit problems
+diff -Nur sane-backends-1.0.10.orig/tools/Makefile.in sane-backends-1.0.10/tools/Makefile.in
+--- sane-backends-1.0.10.orig/tools/Makefile.in	Sun Aug 25 15:40:35 2002
++++ sane-backends-1.0.10/tools/Makefile.in	Sun Feb  2 00:31:11 2003
+@@ -92,7 +92,7 @@
+ sane-find-scanner: sane-find-scanner.o ../backend/sane_strstatus.lo \
+ 	../sanei/sanei_scsi.lo ../sanei/sanei_usb.lo ../sanei/sanei_init_debug.lo
+ 	@$(LIBTOOL) $(MLINK) $(LINK) sane-find-scanner.o \
+-	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS)
++	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS) @USB_LIBS@
  
+ gamma4scanimage: gamma4scanimage.o
+ 	@$(LIBTOOL) $(MLINK) $(LINK) gamma4scanimage.o -lm

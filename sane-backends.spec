@@ -1,10 +1,13 @@
 # conditional build
 # _without_dist_kernel		without kernel from distribution
 # TODO: 
-# - write kernel-chat-plustek.spec
-
-%define		pre	pre3
-
+# - write kernel-plustek.spec (with kernel{,-smp}-char-plustek packages)
+# - separate usb drivers (which depend on libusb)?
+#	usb-only: artec_eplus48u,canon630u,gt68xx,mustek_usb,umax1220u
+#	usb/scsi: coolscan2,hp,snapscan,umax
+#	usb/scsi/pp: epson
+#   what about sane-find-scanner tool? (linked with libusb)
+#
 Summary:	SANE - Easy local and networked scanner access
 Summary(es):	SANE - acceso a scanners en red y locales
 Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
@@ -12,11 +15,11 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.10
-%define	rel	0.%{pre}.1
+%define	rel	0.1
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
-Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}-%{pre}.tar.gz
+Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
@@ -28,7 +31,7 @@ Patch6:		%{name}-alpha.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
-#BuildRequires:	gphoto2-lib-devel >= 2.0.1
+BuildRequires:	libgphoto2-devel >= 2.0.1
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 %ifarch %{ix86}
@@ -186,17 +189,18 @@ SANE backend for gphoto2 supported cameras.
 %description gphoto2 -l pl
 Sterownik SANE do aparatów obs³ugiwanych przez gphoto2.
 
-%package sm3600
-Summary:	SANE backend for Microtek scanners with M011 USB chip
-Summary(pl):	Sterownik SANE dla skanerów Microteka z uk³adem USB M011
+%package hpsj5s
+Summary:	SANE backend for HP ScanJet 5s parallel port scanners
+Summary(pl):	Sterownik SANE do skanerów HP ScanJest 5s pod³±czanych do portu równoleg³ego
 Group:		Applications/System
 Requires:	%{name} = %{version}
 
-%description sm3600
-SANE backend for Microtek scanners with M011 USB chip.
+%description hpsj5s
+SANE backend for HP ScanJet 5s parallel port scanners.
 
-%description sm3600 -l pl
-Sterownik SANE dla skanerów Microteka z uk³adem USB M011.
+%description hpsj5s -l pl
+Sterownik SANE do skanerów HP ScanJest 5s pod³±czanych do portu
+równoleg³ego.
 
 %package plustek
 Summary:	Plustek scanner driver
@@ -209,6 +213,18 @@ This package contains driver for Plustek scanners.
 
 %description plustek -l pl
 Pakiet zawiera sterownik dla skanerów Plustek.
+
+%package sm3600
+Summary:	SANE backend for Microtek scanners with M011 USB chip
+Summary(pl):	Sterownik SANE dla skanerów Microteka z uk³adem USB M011
+Group:		Applications/System
+Requires:	%{name} = %{version}
+
+%description sm3600
+SANE backend for Microtek scanners with M011 USB chip.
+
+%description sm3600 -l pl
+Sterownik SANE dla skanerów Microteka z uk³adem USB M011.
 
 %package -n kernel-char-plustek
 Summary:	Plustek scanner kernel module
@@ -243,11 +259,11 @@ This package contains kernel module which drives Plustek scanners.
 Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 
 %prep
-%setup -q -n %{name}-%{version}-%{pre}
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-#%patch3 -p1
+%patch3 -p1
 %patch4 -p1 -b .wiget
 #%%patch5 -p1
 #%%patch6 -p1
@@ -271,7 +287,6 @@ cd tools
 	-I../include -o mustek600iin-off mustek600iin-off.c
 cd ..
 %endif
-
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -338,20 +353,24 @@ fi
 %doc doc/canon doc/matsushita doc/mustek doc/mustek_usb doc/sceptre
 %doc doc/teco doc/umax
 %dir %{_sysconfdir}/sane.d
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/[^cgs]*
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/c[^a]*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/[!cghps]*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/c[!a]*
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon630u.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/s[^a]*
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gt68xx.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/p[!l]*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/s[!a]*
 %dir %{_libdir}/sane
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%attr(755,root,root) %{_libdir}/sane/libsane-[^cgs]*.so.*
-%attr(755,root,root) %{_libdir}/sane/libsane-c[^a]*.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-[!cghps]*.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-c[!a]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon630u.so.*
-%attr(755,root,root) %{_libdir}/sane/libsane-s[^m]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-gt68xx.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-hp.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-p[!l]*.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-s[!m]*.so.*
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/gamma4scanimage
@@ -359,13 +378,14 @@ fi
 %{_mandir}/man1/scanimage.1*
 %{_mandir}/man1/gamma4scanimage.1*
 %{_mandir}/man1/sane-config.1*
-%{_mandir}/man5/sane-[^cgps]*
-%{_mandir}/man5/sane-c[^a]*
+%{_mandir}/man5/sane-[!cghps]*
+%{_mandir}/man5/sane-c[!a]*
 %{_mandir}/man5/sane-canon.5*
 %{_mandir}/man5/sane-canon630u.5*
-%{_mandir}/man5/sane-p[^l]*
-%{_mandir}/man5/sane-s[^m]*
 %{_mandir}/man5/sane-gt68xx.5*
+%{_mandir}/man5/sane-hp.5*
+%{_mandir}/man5/sane-p[!l]*
+%{_mandir}/man5/sane-s[!m]*
 %{_mandir}/man7/*
 
 %files devel
@@ -374,13 +394,10 @@ fi
 %attr(755,root,root) %{_bindir}/sane-config
 %attr(755,root,root) %{_libdir}/*.so
 %{_libdir}/*.la
-%{_libdir}/sane/lib*.la
-%attr(755,root,root) %{_libdir}/sane/lib*.so
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
-%{_libdir}/sane/lib*.a
 
 %files saned
 %defattr(644,root,root,755)
@@ -403,17 +420,27 @@ fi
 %{_mandir}/man5/sane-canon_pp.5*
 %endif
 
-#%files gphoto2
-#%defattr(644,root,root,755)
-#%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gphoto2.conf
-#%attr(755,root,root) %{_libdir}/sane/libsane-gphoto2.so.*
-#%{_mandir}/man5/sane-gphoto2.5*
+%files gphoto2
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gphoto2.conf
+%attr(755,root,root) %{_libdir}/sane/libsane-gphoto2.so.*
+%{_mandir}/man5/sane-gphoto2.5*
+
+%ifarch %{ix86}
+%files hpsj5s
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hpsj5s.conf
+%attr(755,root,root) %{_libdir}/sane/libsane-hpsj5s.so.*
+%{_mandir}/man5/sane-hpsj5s.5*
+%endif
+
+%files plustek
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/plustek.conf
+%attr(755,root,root) %{_libdir}/sane/libsane-plustek.so.*
+%{_mandir}/man5/sane-plustek.5*
 
 %files sm3600
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/sane/libsane-sm3600.so.*
 %{_mandir}/man5/sane-sm3600.5*
-
-%files plustek
-%defattr(644,root,root,755)
-%{_mandir}/man5/sane-plustek.5*
