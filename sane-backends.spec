@@ -1,21 +1,19 @@
 Summary:	SANE --- Easy local and networked scanner access
 Summary(pl):	SANE --- Prosta obs³uga skanerów lokalnych i sieciowych
 Name:		sane-backends
-Version:	1.0.4
-Release:	3
+Version:	1.0.5
+Release:	1
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Group(de):	Libraries
 Group(es):	Bibliotecas
 Group(fr):	Librairies
 Group(pl):	Biblioteki
-Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
 Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-no_libs.patch
-Patch2:		%{name}-includes.patch
-Patch3:		%{name}-mustek-gamma.patch
-Patch4:		%{name}-mustek-path.patch
+Patch2:		%{name}-mustek-path.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	libjpeg-devel
@@ -33,10 +31,11 @@ local and networked scanners and other image acquisition devices like
 digital still and video cameras. SANE currently includes modules for
 accessing:
 
-Scanners: Agfa SnapScan, Apple, Artec, Canon, CoolScan, Epson, HP,
-          Microtek, Mustek, Nikon, Siemens, Tamarack, UMAX
+Scanners: Abaton, Agfa, Apple, Artec, Avision, Bell+Howell, Canon,
+          Epson, Fujitsu, HP, Microtek, Mustek, NEC, Nikon, PIE,
+          Plustek, Ricoh, Sharp, Siemens, Tamarack, UMAX
 
-Others:   Connectix, QuickCams
+Digital cameras: Kodak, Polaroid, Connectix QuickCam
 
 and other SANE devices via network.
 
@@ -46,10 +45,11 @@ do skanerów, zarówno lokalnych jak i sieciowych, oraz innych urz±dzeñ
 do pozyskiwania obrazów, jak cyfrowe aparaty i kamery. SANE aktualnie
 zawiera modu³y do obs³ugi:
 
-Skanery: Agfa SnapScan, Apple, Artec, Canon, CoolScan, Epson, HP,
-         Microtek, Mustek, Nikon, Siemens, Tamarack, UMAX
+Skanery: Abaton, Agfa, Apple, Artec, Avision, Bell+Howell, Canon,
+         Epson, Fujitsu, HP, Microtek, Mustek, NEC, Nikon, PIE,
+         Plustek, Ricoh, Sharp, Siemens, Tamarack, UMAX
 
-Inne:    Connectix, QuickCams
+Aparaty cyfrowe: Kodak, Polaroid, Connectix QuickCam
 
 oraz inne urz±dzenia dostêpne przez sieæ.
 
@@ -112,8 +112,6 @@ Ten program wymaga uprawnieñ roota albo dostêpu do /dev/port.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 %build
 autoconf
@@ -135,6 +133,9 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 
 gzip -9nf AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %pre
 if [ "$1" = 1 ]; then
@@ -165,9 +166,6 @@ if [ -f /var/lock/subsys/rc-inetd ]; then
 fi
 /sbin/ldconfig
  
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %defattr(644,root,root,755)
 %doc *.gz
@@ -190,6 +188,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/*.la
 %attr(755,root,root) %{_libdir}/sane/lib*.la
 %attr(755,root,root) %{_libdir}/sane/lib*.so
+%{_mandir}/man7/*
 
 %files static
 %defattr(644,root,root,755)

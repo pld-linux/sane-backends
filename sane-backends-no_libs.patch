@@ -1,27 +1,27 @@
-diff -Naur sane-backends-1.0.4/configure.in sane-backends-1.0.4-p/configure.in
---- sane-backends-1.0.4/configure.in	Thu Dec 21 23:22:14 2000
-+++ sane-backends-1.0.4-p/configure.in	Fri Feb  9 14:58:19 2001
-@@ -132,15 +132,21 @@
+--- sane-backends-1.0.5.orig/configure.in	Sun Jul  1 21:07:00 2001
++++ sane-backends-1.0.5/configure.in	Mon Jul  2 14:14:22 2001
+@@ -165,7 +165,9 @@
  AC_CHECK_LIB(m,sqrt)
  AC_CHECK_LIB(scsi, scsireq_enter)	# FreeBSD needs this
  AC_CHECK_LIB(cam, cam_open_device)      # FreeBSD 3+ needs this
 -AC_CHECK_LIB(syslog, syslog)            # OS/2 needs this
 +AC_CHECK_FUNC(syslog, ,[
-+	AC_CHECK_LIB(syslog,syslog)             # OS/2 needs this
++	AC_CHECK_LIB(syslog,syslog)	# OS/2 needs this
 +])
+ AC_CHECK_LIB(usb, usb_open)
  
  SANE_CHECK_JPEG
- 
+@@ -173,8 +175,12 @@
  dnl IRIX sometimes has SYSVR3/4 network DSOs, but we do not need or want
  dnl to use them!
  if test "`uname`" != "IRIX" -a "`uname`" != "IRIX64"; then
 -    AC_CHECK_LIB(nsl,gethostbyaddr)
 -    AC_CHECK_LIB(socket,socket)
 +    AC_CHECK_FUNC(gethostbyaddr, , [
-+    	AC_CHECK_LIB(nsl,gethostbyaddr)
++	AC_CHECK_LIB(nsl,gethostbyaddr)
 +    ])
 +    AC_CHECK_FUNC(socket, , [
-+    	AC_CHECK_LIB(socket,socket)
++	AC_CHECK_LIB(socket,socket)
 +    ])
  fi
  
