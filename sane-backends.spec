@@ -9,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.8
-%define	rel	3
+%define	rel	4
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
@@ -19,19 +19,24 @@ Source2:	http://home.t-online.de/home/g-jaeger/current/plustek-sane-%{_plustek_v
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
-Patch3:		%{name}-libusb-link.patch
+Patch3:		%{name}-link.patch
 Patch4:		%{name}-acinclude.patch
 Patch5:		%{name}-plustek-Makefile.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
+#BuildRequires:	gphoto2-lib-devel >= 2.0.1
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
+BuildRequires:	libieee1284-devel
 %ifnarch sparc sparc64 sparcv9
 BuildRequires:	libusb-devel
 %endif
 %{!?_without_dist_kernel:BuildRequires: kernel-headers}
+BuildRequires:	tetex-dvips
+BuildRequires:	tetex-latex
 PreReq:		rc-inetd
+Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
@@ -135,6 +140,43 @@ przez program (x)scanimage.
 
 Ten program wymaga uprawnieñ roota albo dostêpu do /dev/port.
 
+%package canon_pp
+Summary:	SANE backend for Canon parallel port flatbed scanners
+Summary(pl):	Sterownik SANE do skanerów Canona pod³±czanych do portu równoleg³ego
+Group:		Applications/System
+Requires:	%{name} = %{version}
+
+%description canon_pp
+SANE backend for Canon parallel port flatbed scanners.
+
+%description canon_pp -l pl
+Sterownik SANE do p³askich skanerów Canona pod³±czanych do portu
+równoleg³ego.
+
+%package gphoto2
+Summary:	SANE backend for gphoto2 supported cameras
+Summary(pl):	Sterownik SANE do aparatów obs³ugiwanych przez gphoto2
+Group:		Applications/System
+Requires:	%{name} = %{version}
+
+%description gphoto2
+SANE backend for gphoto2 supported cameras.
+
+%description gphoto2 -l pl
+Sterownik SANE do aparatów obs³ugiwanych przez gphoto2.
+
+%package sm3600
+Summary:	SANE backend for Microtek scanners with M011 USB chip
+Summary(pl):	Sterownik SANE dla skanerów Microteka z uk³adem USB M011
+Group:		Applications/System
+Requires:	%{name} = %{version}
+
+%description sm3600
+SANE backend for Microtek scanners with M011 USB chip.
+
+%description sm3600 -l pl
+Sterownik SANE dla skanerów Microteka z uk³adem USB M011.
+
 %package plustek
 Summary:	Plustek scanner driver
 Summary(pl):	Sterownik do skanerów Plustek
@@ -205,7 +247,8 @@ aclocal
 %configure \
 	--enable-static \
 	--enable-pnm-backend \
-	--enable-translations
+	--enable-translations \
+	--with-gphoto2
 
 %{__make}
 
@@ -251,7 +294,7 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 if [ -n "`getgid saned`" ]; then
         if [ "`getgid saned`" != "90" ]; then
-                echo "Warning: group saned haven't gid=90. Correct this before installing sane" 1>&2
+                echo "Error: group saned doesn't have gid=90. Correct this before installing sane." 1>&2
                 exit 1
         fi
 else
@@ -259,7 +302,7 @@ else
 fi
 if [ -n "`id -u saned 2>/dev/null`" ]; then
         if [ "`id -u saned`" != "90" ]; then
-                echo "Warning: user saned haven't uid=90. Correct this before installing sane" 1>&2
+                echo "Error: user saned doesn't have uid=90. Correct this before installing sane." 1>&2
                 exit 1
         fi
 else
@@ -303,33 +346,64 @@ fi
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog
+%doc doc/canon doc/matsushita doc/mustek doc/mustek_usb doc/sceptre
+%doc doc/teco doc/umax
 %dir %{_sysconfdir}/sane.d
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/[^cg]*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/c[^a]*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon630u.conf
 %config %{_sysconfdir}/sysconfig/rc-inetd/saned
 %dir %{_libdir}/sane
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%attr(755,root,root) %{_libdir}/sane/lib*.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-[^cgs]*.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-c[^a]*.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-canon.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-canon630u.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-s[^m]*.so.*
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_sbindir}/saned
 %{_mandir}/man1/*
-%{_mandir}/man5/sane-[!p]*
-%{_mandir}/man5/sane-p[!l]*
+%{_mandir}/man5/sane-[^cgps]*
+%{_mandir}/man5/sane-c[^a]*
+%{_mandir}/man5/sane-canon.5*
+%{_mandir}/man5/sane-canon630u.5*
+%{_mandir}/man5/sane-p[^l]*
+%{_mandir}/man5/sane-s[^m]*
+%{_mandir}/man7/*
 
 %files devel
 %defattr(644,root,root,755)
+%doc doc/sane.ps
 %{_includedir}/sane
 %attr(755,root,root) %{_bindir}/sane-config
 %attr(755,root,root) %{_libdir}/*.so
 %attr(755,root,root) %{_libdir}/*.la
 %attr(755,root,root) %{_libdir}/sane/lib*.la
 %attr(755,root,root) %{_libdir}/sane/lib*.so
-%{_mandir}/man7/*
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
 %{_libdir}/sane/lib*.a
+
+%files canon_pp
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon_pp.conf
+%attr(755,root,root) %{_libdir}/sane/libsane-canon_pp.so.*
+%{_mandir}/man5/sane-canon_pp.5*
+
+#%files gphoto2
+#%defattr(644,root,root,755)
+#%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gphoto2.conf
+#%attr(755,root,root) %{_libdir}/sane/libsane-gphoto2.so.*
+#%{_mandir}/man5/sane-gphoto2.5*
+
+%files sm3600
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/sane/libsane-sm3600.so.*
+%{_mandir}/man5/sane-sm3600.5*
 
 %ifarch %{ix86}
 %files -n sane-mustek600IIN
@@ -341,7 +415,7 @@ fi
 %defattr(644,root,root,755)
 %doc backend/plustek_driver/README backend/plustek_driver/TODO
 %doc backend/plustek_driver/FAQ backend/plustek_driver/ChangeLog
-%{_mandir}/man5/sane-plustek*
+%{_mandir}/man5/sane-plustek.5*
 
 %ifnarch sparc sparc64 sparcv9
 %files -n kernel-char-plustek
