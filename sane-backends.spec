@@ -9,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.8
-%define	rel	1
+%define	rel	2
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
@@ -310,6 +310,7 @@ fi
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(755,root,root) %{_libdir}/sane/lib*.so.*
 %attr(755,root,root) %{_bindir}/scanimage
+%attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_sbindir}/saned
 %{_mandir}/man1/*
 %{_mandir}/man5/sane-[!p]*
