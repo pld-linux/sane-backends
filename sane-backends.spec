@@ -1,7 +1,9 @@
 # conditional build
 # _without_dist_kernel		without kernel from distribution
+# TODO: 
+# - write kernel-chat-plustek.spec
 
-%define		_plustek_ver	0_43_7
+%define		pre	pre2
 
 Summary:	SANE - Easy local and networked scanner access
 Summary(es):	SANE - acceso a scanners en red y locales
@@ -9,14 +11,13 @@ Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
 Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.9
-%define	rel	0.1
+Version:	1.0.10
+%define	rel	0.%{pre}.1
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
-Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}-%{pre}.tar.gz
 Source1:	%{name}.rc-inetd
-Source2:	http://www.gjaeger.de/scanner/current/plustek-sane-%{_plustek_ver}.tar.gz
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
@@ -242,23 +243,14 @@ This package contains kernel module which drives Plustek scanners.
 Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}-%{pre}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 #%patch3 -p1
-%patch4 -p1
-
-mkdir tmp-plustek_driver
-cd tmp-plustek_driver
-tar xfz %{SOURCE2}
-# NOTE: we need original dll.conf!
-rm -f backend/dll.conf
-cp -Rf * ..
-cd ..
-
-%patch5 -p1
-%patch6 -p1
+%patch4 -p1 -b .wiget
+#%%patch5 -p1
+#%%patch6 -p1
 
 %build
 rm -f missing
@@ -280,14 +272,6 @@ cd tools
 cd ..
 %endif
 
-%ifnarch sparc sparc64 sparcv9
-cd backend/plustek_driver
-%{__make} all BUILD_SMP=1 OPT_FLAGS="%{rpmcflags}"
-mv -f pt_drv.o{,.smp}
-%{__make} clean
-%{__make} all OPT_FLAGS="%{rpmcflags}" CC=%{kgcc}
-cd ..
-%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -295,11 +279,6 @@ install -d $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
-
-%ifnarch sparc sparc64 sparcv9
-install  backend/plustek_driver/pt_drv.o.smp	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/pt_drv.o
-install  backend/plustek_driver/pt_drv.o	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
-%endif
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 
@@ -353,21 +332,9 @@ if [ "$1" = "0" ]; then
 	fi
 fi
 
-%post -n kernel-char-plustek
-/sbin/depmod -a
-
-%post -n kernel-smp-char-plustek
-/sbin/depmod -a
-
-%postun -n kernel-char-plustek
-/sbin/depmod -a
-
-%postun -n kernel-smp-char-plustek
-/sbin/depmod -a
-
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog
+%doc AUTHORS LICENSE NEWS PROBLEMS PROJECTS TODO ChangeLog
 %doc doc/canon doc/matsushita doc/mustek doc/mustek_usb doc/sceptre
 %doc doc/teco doc/umax
 %dir %{_sysconfdir}/sane.d
@@ -376,6 +343,7 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon630u.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/s[^a]*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gt68xx.conf
 %dir %{_libdir}/sane
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(755,root,root) %{_libdir}/sane/libsane-[^cgs]*.so.*
@@ -383,16 +351,21 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-canon.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon630u.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-s[^m]*.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-gt68xx.so.*
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_bindir}/scanimage
+%attr(755,root,root) %{_bindir}/gamma4scanimage
 %{_mandir}/man1/sane-find-scanner.1*
 %{_mandir}/man1/scanimage.1*
+%{_mandir}/man1/gamma4scanimage.1*
+%{_mandir}/man1/sane-config.1*
 %{_mandir}/man5/sane-[^cgps]*
 %{_mandir}/man5/sane-c[^a]*
 %{_mandir}/man5/sane-canon.5*
 %{_mandir}/man5/sane-canon630u.5*
 %{_mandir}/man5/sane-p[^l]*
 %{_mandir}/man5/sane-s[^m]*
+%{_mandir}/man5/sane-gt68xx.5*
 %{_mandir}/man7/*
 
 %files devel
@@ -443,16 +416,4 @@ fi
 
 %files plustek
 %defattr(644,root,root,755)
-%doc backend/plustek_driver/README backend/plustek_driver/TODO
-%doc backend/plustek_driver/FAQ backend/plustek_driver/ChangeLog
 %{_mandir}/man5/sane-plustek.5*
-
-%ifnarch sparc sparc64 sparcv9
-%files -n kernel-char-plustek
-%defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}/misc/*
-
-%files -n kernel-smp-char-plustek
-%defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}smp/misc/*
-%endif
