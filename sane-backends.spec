@@ -2,7 +2,7 @@ Summary:	SANE --- Easy local and networked scanner access
 Summary(pl):	SANE --- Prosta obs³uga skanerów lokalnych i sieciowych
 Name:		sane-backends
 Version:	1.0.4
-Release:	2
+Release:	3
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Group(de):	Libraries
@@ -139,7 +139,7 @@ gzip -9nf AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog
 %pre
 if [ "$1" = 1 ]; then
 	getgid saned >/dev/null 2>&1 || %{_sbindir}/groupadd -g 90 -f saned
-	id -u saned >/dev/null 2>&1 || %{_sbindir}/useradd -g saned -M -u 90 \
+	id -u saned >/dev/null 2>&1 || %{_sbindir}/useradd -g saned -u 90 \
 		-c "SANE remote scanning daemon" saned
 	grep -q '^sane' /etc/services || echo -e \
 		'sane\t\t6566/tcp\t\t\t#network scanner daemon' >>/etc/services
