@@ -1,6 +1,6 @@
---- sane-backends-1.0.14/acinclude.m4.orig	2004-05-15 01:14:41.589083432 +0200
-+++ sane-backends-1.0.14/acinclude.m4	2004-05-15 01:17:12.697111520 +0200
-@@ -202,16 +202,18 @@
+--- sane-backends-1.0.15/acinclude.m4.orig	2004-11-07 22:59:10.184318312 +0100
++++ sane-backends-1.0.15/acinclude.m4	2004-11-07 23:07:43.171332432 +0100
+@@ -183,16 +183,18 @@
  # Checks for ieee1284 library, needed for canon_pp backend.
  AC_DEFUN([SANE_CHECK_IEEE1284],
  [
@@ -20,7 +20,7 @@
    if test "$sane_cv_use_libieee1284" = "yes" ; then
      AC_DEFINE(HAVE_LIBIEEE1284,1,[Define to 1 if you have the `ieee1284' library (-lcam).])
    fi
-@@ -243,6 +243,7 @@
+@@ -243,6 +245,7 @@
  # GPHOTO2 backends.
  AC_DEFUN([SANE_CHECK_JPEG],
  [
@@ -28,7 +28,7 @@
    AC_CHECK_LIB(jpeg,jpeg_start_decompress, 
    [
      AC_CHECK_HEADER(jconfig.h, 
-@@ -254,10 +255,11 @@
+@@ -254,10 +257,11 @@
          #if JPEG_LIB_VERSION >= 61
            sane_correct_jpeg_lib_version_found
          #endif
@@ -41,20 +41,25 @@
  ])
  
  dnl
-@@ -351,7 +353,7 @@
- 	# as "$with_gphoto2" will be set to "no"
+@@ -352,6 +356,7 @@
  
  	])
--
-+	GPHOTO2_LIBS=""
- 	# If --with-gphoto2=yes (or not supplied), then enable it
- 	# if gphoto2-config can be found
- 	if test "$with_gphoto2" != "no" ; then 
-@@ -364,10 +366,9 @@
- 			CPPFLAGS="${CPPFLAGS} `gphoto2-config --cflags`"
- 			GPHOTO2_LIBS="`gphoto2-config --libs`"
- 			SANE_EXTRACT_LDFLAGS(LDFLAGS, GPHOTO2_LIBS)
--			LIBS="${LIBS} ${GPHOTO2_LIBS}"
+ 
++	GPHOTO2_LIBS=
+ 	# If --with-gphoto2=yes (or not supplied), first check if 
+ 	# pkg-config exists, then use it to check if libgphoto2 is
+ 	# present.  If all that works, then see if we can actually link
+@@ -376,14 +381,14 @@
+ 				LIBS="${LIBS} ${GPHOTO2_LIBS}"
+ 				# Make sure we an really use the library
+ 				AC_CHECK_FUNCS(gp_camera_init,HAVE_GPHOTO2=true, 
+-					[ LIBS="${saved_LIBS}"
+-					HAVE_GPHOTO2=false ])
++					[ HAVE_GPHOTO2=false ])
++				LIBS="${saved_LIBS}"
+ 			else
+ 				HAVE_GPHOTO2=false
+ 			fi
  		fi
  	fi
 -
@@ -64,7 +69,7 @@
  #
 --- sane-backends-1.0.14/backend/Makefile.in.orig	Mon Nov 10 19:15:47 2003
 +++ sane-backends-1.0.14/backend/Makefile.in	Fri Nov 28 13:29:02 2003
-@@ -153,6 +153,136 @@
+@@ -153,6 +153,141 @@
  
  .PHONY: all clean depend dist distclean install uninstall
  
@@ -163,6 +168,11 @@
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
++libsane-niash.la: niash.lo niash-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-plustek.la: plustek.lo plustek-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
@@ -201,7 +211,7 @@
  libsane-%.la: %.lo %-s.lo $(EXTRA) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) \
  	$(LDFLAGS) $(BACKENDLIBS) $^ @LIBTOOL_LINK_EXTRA@ -rpath $(libsanedir) \
-@@ -244,7 +354,7 @@
+@@ -244,7 +359,7 @@
  
  libsane.la: dll.lo dll-s.lo $(EXTRA) $(addsuffix .lo,$(DLL_PRELOAD)) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -o $@ $(LDFLAGS) $(BACKENDLIBS)  $^ \
