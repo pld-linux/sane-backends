@@ -6,7 +6,7 @@
 dnl AM_PATH_SANE([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
 dnl Test for SANE, and define SANE_CFLAGS and SANE_LIBS
 dnl
-AC_DEFUN(AM_PATH_SANE,
+AC_DEFUN([AM_PATH_SANE],
 [dnl 
 dnl Get the cflags and libraries from the sane-config script
 dnl
