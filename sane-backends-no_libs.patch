@@ -1,0 +1,28 @@
+diff -Naur sane-backends-1.0.4/configure.in sane-backends-1.0.4-p/configure.in
+--- sane-backends-1.0.4/configure.in	Thu Dec 21 23:22:14 2000
++++ sane-backends-1.0.4-p/configure.in	Fri Feb  9 14:58:19 2001
+@@ -132,15 +132,21 @@
+ AC_CHECK_LIB(m,sqrt)
+ AC_CHECK_LIB(scsi, scsireq_enter)	# FreeBSD needs this
+ AC_CHECK_LIB(cam, cam_open_device)      # FreeBSD 3+ needs this
+-AC_CHECK_LIB(syslog, syslog)            # OS/2 needs this
++AC_CHECK_FUNC(syslog, ,[
++	AC_CHECK_LIB(syslog,syslog)             # OS/2 needs this
++])
+ 
+ SANE_CHECK_JPEG
+ 
+ dnl IRIX sometimes has SYSVR3/4 network DSOs, but we do not need or want
+ dnl to use them!
+ if test "`uname`" != "IRIX" -a "`uname`" != "IRIX64"; then
+-    AC_CHECK_LIB(nsl,gethostbyaddr)
+-    AC_CHECK_LIB(socket,socket)
++    AC_CHECK_FUNC(gethostbyaddr, , [
++    	AC_CHECK_LIB(nsl,gethostbyaddr)
++    ])
++    AC_CHECK_FUNC(socket, , [
++    	AC_CHECK_LIB(socket,socket)
++    ])
+ fi
+ 
+ dnl check for PTAL library (used in hp backend)

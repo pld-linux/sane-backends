@@ -1,0 +1,213 @@
+diff -Naur sane-backends-1.0.4/Makefile.in sane-backends-1.0.4-p/Makefile.in
+--- sane-backends-1.0.4/Makefile.in	Wed Nov 15 23:39:42 2000
++++ sane-backends-1.0.4-p/Makefile.in	Thu Feb  8 16:22:24 2001
+@@ -7,6 +7,7 @@
+ 
+ PACKAGE = @PACKAGE@
+ VERSION = @VERSION@
++DESTDIR =
+ 
+ prefix = @prefix@
+ exec_prefix = @exec_prefix@
+@@ -48,10 +49,10 @@
+ lsm: $(PACKAGE)-$(VERSION).lsm
+ 
+ install: install-recursive
+-	$(MKDIR) $(includedir)/sane
++	$(MKDIR) $(DESTDIR)$(includedir)/sane
+ 	@list="$(INSTALLED_INCLUDES)"; for file in $$list; do \
+ 	  echo installing $${file} in $(includedir)/sane...; \
+-	  $(INSTALL_DATA) $${file} $(includedir)/sane || exit 1; \
++	  $(INSTALL_DATA) $${file} $(DESTDIR)$(includedir)/sane || exit 1; \
+ 	done
+ 
+ clean: clean-recursive
+diff -Naur sane-backends-1.0.4/backend/Makefile.in sane-backends-1.0.4-p/backend/Makefile.in
+--- sane-backends-1.0.4/backend/Makefile.in	Thu Nov 30 21:05:49 2000
++++ sane-backends-1.0.4-p/backend/Makefile.in	Fri Feb  9 10:24:20 2001
+@@ -1,4 +1,5 @@
+ SHELL = /bin/sh
++DESTDIR =
+ 
+ VPATH = @srcdir@
+ srcdir = @srcdir@
+@@ -90,40 +91,37 @@
+ all:	$(LIBS) libsane.la
+ 
+ install:
+-	$(MKDIR) $(libdir) $(libsanedir) $(configdir)
++	$(MKDIR) $(DESTDIR)$(libdir) $(DESTDIR)$(libsanedir) $(DESTDIR)$(configdir)
+ 	@list="$(LIBS)"; for be in $$list; do \
+ 	  echo installing $${be} in $(libsanedir)...; \
+-	  $(LIBTOOL) $(MINST) $(INSTALL_PROGRAM) $${be} $(libsanedir)/$${be} \
++	  $(LIBTOOL) $(MINST) $(INSTALL_PROGRAM) $${be} $(DESTDIR)$(libsanedir)/$${be} \
+ 	    || exit 1; \
+ 	done
+-	@$(LIBTOOL) $(MINST) --finish $(libsanedir)
++	@$(LIBTOOL) $(MINST) --finish $(DESTDIR)$(libsanedir)
+ 	@# Assume the dll name without any versions is last
+ 	@dllend=`../tools/libtool-get-dll-ext libsane-dll.la`; \
+-	list="$(ALL_BACKENDS)"; cd $(libsanedir) && for be in $$list; do \
++	list="$(ALL_BACKENDS)"; cd $(DESTDIR)$(libsanedir) && for be in $$list; do \
+ 	  file=libsane-$${be}.$$dllend.$(V_MAJOR); \
+ 	  lib=`grep dlname= libsane-$${be}.la | cut -f2 -d"'"`; \
+-	  if test ! -f $${file} -a -n "$${lib}"; then \
+-	    $(LN_S) $${lib} $${file}; \
++	  if test ! -f $${file} -a -n "$${lib}"; then \
++	    $(LN_S) $${lib} $${file}; \
+ 	  fi; \
+ 	done
+ 	@# Assume the dll name without any versions is last
+ 	@dllend=`../tools/libtool-get-dll-ext libsane-dll.la`; \
+-	rm -f $(libdir)/libsane.a $(libdir)/libsane.$$dllend \
+-		$(libdir)/libsane.$$dllend.$(V_MAJOR)*; \
+-	$(LN_S) sane/libsane-dll.a $(libdir)/libsane.a; \
+-	$(LN_S) sane/libsane-dll.$$dllend $(libdir)/libsane.$$dllend ; \
+-	cd $(libsanedir) && for n in libsane-dll.$$dllend.$(V_MAJOR)*; do \
++	rm -f $(DESTDIR)$(libdir)/libsane.a $(DESTDIR)$(libdir)/libsane.$$dllend \
++		$(DESTDIR)$(libdir)/libsane.$$dllend.$(V_MAJOR)*; \
++	$(LN_S) sane/libsane-dll.a $(DESTDIR)$(libdir)/libsane.a; \
++	$(LN_S) sane/libsane-dll.$$dllend $(DESTDIR)$(libdir)/libsane.$$dllend ; \
++	cd $(DESTDIR)$(libsanedir) && for n in libsane-dll.$$dllend.$(V_MAJOR)*; do \
+ 	  nn=`echo $$n | sed 's,^libsane-dll,libsane,'`; \
+-	  (cd ..; $(LN_S) sane/$$n $$nn); \
++	  (cd ..; $(LN_S) sane/$$n $$nn); \
+ 	done || exit 1
+-	$(LIBTOOL) $(MINST) $(INSTALL_PROGRAM) libsane.la $(libdir)/libsane.la
++	$(LIBTOOL) $(MINST) $(INSTALL_PROGRAM) libsane.la $(DESTDIR)$(libdir)/libsane.la
+ 	@list="$(CONFIGS)"; for cfg in $$list; do \
+-	  if test ! -r $(srcdir)/$${cfg}; then continue; fi; \
+-	  if test -f $(configdir)/$${cfg}; then \
+-	    echo NOT overwriting $${cfg} in $(configdir)...; \
+-	  else \
++	  if test -f $(srcdir)/$${cfg}; then \
+ 	    echo installing $${cfg} in $(configdir)...; \
+-	    $(INSTALL_DATA) $(srcdir)/$${cfg} $(configdir)/$${cfg} || exit 1; \
++	    $(INSTALL_DATA) $(srcdir)/$${cfg} $(DESTDIR)$(configdir)/$${cfg} || exit 1; \
+ 	  fi; \
+ 	done
+ 
+diff -Naur sane-backends-1.0.4/doc/Makefile.in sane-backends-1.0.4-p/doc/Makefile.in
+--- sane-backends-1.0.4/doc/Makefile.in	Fri Nov 24 00:00:05 2000
++++ sane-backends-1.0.4-p/doc/Makefile.in	Thu Feb  8 16:28:04 2001
+@@ -1,4 +1,5 @@
+ SHELL = /bin/sh
++DESTDIR =
+ 
+ VPATH = @srcdir@
+ srcdir = @srcdir@
+@@ -57,21 +58,21 @@
+ 	    -e 's|@SBINDIR@|$(sbindir)|g' $^ >$@
+ 
+ install: $(MANPAGES)
+-	$(MKDIR) $(mandir)/man1 $(mandir)/man5
++	$(MKDIR) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man5
+ 	@for page in $(SECT1); do \
+ 	  echo installing $${page} in $(mandir)/man1/$${page}...; \
+-	  $(INSTALL_DATA) $${page} $(mandir)/man1/$${page} || exit 1; \
++	  $(INSTALL_DATA) $${page} $(DESTDIR)$(mandir)/man1/$${page} || exit 1; \
+ 	done
+ 	@for page in $(SECT5); do \
+ 	  echo installing $${page} in $(mandir)/man5/$${page}...; \
+-	  $(INSTALL_DATA) $${page} $(mandir)/man5/$${page} || exit 1; \
++	  $(INSTALL_DATA) $${page} $(DESTDIR)$(mandir)/man5/$${page} || exit 1; \
+ 	done
+ 
+ install-docs: ps
+-	$(MKDIR) $(docdir)
++	$(MKDIR) $(DESTDIR)$(docdir)
+ 	@for doc in $(DOCS); do \
+ 	  echo installing $${doc} in $(docdir)/$${doc}...; \
+-	  $(INSTALL_DATA) $${doc} $(docdir)/$${doc} || exit 1; \
++	  $(INSTALL_DATA) $${doc} $(DESTDIR)$(docdir)/$${doc} || exit 1; \
+ 	done
+ 
+ docs: ps html
+diff -Naur sane-backends-1.0.4/frontend/Makefile.in sane-backends-1.0.4-p/frontend/Makefile.in
+--- sane-backends-1.0.4/frontend/Makefile.in	Mon Dec  4 22:19:53 2000
++++ sane-backends-1.0.4-p/frontend/Makefile.in	Thu Feb  8 16:28:38 2001
+@@ -1,4 +1,5 @@
+ SHELL = /bin/sh
++DESTDIR =
+ 
+ VPATH = @srcdir@
+ srcdir = @srcdir@
+@@ -61,14 +62,14 @@
+ all: $(PROGRAMS)
+ 
+ install: $(PROGRAMS)
+-	$(MKDIR) $(bindir) $(sbindir) $(datadir)
++	$(MKDIR) $(DESTDIR)$(bindir) $(DESTDIR)$(sbindir) $(DESTDIR)$(datadir)
+ 	@for program in $(BINPROGS); do \
+ 	  $(LIBTOOL) $(MINST) $(INSTALL_PROGRAM) $${program} \
+-	    $(bindir)/$${program}; \
++	    $(DESTDIR)$(bindir)/$${program}; \
+ 	done
+ 	@for program in $(SBINPROGS); do \
+ 	  $(LIBTOOL) $(MINST) $(INSTALL_PROGRAM) $${program} \
+-	    $(sbindir)/$${program}; \
++	    $(DESTDIR)$(sbindir)/$${program}; \
+ 	done
+ 
+ test: test.o $(LIBSANE) $(LIBLIB)
+diff -Naur sane-backends-1.0.4/japi/Makefile.in sane-backends-1.0.4-p/japi/Makefile.in
+--- sane-backends-1.0.4/japi/Makefile.in	Sun Sep 17 05:02:24 2000
++++ sane-backends-1.0.4-p/japi/Makefile.in	Thu Feb  8 16:29:05 2001
+@@ -3,6 +3,7 @@
+ #
+ 
+ SHELL = /bin/sh
++DESTDIR =
+ 
+ VPATH = @srcdir@
+ srcdir = @srcdir@
+@@ -92,10 +93,10 @@
+ #	Install library.  Don't know where to install .class files yet.
+ 
+ install:
+-	$(MKDIR) $(libdir) $(configdir)
++	$(MKDIR) $(DESTDIR)$(libdir) $(DESTDIR)$(configdir)
+ 	$(LIBTOOL) $(MINST) $(INSTALL_PROGRAM) libsanej.la \
+-		$(libdir)/libsanej.la || exit 1;
+-	@$(LIBTOOL) $(MINST) --finish $(libdir)
++		$(DESTDIR)$(libdir)/libsanej.la || exit 1;
++	@$(LIBTOOL) $(MINST) --finish $(DESTDIR)$(libdir)
+ 
+ 
+ Sane.c: Sane.h
+diff -Naur sane-backends-1.0.4/lib/Makefile.in sane-backends-1.0.4-p/lib/Makefile.in
+--- sane-backends-1.0.4/lib/Makefile.in	Mon Nov 20 23:18:10 2000
++++ sane-backends-1.0.4-p/lib/Makefile.in	Thu Feb  8 16:29:12 2001
+@@ -1,4 +1,5 @@
+ SHELL = /bin/sh
++DESTDIR =
+ 
+ VPATH = @srcdir@
+ srcdir = @srcdir@
+diff -Naur sane-backends-1.0.4/sanei/Makefile.in sane-backends-1.0.4-p/sanei/Makefile.in
+--- sane-backends-1.0.4/sanei/Makefile.in	Mon Nov 20 23:18:12 2000
++++ sane-backends-1.0.4-p/sanei/Makefile.in	Thu Feb  8 16:29:21 2001
+@@ -1,4 +1,5 @@
+ SHELL = /bin/sh
++DESTDIR =
+ 
+ VPATH = @srcdir@
+ srcdir = @srcdir@
+diff -Naur sane-backends-1.0.4/tools/Makefile.in sane-backends-1.0.4-p/tools/Makefile.in
+--- sane-backends-1.0.4/tools/Makefile.in	Sun Mar  5 14:57:22 2000
++++ sane-backends-1.0.4-p/tools/Makefile.in	Thu Feb  8 16:29:45 2001
+@@ -1,4 +1,5 @@
+ SHELL = /bin/sh
++DESTDIR =
+ 
+ VPATH = @srcdir@
+ srcdir = @srcdir@
+@@ -65,7 +66,7 @@
+ all:	$(DESTINATIONS)
+ 
+ install: sane-config
+-	$(INSTALL_PROGRAM) sane-config $(bindir)/sane-config
++	$(INSTALL_PROGRAM) sane-config $(DESTDIR)$(bindir)/sane-config
+ 
+ sane-config: sane-config.in $(top_builddir)/config.status 
+ 	cd $(top_builddir) \
