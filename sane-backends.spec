@@ -138,7 +138,7 @@ Bibliotecas estáticas para desenvolvimento de módulos do SANE.
 Summary:	SANE network daemon
 Summary(pl):	Demon sieciowy SANE
 Group:		Networking/Daemons
-PreReq:         rc-inetd
+PreReq:		rc-inetd
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
@@ -281,28 +281,28 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre saned
 if [ -n "`/usr/bin/getgid saned`" ]; then
-        if [ "`/usr/bin/getgid saned`" != "90" ]; then
-                echo "Error: group saned doesn't have gid=90. Correct this before installing sane." 1>&2
-                exit 1
-        fi
+	if [ "`/usr/bin/getgid saned`" != "90" ]; then
+	echo "Error: group saned doesn't have gid=90. Correct this before installing sane." 1>&2
+		exit 1
+	fi
 else
-        /usr/sbin/groupadd -g 90 saned 1>&2
+	/usr/sbin/groupadd -g 90 saned 1>&2
 fi
 if [ -n "`/bin/id -u saned 2>/dev/null`" ]; then
-        if [ "`/bin/id -u saned`" != "90" ]; then
-                echo "Error: user saned doesn't have uid=90. Correct this before installing sane." 1>&2
-                exit 1
-        fi
+	if [ "`/bin/id -u saned`" != "90" ]; then
+	echo "Error: user saned doesn't have uid=90. Correct this before installing sane." 1>&2
+		exit 1
+	fi
 else
-        /usr/sbin/useradd -u 90 -d /usr/share/empty -s /bin/false \
+	/usr/sbin/useradd -u 90 -d /usr/share/empty -s /bin/false \
 		-c "SANE remote scanning daemon" -g saned saned 1>&2
 fi
 
 %post saned
 if [ -f /var/lock/subsys/rc-inetd ]; then
-        /etc/rc.d/init.d/rc-inetd reload
+	/etc/rc.d/init.d/rc-inetd reload
 else
-        echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server" 1>&2
+	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server" 1>&2
 fi
 
 %postun saned
