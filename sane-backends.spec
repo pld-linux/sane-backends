@@ -9,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.7
-%define	rel	2.20
+%define	rel	2.21
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
@@ -198,16 +198,20 @@ cd ..
 %patch6 -p1
 
 %build
+rm -f missing
 libtoolize --copy --force
 aclocal
+automake -a -c -f --foreign ||
 autoconf
 %configure
 %{__make}
 
+%ifnarch ppc
 cd tools
 %{__cc} -DHAVE_SYS_IO_H %{rpmcflags} \
 	-I../include -o mustek600iin-off mustek600iin-off.c
 cd ..
+%endif
 
 cd backend/plustek_driver
 %{__make} all BUILD_SMP=1 OPT_FLAGS="%{rpmcflags}"
@@ -226,7 +230,10 @@ install  backend/plustek_driver/pt_drv.o.smp	$RPM_BUILD_ROOT/lib/modules/%{_kern
 install  backend/plustek_driver/pt_drv.o	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
+
+%ifnarch ppc
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
+%endif
 
 gzip -9nf AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog \
 	backend/plustek_driver/README backend/plustek_driver/TODO \
@@ -317,9 +324,11 @@ fi
 %{_libdir}/lib*.a
 %{_libdir}/sane/lib*.a
 
+%ifnarch ppc
 %files -n sane-mustek600IIN
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mustek600iin-off
+%endif
 
 %files plustek
 %defattr(644,root,root,755)
