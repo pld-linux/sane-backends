@@ -9,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.8
-%define	rel	14
+%define	rel	15
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
@@ -311,6 +311,9 @@ install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
 %pre saned
 if [ -n "`getgid saned`" ]; then
         if [ "`getgid saned`" != "90" ]; then
@@ -330,7 +333,6 @@ else
 fi
 
 %post saned
-/sbin/ldconfig
 if [ -f /var/lock/subsys/rc-inetd ]; then
         /etc/rc.d/init.d/rc-inetd reload
 else
@@ -349,7 +351,6 @@ if [ "$1" = "0" ]; then
 		/etc/rc.d/init.d/rc-inetd reload
 	fi
 fi
-/sbin/ldconfig
 
 %post -n kernel-char-plustek
 /sbin/depmod -a
