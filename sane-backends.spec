@@ -29,10 +29,11 @@ Patch3:		%{name}-link.patch
 Patch4:		%{name}-acinclude.patch
 Patch5:		%{name}-plustek-Makefile.patch
 Patch6:		%{name}-alpha.patch
+Patch7:		%{name}-ac.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libgphoto2-devel >= 2.0.1
+BuildRequires:	gphoto2-devel >= 2.0.1
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 %ifarch %{ix86}
@@ -268,6 +269,7 @@ Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 %patch4 -p1 -b .wiget
 #%%patch5 -p1
 #%%patch6 -p1
+%patch7 -p1
 
 %build
 rm -f missing
