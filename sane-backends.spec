@@ -64,10 +64,10 @@ Requires:	%{name} = %{version}
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
 
-%description sane-devel
+%description devel
 Development part of SANE.
 
-%description -l pl sane-devel
+%description -l pl devel
 Czê¶æ SANE dla programistów.
 
 %package static
@@ -80,10 +80,10 @@ Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
 Obsoletes:	sane-backends-sane-static
 
-%description sane-static
+%description static
 Static SANE libraries.
 
-%description -l pl sane-static
+%description -l pl static
 Biblioteki statyczne SANE.
 
 %package -n sane-mustek600IIN
