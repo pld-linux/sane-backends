@@ -10,7 +10,7 @@ Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.8
-%define	rel	18
+%define	rel	19
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
@@ -29,6 +29,7 @@ Patch6:		%{name}-alpha.patch
 Patch7:		%{name}-autoload.patch
 Patch8:		%{name}-rpath.patch
 Patch9:		%{name}-saned.patch
+Patch10:	%{name}-de.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -253,6 +254,7 @@ Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch10 -p1
 
 mkdir tmp-plustek_driver
 cd tmp-plustek_driver
