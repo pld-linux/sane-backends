@@ -17,7 +17,6 @@ Patch2:		%{name}-includes.patch
 Patch3:		%{name}-mustek-gamma.patch
 Patch4:		%{name}-mustek-path.patch
 URL:		http://www.mostang.com/sane/
-BuildConflicts:	sane
 BuildRequires:	libjpeg-devel
 Prereq:		/sbin/ldconfig
 Prereq:		sh-utils
@@ -25,6 +24,7 @@ Prereq:		shadow
 Prereq:		grep
 Requires:	rc-inetd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+Obsoletes:	sane
 
 %description
 SANE (Scanner Access Now Easy) is a sane and simple interface to both
