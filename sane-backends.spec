@@ -1,3 +1,9 @@
+#
+# Conditional build:
+# _without_gphoto	- no gphoto backend (which requires libgphoto2)
+# _without_lpt		- no parallel port backends (only those which require libieee1284)
+# _without_usb		- without USB scanners support (which requires libusb)
+#
 # TODO: 
 # - separate usb drivers (which depend on libusb)?
 #	usb-only: artec_eplus48u,canon630u,gt68xx,mustek_usb,umax1220u
@@ -12,11 +18,12 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.11
-Release:	1
+Release:	2
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
+Source2:	%{name}.m4
 Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
@@ -27,14 +34,14 @@ URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
 BuildRequires:	gettext-devel
-BuildRequires:	libgphoto2-devel >= 2.0.1
+%{!?_without_gphoto:BuildRequires:	libgphoto2-devel >= 2.0.1}
 %ifarch %{ix86}
-BuildRequires:	libieee1284-devel
+%{!?_without_lpt:BuildRequires:	libieee1284-devel}
 %endif
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 %ifnarch sparc sparc64 sparcv9
-BuildRequires:	libusb-devel
+%{!?_without_usb:BuildRequires:	libusb-devel}
 %endif
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
@@ -238,7 +245,7 @@ rm -f missing
 	--enable-static \
 	--enable-pnm-backend \
 	--enable-translations \
-	--with-gphoto2
+	%{!?_without_gphoto:--with-gphoto2}
 
 %{__make}
 
@@ -251,12 +258,12 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
+install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_aclocaldir}}
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
+install %{SOURCE2} $RPM_BUILD_ROOT%{_aclocaldir}
 
 %ifarch %{ix86}
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
@@ -355,6 +362,7 @@ fi
 %attr(755,root,root) %{_bindir}/sane-config
 %attr(755,root,root) %{_libdir}/*.so
 %{_libdir}/*.la
+%{_aclocaldir}/*.m4
 
 %files static
 %defattr(644,root,root,755)
@@ -374,25 +382,31 @@ fi
 %endif
 
 %ifarch %{ix86}
+%if 0%{!?_without_lpt:1}
 %files canon_pp
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon_pp.conf
 %attr(755,root,root) %{_libdir}/sane/libsane-canon_pp.so.*
 %{_mandir}/man5/sane-canon_pp.5*
 %endif
+%endif
 
+%if 0%{!?_without_gphoto:1}
 %files gphoto2
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gphoto2.conf
 %attr(755,root,root) %{_libdir}/sane/libsane-gphoto2.so.*
 %{_mandir}/man5/sane-gphoto2.5*
+%endif
 
 %ifarch %{ix86}
+%if 0%{!?_without_lpt:1}
 %files hpsj5s
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hpsj5s.conf
 %attr(755,root,root) %{_libdir}/sane/libsane-hpsj5s.so.*
 %{_mandir}/man5/sane-hpsj5s.5*
+%endif
 %endif
 
 %files plustek
@@ -401,7 +415,9 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-plustek.so.*
 %{_mandir}/man5/sane-plustek.5*
 
+%if 0%{!?_without_usb:1}
 %files sm3600
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/sane/libsane-sm3600.so.*
 %{_mandir}/man5/sane-sm3600.5*
+%endif
