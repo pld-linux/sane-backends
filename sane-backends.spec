@@ -121,7 +121,7 @@ autoconf
 %{__make}
 
 (cd tools
-%{__cc} -DHAVE_SYS_IO_H %{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} \
+%{__cc} -DHAVE_SYS_IO_H %{rpmcflags} \
 	-I../include -o mustek600iin-off mustek600iin-off.c
 )
 
