@@ -23,7 +23,7 @@ Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
 Patch4:		%{name}-acinclude.patch
 URL:		http://www.mostang.com/sane/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
 BuildRequires:	gettext-devel
 BuildRequires:	libgphoto2-devel >= 2.0.1
