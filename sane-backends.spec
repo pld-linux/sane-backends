@@ -9,7 +9,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.8
-%define	rel	2
+%define	rel	3
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
@@ -48,8 +48,8 @@ digital still and video cameras. SANE currently includes modules for
 accessing:
 
 Scanners: Abaton, Agfa, Apple, Artec, Avision, Bell+Howell, Canon,
-Epson, Fujitsu, HP, Microtek, Mustek, NEC, Nikon, PIE, Plustek, Ricoh,
-Sharp, Siemens, Tamarack, UMAX
+Epson, Fujitsu, HP, LEO, Microtek, Mustek, NEC, Nikon, Panasonic, PIE,
+Plustek, Ricoh, Sceptre, Sharp, Siemens, Tamarack, Teco, UMAX
 
 Digital cameras: Kodak, Polaroid, Connectix QuickCam
 
@@ -65,8 +65,8 @@ do pozyskiwania obrazów, jak cyfrowe aparaty i kamery. SANE aktualnie
 zawiera modu³y do obs³ugi:
 
 Skanery: Abaton, Agfa, Apple, Artec, Avision, Bell+Howell, Canon,
-Epson, Fujitsu, HP, Microtek, Mustek, NEC, Nikon, PIE, Plustek, Ricoh,
-Sharp, Siemens, Tamarack, UMAX
+Epson, Fujitsu, HP, LEO, Microtek, Mustek, NEC, Nikon, Panasonic, PIE,
+Plustek, Ricoh, Sceptre, Sharp, Siemens, Tamarack, Teco, UMAX
 
 Aparaty cyfrowe: Kodak, Polaroid, Connectix QuickCam
 
@@ -199,12 +199,14 @@ cd ..
 
 %build
 rm -f missing
-libtoolize --copy --force
+%{__libtoolize}
 aclocal
-%{__automake} ||
 %{__autoconf}
 %configure \
-	--enable-static
+	--enable-static \
+	--enable-pnm-backend \
+	--enable-translations
+
 %{__make}
 
 %ifarch %{ix86}
@@ -241,9 +243,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %endif
 
-gzip -9nf AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog \
-	backend/plustek_driver/README backend/plustek_driver/TODO \
-	backend/plustek_driver/FAQ backend/plustek_driver/ChangeLog
+%find_lang %{name} --all-name
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -300,9 +300,9 @@ fi
 %postun -n kernel-smp-char-plustek
 /sbin/depmod -a
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc *.gz
+%doc AUTHORS LICENSE LEVEL2 NEWS PROBLEMS PROJECTS TODO ChangeLog
 %dir %{_sysconfdir}/sane.d
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/*
 %config %{_sysconfdir}/sysconfig/rc-inetd/saned
@@ -339,7 +339,8 @@ fi
 
 %files plustek
 %defattr(644,root,root,755)
-%doc backend/plustek_driver/*.gz
+%doc backend/plustek_driver/README backend/plustek_driver/TODO
+%doc backend/plustek_driver/FAQ backend/plustek_driver/ChangeLog
 %{_mandir}/man5/sane-plustek*
 
 %ifnarch sparc sparc64 sparcv9
