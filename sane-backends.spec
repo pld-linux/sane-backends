@@ -24,12 +24,12 @@ Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
 Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.13
-Release:	2
+Version:	1.0.14
+Release:	1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	9a158413180a752f8af6f11792154a42
+# Source0-md5:	7ae5bf91aea34ef7956df6f53cf073bd
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-no_libs.patch
@@ -96,7 +96,7 @@ Summary(es):	Archivos necesarios para el desarrollo de programas que usen SANE
 Summary(pl):	Czê¶æ SANE przeznaczona dla programistów
 Summary(pt_BR):	Arquivos necessários ao desenvolvimento de programas que usem o SANE
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
 
@@ -117,7 +117,7 @@ Summary:	Static SANE libraries
 Summary(pl):	Statyczne biblioteki SANE
 Summary(pt_BR):	Ferramentas de desenvolvimento para o SANE (bibliotecas estáticas)
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 Obsoletes:	sane-backends-sane-static
 
 %description static
@@ -141,7 +141,7 @@ Requires(pre):	/usr/sbin/useradd
 Requires(post,postun):	/sbin/ldconfig
 Requires(preun):	/usr/sbin/userdel
 Requires(preun):	/usr/sbin/groupdel
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description saned
 saned is the SANE (Scanner Access Now Easy) daemon that allows remote
@@ -156,7 +156,7 @@ urz±dzeñ odczytuj±cych obraz pod³±czonych lokalnie.
 Summary:	Mustek 600 II N scanner tool
 Summary(pl):	Narzêdzie do skanera Mustek 600 II N
 Group:		Applications/System
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description -n sane-mustek600IIN
 Tool which turns Mustek 600 II N scanner off. Sometimes scanner hangs
@@ -175,7 +175,7 @@ Ten program wymaga uprawnieñ roota albo dostêpu do /dev/port.
 Summary:	SANE backend for gphoto2 supported cameras
 Summary(pl):	Sterownik SANE do aparatów obs³ugiwanych przez gphoto2
 Group:		Applications/System
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description gphoto2
 SANE backend for gphoto2 supported cameras.
@@ -187,7 +187,7 @@ Sterownik SANE do aparatów obs³ugiwanych przez gphoto2.
 Summary:	SANE backends for parallel port scanners
 Summary(pl):	Starowniki SANE dla skanerów pod³±czanych do portu równoleg³ego
 Group:		Applications/System
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Obsoletes:	sane-backends-canon_pp
 Obsoletes:	sane-backends-hpsj5s
 # in case sb used parport scanner
@@ -200,22 +200,20 @@ SANE backends for parallel port scanners. It includes the following
 drivers:
 - canon_pp (Canon CanoScan FBxxxP, CanoScan NxxxP)
 - hpsj5s (HP ScanJet 5S)
-- mustek_pp (Mustek CIS scanners)
-- mustek_pp_ccd (Mustek CCD scanners)
+- mustek_pp (Mustek CIS and CCD scanners)
 - plustek_pp (Plustek)
 
 %description pp -l pl
 Starowniki SANE dla skanerów pod³±czanych do portu równoleg³ego:
 - canon_pp (Canon CanoScan FBxxxP, CanoScan NxxxP)
 - hpsj5s (HP ScanJet 5S)
-- mustek_pp (skanery Mustek CIS)
-- mustek_pp_ccd (skanery Mustek CCD)
+- mustek_pp (skanery Mustek CIS i CCD)
 - plustek_pp (Plustek)
 
 %prep
 %setup -q
 # kill libtool.m4 copy
-head -n550 acinclude.m4 > acinclude.m4.tmp
+head -n506 acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
 %patch0 -p1
 %patch1 -p1
@@ -360,10 +358,10 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/sane
 %attr(755,root,root) %{_bindir}/sane-config
 %attr(755,root,root) %{_libdir}/*.so
 %{_libdir}/*.la
+%{_includedir}/sane
 %{_aclocaldir}/*.m4
 
 %files static
@@ -397,16 +395,13 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon_pp.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hpsj5s.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/mustek_pp.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/mustek_pp_ccd.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/plustek_pp.conf
 %attr(755,root,root) %{_libdir}/sane/libsane-canon_pp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hpsj5s.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek_pp.so.*
-%attr(755,root,root) %{_libdir}/sane/libsane-mustek_pp_ccd.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-plustek_pp.so.*
 %{_mandir}/man5/sane-canon_pp.5*
 %{_mandir}/man5/sane-hpsj5s.5*
 %{_mandir}/man5/sane-mustek_pp.5*
-%{_mandir}/man5/sane-mustek_pp_ccd.5*
 %{_mandir}/man5/sane-plustek_pp.5*
 %endif
