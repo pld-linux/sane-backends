@@ -10,7 +10,7 @@ Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.8
-%define	rel	17.1
+%define	rel	18
 Release:	%{rel}
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
@@ -26,6 +26,9 @@ Patch3:		%{name}-link.patch
 Patch4:		%{name}-acinclude.patch
 Patch5:		%{name}-plustek-Makefile.patch
 Patch6:		%{name}-alpha.patch
+Patch7:		%{name}-autoload.patch
+Patch8:		%{name}-rpath.patch
+Patch9:		%{name}-saned.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -261,6 +264,15 @@ cd ..
 
 %patch5 -p1
 %patch6 -p1
+# from RH - Make sure to load SCSI modules if not already loaded (bug #59979):
+cd sanei
+%patch7 -p0
+cd ..
+%patch8 -p1
+%patch9 -p1
+
+# from RH (fix bug #62847):
+perl -pi -e 's,/dev/usbscanner0?,/dev/usb/scanner0,' backend/*.conf
 
 %build
 rm -f missing
