@@ -399,8 +399,8 @@ fi
 %{_includedir}/sane
 %attr(755,root,root) %{_bindir}/sane-config
 %attr(755,root,root) %{_libdir}/*.so
-%attr(755,root,root) %{_libdir}/*.la
-%attr(755,root,root) %{_libdir}/sane/lib*.la
+%{_libdir}/*.la
+%{_libdir}/sane/lib*.la
 %attr(755,root,root) %{_libdir}/sane/lib*.so
 
 %files static
