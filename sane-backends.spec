@@ -10,7 +10,7 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.7
-Release:	1
+Release:	2
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
@@ -135,6 +135,7 @@ Summary:	Plustek scanner driver
 Summary(pl):	Sterownik do skanerów Plustek
 Group:		Applications/System
 Requires:	%{name} = %{version}
+PreReq:		/sbin/depmod
 
 %description plustek
 This package contains kernel module which drives Plustek scanners.
@@ -231,6 +232,12 @@ if [ "$1" = "0" ]; then
 	fi
 fi
 /sbin/ldconfig
+
+%post plustek
+/sbin/depmod -a
+
+%postun plustek
+/sbin/depmod -a
 
 %files
 %defattr(644,root,root,755)
