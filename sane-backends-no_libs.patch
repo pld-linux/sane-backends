@@ -1,21 +1,21 @@
-diff -urN sane-backends-1.0.7.orig/configure.in sane-backends-1.0.7/configure.in
---- sane-backends-1.0.7.orig/configure.in	Sun Feb  3 12:58:45 2002
-+++ sane-backends-1.0.7/configure.in	Tue Mar 12 19:19:23 2002
-@@ -187,9 +187,15 @@
+--- sane-backends-1.0.10-pre1/configure.in.wiget	Sun Jan 12 21:23:42 2003
++++ sane-backends-1.0.10-pre1/configure.in	Mon Jan 13 17:32:17 2003
+@@ -80,9 +80,15 @@
  dnl IRIX sometimes has SYSVR3/4 network DSOs, but we do not need or want
  dnl to use them!
  if test "`uname`" != "IRIX" -a "`uname`" != "IRIX64"; then
--    AC_CHECK_LIB(nsl,gethostbyaddr)
--    AC_CHECK_LIB(socket,socket)
+-    AC_CHECK_LIB(nsl, gethostbyaddr)
+-    AC_CHECK_LIB(socket, socket)
+-    AC_CHECK_LIB(syslog, syslog)            # OS/2 needs this
 +    AC_CHECK_FUNC(gethostbyaddr, , [
-+	AC_CHECK_LIB(nsl,gethostbyaddr)
++		AC_CHECK_LIB(nsl,gethostbyaddr)
 +    ])
 +    AC_CHECK_FUNC(socket, , [
-+	AC_CHECK_LIB(socket,socket)
++		AC_CHECK_LIB(socket,socket)
 +    ])
-+    AC_CHECK_FUNC(syslog, ,[
- 	AC_CHECK_LIB(syslog, syslog)            # OS/2 needs this
++    AC_CHECK_FUNC(syslog, ,[    AC_CHECK_LIB(nsl, gethostbyaddr)
++	    AC_CHECK_LIB(syslog, syslog)            # OS/2 needs this
 +    ])
  fi
- 
- dnl check for PTAL library (used in hp backend)
+ SANE_CHECK_JPEG
+ SANE_CHECK_IEEE1284
