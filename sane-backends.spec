@@ -186,7 +186,6 @@ Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 mkdir tmp-plustek_driver
 cd tmp-plustek_driver
@@ -196,7 +195,7 @@ rm -f backend/dll.conf
 cp -Rf * ..
 cd ..
 
-%patch6 -p1
+%patch5 -p1
 
 %build
 rm -f missing
