@@ -1,0 +1,12 @@
+diff -urN sane-backends-1.0.7.orig/acinclude.m4 sane-backends-1.0.7/acinclude.m4
+--- sane-backends-1.0.7.orig/acinclude.m4	Sun Feb  3 12:58:43 2002
++++ sane-backends-1.0.7/acinclude.m4	Tue Mar 12 20:42:20 2002
+@@ -240,7 +240,7 @@
+ LN_S="$LN_S" NM="$NM" RANLIB="$RANLIB" \
+ DLLTOOL="$DLLTOOL" AS="$AS" OBJDUMP="$OBJDUMP" \
+ ${CONFIG_SHELL-/bin/sh} $ac_aux_dir/ltconfig --no-reexec \
+-$libtool_flags --no-verify $ac_aux_dir/ltmain.sh $lt_target \
++$libtool_flags $ac_aux_dir/ltmain.sh \
+ || AC_MSG_ERROR([libtool configure failed])
+ 
+ # Reload cache, that may have been modified by ltconfig
