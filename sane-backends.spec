@@ -1,14 +1,19 @@
 Summary:	SANE --- Easy local and networked scanner access
+Summary(es):	SANE - acceso a scanners en red y locales
 Summary(pl):	SANE --- Prosta obs≥uga skanerÛw lokalnych i sieciowych
+Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.6
-Release:	4
+Release:	5
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Group(de):	Libraries
 Group(es):	Bibliotecas
 Group(fr):	Librairies
 Group(pl):	Biblioteki
+Group(pt_BR):	Bibliotecas
+Group(ru):	‚…¬Ã…œ‘≈À…
+Group(uk):	‚¶¬Ã¶œ‘≈À…
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
 Source1:	%{name}.rc-inetd
 Patch0:		%{name}-DESTDIR.patch
@@ -38,12 +43,17 @@ digital still and video cameras. SANE currently includes modules for
 accessing:
 
 Scanners: Abaton, Agfa, Apple, Artec, Avision, Bell+Howell, Canon,
-          Epson, Fujitsu, HP, Microtek, Mustek, NEC, Nikon, PIE,
-          Plustek, Ricoh, Sharp, Siemens, Tamarack, UMAX
+Epson, Fujitsu, HP, Microtek, Mustek, NEC, Nikon, PIE, Plustek, Ricoh,
+Sharp, Siemens, Tamarack, UMAX
 
 Digital cameras: Kodak, Polaroid, Connectix QuickCam
 
 and other SANE devices via network.
+
+%description -l pt_BR
+O SANE (Scanner Access Now Easy) È uma interface simples para scanners
+e outros dispositivos de captura de imagens como c‚meras fotogr·ficas
+digitais e de vÌdeo conectados diretamente ou atravÈs da rede.
 
 %description -l pl
 SANE (Scanner Access Now Easy) jest rozs±dnym i prostym insterfejsem
@@ -52,20 +62,29 @@ do pozyskiwania obrazÛw, jak cyfrowe aparaty i kamery. SANE aktualnie
 zawiera modu≥y do obs≥ugi:
 
 Skanery: Abaton, Agfa, Apple, Artec, Avision, Bell+Howell, Canon,
-         Epson, Fujitsu, HP, Microtek, Mustek, NEC, Nikon, PIE,
-         Plustek, Ricoh, Sharp, Siemens, Tamarack, UMAX
+Epson, Fujitsu, HP, Microtek, Mustek, NEC, Nikon, PIE, Plustek, Ricoh,
+Sharp, Siemens, Tamarack, UMAX
 
 Aparaty cyfrowe: Kodak, Polaroid, Connectix QuickCam
 
 oraz inne urz±dzenia dostÍpne przez sieÊ.
 
+%description -l es
+SANE - acceso a scanners en red y locales.
+
 %package devel
 Summary:	Development part of SANE 
+Summary(es):	Archivos necesarios para el desarrollo de programas que usen SANE
 Summary(pl):	CzÍ∂Ê SANE przeznaczona dla programistÛw
+Summary(pt_BR):	Arquivos necess·rios ao desenvolvimento de programas que usem o SANE
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Ú¡⁄“¡¬œ‘À¡/‚…¬Ã…œ‘≈À…
+Group(uk):	Úœ⁄“œ¬À¡/‚¶¬Ã¶œ‘≈À…
 Requires:	%{name} = %{version}
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
@@ -73,16 +92,27 @@ Obsoletes:	sane-backends-sane-static
 %description devel
 Development part of SANE.
 
+%description -l es devel
+Archivos necesarios para el desarrollo de programas que usen SANE.
+
 %description -l pl devel
 CzÍ∂Ê SANE dla programistÛw.
+
+%description -l pt_BR devel
+Arquivos necess·rios ao desenvolvimento de programas que usem o SANE.
 
 %package static
 Summary:	Static SANE libraries
 Summary(pl):	statyczne biblioteki SANE
+Summary(pt_BR):	Ferramentas de desenvolvimento para o SANE (bibliotecas est·ticas)
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Ú¡⁄“¡¬œ‘À¡/‚…¬Ã…œ‘≈À…
+Group(uk):	Úœ⁄“œ¬À¡/‚¶¬Ã¶œ‘≈À…
 Requires:	%{name}-devel = %{version}
 Obsoletes:	sane-backends-sane-static
 
@@ -91,6 +121,9 @@ Static SANE libraries.
 
 %description -l pl static
 Biblioteki statyczne SANE.
+
+%description -l pt_BR static
+Bibliotecas est·ticas para desenvolvimento de mÛdulos do SANE.
 
 %package -n sane-mustek600IIN
 Summary:	Mustek 600 II N scanner tool
