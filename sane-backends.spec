@@ -22,6 +22,7 @@ Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
 Patch4:		%{name}-acinclude.patch
+Patch5:		%{name}-pmake.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -226,6 +227,7 @@ Sterownik SANE dla skanerów Microteka z uk³adem USB M011.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 rm -f missing
