@@ -1,8 +1,8 @@
 Summary:	SANE --- Easy local and networked scanner access
 Summary(pl):	SANE --- Prosta obs³uga skanerów lokalnych i sieciowych
 Name:		sane-backends
-Version:	1.0.5
-Release:	1
+Version:	1.0.6
+Release:	4
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Group(de):	Libraries
@@ -14,14 +14,19 @@ Source1:	%{name}.rc-inetd
 Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-no_libs.patch
 Patch2:		%{name}-mustek-path.patch
+Patch3:		%{name}-format.patch
+Patch4:		%{name}-scsi.patch
+Patch5:		%{name}-microtek2.patch
+Patch6:		%{name}-spatc.patch
 URL:		http://www.mostang.com/sane/
 BuildRequires:	autoconf
 BuildRequires:	libjpeg-devel
+BuildRequires:	libusb-devel
 Prereq:		/sbin/ldconfig
+Prereq:		grep
 Prereq:		sh-utils
 Prereq:		shadow
-Prereq:		grep
-Requires:	rc-inetd
+Prereq:		rc-inetd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	sane
 
@@ -112,8 +117,14 @@ Ten program wymaga uprawnieñ roota albo dostêpu do /dev/port.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
+libtoolize --copy --force
+aclocal
 autoconf
 %configure
 %{__make}
