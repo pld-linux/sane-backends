@@ -182,7 +182,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*
 %{_mandir}/man5/*
 
-%files sane-devel
+%files devel
 %defattr(644,root,root,755)
 %{_includedir}/sane
 %attr(755,root,root) %{_bindir}/sane-config
@@ -191,7 +191,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/sane/lib*.la
 %attr(755,root,root) %{_libdir}/sane/lib*.so
 
-%files sane-static
+%files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
 %{_libdir}/sane/lib*.a
