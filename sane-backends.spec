@@ -9,7 +9,8 @@ Summary(pl):	SANE - Prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.7
-Release:	2.12
+%define	rel	2.20
+Release:	%{rel}
 License:	relaxed LGPL (libraries), and public domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.mostang.com/pub/sane/sane-%{version}/%{name}-%{version}.tar.gz
@@ -29,11 +30,13 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-devel
 %{!?_without_dist_kernel:BuildRequires: kernel-headers}
-Prereq:		/sbin/ldconfig
-Prereq:		grep
-Prereq:		sh-utils
-Prereq:		shadow
-Prereq:		rc-inetd
+PreReq:		rc-inetd
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(post,postun):	/sbin/ldconfig
+Requires(preun):	/usr/sbin/userdel
+Requires(preun):	/usr/sbin/groupdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	sane
 
@@ -136,7 +139,6 @@ Summary:	Plustek scanner driver
 Summary(pl):	Sterownik do skanerów Plustek
 Group:		Applications/System
 Requires:	%{name} = %{version}
-PreReq:		/sbin/depmod
 
 %description plustek
 This package contains driver for Plustek scanners.
@@ -147,11 +149,12 @@ Pakiet zawiera sterownik dla skanerów Plustek.
 %package -n kernel-char-plustek
 Summary:	Plustek scanner kernel module
 Summary(pl):	Modu³ j±dra dla skanerów Plustek
+Release:	%{rel}@%{_kernel_ver_str}
 Group:		Applications/System
-Requires:	%{name} = %{version}
-Requires:	%{name}-plustek
 %{!?_without_dist_kernel:%requires_releq_kernel_up}
-PreReq:		/sbin/depmod
+Requires(post,postun):	/sbin/depmod
+Requires:	%{name} = %{version}
+Requires:	%{name}-plustek = %{version}
 
 %description -n kernel-char-plustek
 This package contains kernel module which drives Plustek scanners.
@@ -162,11 +165,12 @@ Pakiet zawiera modu³ steruj±cy skanerami Plustek.
 %package -n kernel-smp-char-plustek
 Summary:	Plustek scanner kernel module (SMP)
 Summary(pl):	Modu³ j±dra dla skanerów Plustek (SMP)
+Release:	%{rel}@%{_kernel_ver_str}
 Group:		Applications/System
+%{!?_without_dist_kernel:%requires_releq_kernel_smp}
+Requires(post,postun):	/sbin/depmod
 Requires:	%{name} = %{version}
-Requires:	%{name}-plustek
-%{!?_without_dist_kernel:%requires_releq_kernel_up}
-PreReq:		/sbin/depmod
+Requires:	%{name}-plustek = %{version}
 
 %description -n kernel-smp-char-plustek
 This package contains kernel module which drives Plustek scanners.
@@ -187,7 +191,7 @@ mkdir tmp-plustek_driver
 cd tmp-plustek_driver
 tar xfz %{SOURCE2}
 # NOTE: we need original dll.conf!
-rm backend/dll.conf
+rm -f backend/dll.conf
 cp -Rf * ..
 cd ..
 
@@ -206,10 +210,10 @@ cd tools
 cd ..
 
 cd backend/plustek_driver
-%{__make} all BUILD_SMP=1 OPT_FLAGS=$RPM_OPT_FLAGS
-mv pt_drv.o{,.smp}
+%{__make} all BUILD_SMP=1 OPT_FLAGS="%{rpmcflags}"
+mv -f pt_drv.o{,.smp}
 %{__make} clean
-%{__make} all
+%{__make} all OPT_FLAGS="%{rpmcflags}"
 cd ..
 
 %install
@@ -259,14 +263,14 @@ fi
 
 %preun
 if [ "$1" = "0" ]; then
-        %{_sbindir}/userdel saned 2>/dev/null
-        %{_sbindir}/groupdel saned 2>/dev/null
+	/usr/sbin/userdel saned 2>/dev/null
+	/usr/sbin/groupdel saned 2>/dev/null
 fi
 
 %postun
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/rc-inetd ]; then
-	        /etc/rc.d/init.d/rc-inetd reload
+		/etc/rc.d/init.d/rc-inetd reload
 	fi
 fi
 /sbin/ldconfig
