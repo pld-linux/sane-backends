@@ -47,7 +47,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 %{?with_usb:BuildRequires:	libusb-devel}
 BuildRequires:	pkgconfig
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-latex-psnfss
@@ -278,23 +278,8 @@ rm -rf $RPM_BUILD_ROOT
 %postun	-p /sbin/ldconfig
 
 %pre saned
-if [ -n "`/usr/bin/getgid saned`" ]; then
-	if [ "`/usr/bin/getgid saned`" != "90" ]; then
-	echo "Error: group saned doesn't have gid=90. Correct this before installing sane." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 90 saned 1>&2
-fi
-if [ -n "`/bin/id -u saned 2>/dev/null`" ]; then
-	if [ "`/bin/id -u saned`" != "90" ]; then
-	echo "Error: user saned doesn't have uid=90. Correct this before installing sane." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 90 -d /usr/share/empty -s /bin/false \
-		-c "SANE remote scanning daemon" -g saned saned 1>&2
-fi
+%groupadd -g 90 saned
+%useradd -u 90 -d /usr/share/empty -s /bin/false -c "SANE remote scanning daemon" -g saned saned
 
 %post saned
 if [ -f /var/lock/subsys/rc-inetd ]; then
