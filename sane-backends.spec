@@ -9,7 +9,7 @@
 %undefine	with_usb
 %endif
 # XXX: really only x86*?
-%ifnarch %{ix86} amd64
+%ifnarch %{ix86} %{x8664}
 %undefine	with_lpt
 %endif
 Summary:	SANE - easy local and networked scanner access
@@ -47,7 +47,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 %{?with_usb:BuildRequires:	libusb-devel}
 BuildRequires:	pkgconfig
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-latex-psnfss
