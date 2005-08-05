@@ -69,7 +69,7 @@
  #
 --- sane-backends-1.0.14/backend/Makefile.in.orig	Mon Nov 10 19:15:47 2003
 +++ sane-backends-1.0.14/backend/Makefile.in	Fri Nov 28 13:29:02 2003
-@@ -153,6 +153,141 @@
+@@ -153,6 +153,151 @@
  
  .PHONY: all clean depend dist distclean install uninstall
  
@@ -119,6 +119,11 @@
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-fujitsu.la: fujitsu.lo fujitsu-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-genesys.la: genesys.lo genesys-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
@@ -188,6 +193,11 @@
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
++libsane-sm3840.la: sm3840.lo sm3840-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-snapscan.la: snapscan.lo snapscan-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
@@ -225,13 +235,13 @@ diff -Nur sane-backends-1.0.12-pre1.orig/configure.in sane-backends-1.0.12-pre1/
 +++ sane-backends-1.0.12-pre1/configure.in	Sun Feb  2 00:31:03 2003
 @@ -203,10 +203,15 @@
  
- dnl we need both libusb header and a libusb providing usb_get_busses
+ dnl we need both libusb header and a libusb providing usb_interrupt_read
  if test "${ac_cv_header_usb_h}" = "yes" && test "$USE_LIBUSB" = "yes" ; then
 +  USB_LIBS=""
 +  save_LIBS="$LIBS"
-   AC_CHECK_LIB(usb, usb_get_busses)
+   AC_CHECK_LIB(usb, usb_interrupt_read)
 +  LIBS="$save_LIBS"
-   if test "${ac_cv_lib_usb_usb_get_busses}" = "yes" ; then
+   if test "${ac_cv_lib_usb_usb_interrupt_read}" = "yes" ; then
      HAVE_LIBUSB="yes"
 +    USB_LIBS="-lusb"
    fi
