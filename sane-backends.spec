@@ -12,25 +12,28 @@
 %ifnarch %{ix86} %{x8664}
 %undefine	with_lpt
 %endif
+
+%define		snap	20050805
+
 Summary:	SANE - easy local and networked scanner access
 Summary(es):	SANE - acceso a scanners en red y locales
 Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
 Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.15
-Release:	1
+Version:	1.0.16
+Release:	0.%{snap}.1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
-Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	3b804f35cdfbc5ad2d201ffe078bbac9
+#ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
+Source0:	%{name}-%{snap}.tar.bz2
+# Source0-md5:	573f61da3e1569394750a693a5717cbb
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 # http://hp44x0backend.sourceforge.net/
 Source3:	http://dl.sourceforge.net/hp44x0backend/sane_hp_rts88xx-0.17n.tar.gz
 # Source3-md5:	01cae741a347fc73eeaf32aeb731d9af
 #Source3:	http://home.foni.net/~johanneshub/sane_hp_rts88xx-0.17k.tar.gz
-Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
@@ -215,11 +218,10 @@ Starowniki SANE dla skanerów pod³±czanych do portu równoleg³ego:
 - plustek_pp (Plustek)
 
 %prep
-%setup -q -a3
+%setup -q -a3 -n %{name}
 # kill libtool.m4 copy
-head -n 522 acinclude.m4 > acinclude.m4.tmp
+head -n 574 acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
-%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -266,6 +268,8 @@ install %{SOURCE2} $RPM_BUILD_ROOT%{_aclocaldir}
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %endif
 
+rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
+
 # only shared modules - shut up check-files
 rm -f $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la,a}
 
@@ -307,6 +311,7 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/c[!a]*
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon630u.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/genesys.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gt68xx.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp5400.conf
@@ -322,6 +327,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-c[!a]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon630u.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-genesys.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-gt68xx.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp5400.so.*
@@ -342,6 +348,7 @@ fi
 %{_mandir}/man5/sane-c[!a]*
 %{_mandir}/man5/sane-canon.5*
 %{_mandir}/man5/sane-canon630u.5*
+%{_mandir}/man5/sane-genesys.5*
 %{_mandir}/man5/sane-gt68xx.5*
 %{_mandir}/man5/sane-hp.5*
 %{_mandir}/man5/sane-hp5400.5*
