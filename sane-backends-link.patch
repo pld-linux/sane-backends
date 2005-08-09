@@ -1,6 +1,7 @@
---- sane-backends-1.0.15/acinclude.m4.orig	2004-11-07 22:59:10.184318312 +0100
-+++ sane-backends-1.0.15/acinclude.m4	2004-11-07 23:07:43.171332432 +0100
-@@ -183,16 +183,18 @@
+diff -urbB sane-backends-1.0.16.org/acinclude.m4 sane-backends-1.0.16/acinclude.m4
+--- sane-backends-1.0.16.org/acinclude.m4	2005-07-30 15:59:53.000000000 +0200
++++ sane-backends-1.0.16/acinclude.m4	2005-08-09 18:07:30.781728672 +0200
+@@ -184,16 +184,18 @@
  # Checks for ieee1284 library, needed for canon_pp backend.
  AC_DEFUN([SANE_CHECK_IEEE1284],
  [
@@ -20,7 +21,7 @@
    if test "$sane_cv_use_libieee1284" = "yes" ; then
      AC_DEFINE(HAVE_LIBIEEE1284,1,[Define to 1 if you have the `ieee1284' library (-lcam).])
    fi
-@@ -243,6 +245,7 @@
+@@ -244,6 +246,7 @@
  # GPHOTO2 backends.
  AC_DEFUN([SANE_CHECK_JPEG],
  [
@@ -28,7 +29,7 @@
    AC_CHECK_LIB(jpeg,jpeg_start_decompress, 
    [
      AC_CHECK_HEADER(jconfig.h, 
-@@ -254,10 +257,11 @@
+@@ -255,10 +258,11 @@
          #if JPEG_LIB_VERSION >= 61
            sane_correct_jpeg_lib_version_found
          #endif
@@ -40,8 +41,8 @@
 +  AC_SUBST(JPEG_LIBS)
  ])
  
- dnl
-@@ -352,6 +356,7 @@
+ #
+@@ -404,6 +408,7 @@
  
  	])
  
@@ -49,7 +50,7 @@
  	# If --with-gphoto2=yes (or not supplied), first check if 
  	# pkg-config exists, then use it to check if libgphoto2 is
  	# present.  If all that works, then see if we can actually link
-@@ -376,14 +381,14 @@
+@@ -428,14 +433,14 @@
  				LIBS="${LIBS} ${GPHOTO2_LIBS}"
  				# Make sure we an really use the library
  				AC_CHECK_FUNCS(gp_camera_init,HAVE_GPHOTO2=true, 
@@ -67,9 +68,10 @@
  ])
  
  #
---- sane-backends-1.0.14/backend/Makefile.in.orig	Mon Nov 10 19:15:47 2003
-+++ sane-backends-1.0.14/backend/Makefile.in	Fri Nov 28 13:29:02 2003
-@@ -153,6 +153,141 @@
+diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/backend/Makefile.in
+--- sane-backends-1.0.16.org/backend/Makefile.in	2005-07-30 14:28:10.000000000 +0200
++++ sane-backends-1.0.16/backend/Makefile.in	2005-08-09 18:07:30.782728520 +0200
+@@ -165,6 +165,141 @@
  
  .PHONY: all clean depend dist distclean install uninstall
  
@@ -211,7 +213,7 @@
  libsane-%.la: %.lo %-s.lo $(EXTRA) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) \
  	$(LDFLAGS) $(BACKENDLIBS) $^ @LIBTOOL_LINK_EXTRA@ -rpath $(libsanedir) \
-@@ -244,7 +359,7 @@
+@@ -273,7 +408,7 @@
  
  libsane.la: dll.lo dll-s.lo $(EXTRA) $(addsuffix .lo,$(DLL_PRELOAD)) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -o $@ $(LDFLAGS) $(BACKENDLIBS)  $^ \
@@ -220,18 +222,18 @@
  		-rpath $(libdir) -version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
  
  # additional dependencies
-diff -Nur sane-backends-1.0.12-pre1.orig/configure.in sane-backends-1.0.12-pre1/configure.in
---- sane-backends-1.0.12-pre1.orig/configure.in	Sat Feb  1 23:31:50 2003
-+++ sane-backends-1.0.12-pre1/configure.in	Sun Feb  2 00:31:03 2003
-@@ -203,10 +203,15 @@
+diff -urbB sane-backends-1.0.16.org/configure.in sane-backends-1.0.16/configure.in
+--- sane-backends-1.0.16.org/configure.in	2005-08-07 11:49:48.000000000 +0200
++++ sane-backends-1.0.16/configure.in	2005-08-09 18:08:59.525237608 +0200
+@@ -261,10 +261,15 @@
  
- dnl we need both libusb header and a libusb providing usb_get_busses
+ dnl we need both libusb header and a libusb providing usb_interrupt_read
  if test "${ac_cv_header_usb_h}" = "yes" && test "$USE_LIBUSB" = "yes" ; then
 +  USB_LIBS=""
 +  save_LIBS="$LIBS"
-   AC_CHECK_LIB(usb, usb_get_busses)
+   AC_CHECK_LIB(usb, usb_interrupt_read)
 +  LIBS="$save_LIBS"
-   if test "${ac_cv_lib_usb_usb_get_busses}" = "yes" ; then
+   if test "${ac_cv_lib_usb_usb_interrupt_read}" = "yes" ; then
      HAVE_LIBUSB="yes"
 +    USB_LIBS="-lusb"
    fi
@@ -239,11 +241,12 @@ diff -Nur sane-backends-1.0.12-pre1.orig/configure.in sane-backends-1.0.12-pre1/
  fi
  
  dnl disable Linux SCSI generic version 3 to avoid 32/64 bit problems
---- sane-backends-1.0.13/tools/Makefile.in.orig	Fri Jul 18 14:11:01 2003
-+++ sane-backends-1.0.13/tools/Makefile.in	Fri Nov 28 13:27:02 2003
-@@ -92,7 +92,7 @@
- sane-find-scanner: sane-find-scanner.o check-usb-chip.o ../backend/sane_strstatus.lo \
- 	../sanei/sanei_scsi.lo ../sanei/sanei_usb.lo ../sanei/sanei_init_debug.lo
+diff -urbB sane-backends-1.0.16.org/tools/Makefile.in sane-backends-1.0.16/tools/Makefile.in
+--- sane-backends-1.0.16.org/tools/Makefile.in	2005-07-17 13:53:42.000000000 +0200
++++ sane-backends-1.0.16/tools/Makefile.in	2005-08-09 18:07:30.784728216 +0200
+@@ -95,7 +95,7 @@
+ 	../sanei/sanei_scsi.lo ../sanei/sanei_usb.lo ../sanei/sanei_init_debug.lo \
+ 	../sanei/sanei_config.lo
  	@$(LIBTOOL) $(MLINK) $(LINK) sane-find-scanner.o check-usb-chip.o \
 -	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS)
 +	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS) @USB_LIBS@ @IEEE1284_LIBS@
