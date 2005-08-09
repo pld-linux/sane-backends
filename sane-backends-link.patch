@@ -71,7 +71,7 @@ diff -urbB sane-backends-1.0.16.org/acinclude.m4 sane-backends-1.0.16/acinclude.
 diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/backend/Makefile.in
 --- sane-backends-1.0.16.org/backend/Makefile.in	2005-07-30 14:28:10.000000000 +0200
 +++ sane-backends-1.0.16/backend/Makefile.in	2005-08-09 18:07:30.782728520 +0200
-@@ -165,6 +165,141 @@
+@@ -165,6 +165,151 @@
  
  .PHONY: all clean depend dist distclean install uninstall
  
@@ -121,6 +121,11 @@ diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/bac
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-fujitsu.la: fujitsu.lo fujitsu-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-genesys.la: genesys.lo genesys-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
@@ -186,6 +191,11 @@ diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/bac
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-sm3600.la: sm3600.lo sm3600-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-sm3840.la: sm3840.lo sm3840-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
