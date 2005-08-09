@@ -18,12 +18,12 @@ Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
 Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.15
+Version:	1.0.16
 Release:	1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
-Source0:	ftp://ftp.mostang.com/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	3b804f35cdfbc5ad2d201ffe078bbac9
+Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	bec9b9262246316b4ebfe2bc7451aa28
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 # http://hp44x0backend.sourceforge.net/
@@ -217,7 +217,7 @@ Starowniki SANE dla skanerów pod³±czanych do portu równoleg³ego:
 %prep
 %setup -q -a3
 # kill libtool.m4 copy
-head -n 522 acinclude.m4 > acinclude.m4.tmp
+grep -B 100000 'libtool.m4 - Configure libtool for the host system' acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
 %patch0 -p1
 %patch1 -p1
@@ -307,6 +307,7 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/c[!a]*
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon630u.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/genesys.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gt68xx.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp5400.conf
@@ -322,6 +323,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-c[!a]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon630u.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-genesys.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-gt68xx.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp5400.so.*
@@ -342,6 +344,7 @@ fi
 %{_mandir}/man5/sane-c[!a]*
 %{_mandir}/man5/sane-canon.5*
 %{_mandir}/man5/sane-canon630u.5*
+%{_mandir}/man5/sane-genesys.5*
 %{_mandir}/man5/sane-gt68xx.5*
 %{_mandir}/man5/sane-hp.5*
 %{_mandir}/man5/sane-hp5400.5*
