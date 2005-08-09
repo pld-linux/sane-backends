@@ -30,7 +30,6 @@ Source2:	%{name}.m4
 Source3:	http://dl.sourceforge.net/hp44x0backend/sane_hp_rts88xx-0.17n.tar.gz
 # Source3-md5:	01cae741a347fc73eeaf32aeb731d9af
 #Source3:	http://home.foni.net/~johanneshub/sane_hp_rts88xx-0.17k.tar.gz
-Patch0:		%{name}-no_libs.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
@@ -219,7 +218,6 @@ Starowniki SANE dla skanerów pod³±czanych do portu równoleg³ego:
 # kill libtool.m4 copy
 grep -B 100000 'libtool.m4 - Configure libtool for the host system' acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
-%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -265,6 +263,8 @@ install %{SOURCE2} $RPM_BUILD_ROOT%{_aclocaldir}
 %ifarch %{ix86}
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %endif
+
+rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
 
 # only shared modules - shut up check-files
 rm -f $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la,a}
