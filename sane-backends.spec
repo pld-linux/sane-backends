@@ -3,7 +3,7 @@
 %bcond_without	gphoto	# no gphoto backend (which requires libgphoto2)
 %bcond_without	lpt	# no parallel port backends (which require libieee1284)
 %bcond_without	usb	# without USB scanners support (which requires libusb)
-%bcond_without 	rts88xx # rts88xx scanner support (hp4400/4470)
+%bcond_without	rts88xx # rts88xx scanner support (hp4400/4470)
 #
 %ifarch sparc sparc64 sparcv9
 %undefine	with_usb
