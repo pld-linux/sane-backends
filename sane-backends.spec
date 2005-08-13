@@ -36,6 +36,7 @@ Patch3:		%{name}-link.patch
 Patch4:		%{name}-pmake.patch
 Patch5:		%{name}-locale-names.patch
 Patch6:		%{name}-hp_rts88xx-fixes.patch
+Patch7:		%{name}-pl.po-update.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -229,6 +230,7 @@ cd sane_hp_rts88xx/sane_hp_rts88xx
 sh -x patch-sane.sh `pwd`/../..
 cd ../..
 %endif
+%patch7 -p1
 mv -f po/sane-backends.{no,nb}.po
 
 %build
