@@ -1,3 +1,4 @@
+# TODO: don't link libsane with -lresmgr, only plugins which use it (sanei_{scsi,usb} based)
 #
 # Conditional build:
 %bcond_without	gphoto	# no gphoto backend (which requires libgphoto2)
@@ -47,6 +48,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
 %{?with_usb:BuildRequires:	libusb-devel}
 BuildRequires:	pkgconfig
+BuildRequires:	resmgr-devel
 BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
