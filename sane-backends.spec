@@ -20,7 +20,7 @@ Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.16
-Release:	1
+Release:	2
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
@@ -256,7 +256,7 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_aclocaldir}}
+install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_aclocaldir},/var/lock/sane}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -340,6 +340,7 @@ fi
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/gamma4scanimage
+%dir /var/lock/sane
 %{_mandir}/man1/sane-find-scanner.1*
 %{_mandir}/man1/scanimage.1*
 %{_mandir}/man1/gamma4scanimage.1*
