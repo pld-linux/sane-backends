@@ -53,6 +53,7 @@ BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-latex-psnfss
+Requires:	setup >= 2.4.10-1
 Obsoletes:	sane
 Obsoletes:	sane-backends-sm3600
 Conflicts:	sane-backends-plustek
@@ -340,7 +341,7 @@ fi
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/gamma4scanimage
-%dir /var/lock/sane
+%dir %attr(775,root,usb) /var/lock/sane
 %{_mandir}/man1/sane-find-scanner.1*
 %{_mandir}/man1/scanimage.1*
 %{_mandir}/man1/gamma4scanimage.1*
