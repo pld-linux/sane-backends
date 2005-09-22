@@ -68,25 +68,54 @@ diff -urbB sane-backends-1.0.16.org/acinclude.m4 sane-backends-1.0.16/acinclude.
  ])
  
  #
-diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/backend/Makefile.in
---- sane-backends-1.0.16.org/backend/Makefile.in	2005-07-30 14:28:10.000000000 +0200
-+++ sane-backends-1.0.16/backend/Makefile.in	2005-08-09 18:07:30.782728520 +0200
-@@ -165,6 +165,151 @@
+--- sane-backends-1.0.16/backend/Makefile.in.orig	2005-07-30 14:28:10.000000000 +0200
++++ sane-backends-1.0.16/backend/Makefile.in	2005-09-22 12:22:51.000000000 +0200
+@@ -165,6 +165,276 @@
  
  .PHONY: all clean depend dist distclean install uninstall
  
++libsane-abaton.la: abaton.lo abaton-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-agfafocus.la: agfafocus.lo agfafocus-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-apple.la: apple.lo apple-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-artec.la: artec.lo artec-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-artec_eplus48u.la: artec_eplus48u.lo artec_eplus48u-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-avision.la: avision.lo avision-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-bh.la: bh.lo bh-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-canon.la: canon.lo canon-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-canon630u.la: canon630u.lo canon630u-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
@@ -95,8 +124,13 @@ diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/bac
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
++libsane-coolscan.la: coolscan.lo coolscan-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-coolscan2.la: coolscan2.lo coolscan2-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
@@ -115,18 +149,23 @@ diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/bac
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
++libsane-dmc.la: dmc.lo dmc-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-epson.la: epson.lo epson-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-fujitsu.la: fujitsu.lo fujitsu-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-genesys.la: genesys.lo genesys-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
@@ -136,17 +175,17 @@ diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/bac
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-gt68xx.la: gt68xx.lo gt68xx-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-hp.la: hp.lo hp-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-hp5400.la: hp5400.lo hp5400-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
@@ -155,13 +194,38 @@ diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/bac
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
++libsane-ibm.la: ibm.lo ibm-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-leo.la: leo.lo leo-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-ma1509.la: ma1509.lo ma1509-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-matsushita.la: matsushita.lo matsushita-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-microtek.la: microtek.lo microtek-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-microtek2.la: microtek2.lo microtek2-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-mustek.la: mustek.lo mustek-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @IEEE1284_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @IEEE1284_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
@@ -171,17 +235,27 @@ diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/bac
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-mustek_usb.la: mustek_usb.lo mustek_usb-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-nec.la: nec.lo nec-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-niash.la: niash.lo niash-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-pie.la: pie.lo pie-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-plustek.la: plustek.lo plustek-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
@@ -190,40 +264,90 @@ diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/bac
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
++libsane-ricoh.la: ricoh.lo ricoh-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-s9036.la: s9036.lo s9036-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-sceptre.la: sceptre.lo sceptre-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-sharp.la: sharp.lo sharp-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-sm3600.la: sm3600.lo sm3600-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-sm3840.la: sm3840.lo sm3840-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-snapscan.la: snapscan.lo snapscan-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-sp15c.la: sp15c.lo sp15c-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-st400.la: st400.lo st400-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-tamarack.la: tamarack.lo tamarack-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-teco1.la: teco1.lo teco1-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-teco2.la: teco2.lo teco2-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-teco3.la: teco3.lo teco3-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-u12.la: u12.lo u12-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-umax.la: umax.lo umax-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-umax1220u.la: umax1220u.lo umax1220u-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
  libsane-%.la: %.lo %-s.lo $(EXTRA) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) \
  	$(LDFLAGS) $(BACKENDLIBS) $^ @LIBTOOL_LINK_EXTRA@ -rpath $(libsanedir) \
-@@ -273,7 +408,7 @@
+@@ -273,7 +543,7 @@
  
  libsane.la: dll.lo dll-s.lo $(EXTRA) $(addsuffix .lo,$(DLL_PRELOAD)) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -o $@ $(LDFLAGS) $(BACKENDLIBS)  $^ \
@@ -232,10 +356,28 @@ diff -urbB sane-backends-1.0.16.org/backend/Makefile.in sane-backends-1.0.16/bac
  		-rpath $(libdir) -version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
  
  # additional dependencies
-diff -urbB sane-backends-1.0.16.org/configure.in sane-backends-1.0.16/configure.in
---- sane-backends-1.0.16.org/configure.in	2005-08-07 11:49:48.000000000 +0200
-+++ sane-backends-1.0.16/configure.in	2005-08-09 18:08:59.525237608 +0200
-@@ -261,10 +261,15 @@
+--- sane-backends-1.0.16/configure.in.orig	2005-08-07 11:49:48.000000000 +0200
++++ sane-backends-1.0.16/configure.in	2005-09-22 11:29:35.000000000 +0200
+@@ -128,15 +128,17 @@
+ 
+ SANE_CHECK_MISSING_HEADERS
+ 
++LIBRESMGR=
+ AC_CHECK_HEADER(resmgr.h,[
+ 	AC_CHECK_LIB(
+ 		resmgr,
+ 		rsm_open_device,[
+ 			AC_DEFINE(HAVE_RESMGR,1,[define if you have the resmgr library])
+-			LIBS="$LIBS -lresmgr"
++			LIBRESMGR="-lresmgr"
+ 		]
+ 	)
+ ])
++AC_SUBST(LIBRESMGR)
+ 
+ dnl ***********************************************************************
+ dnl Checks for types and structures
+@@ -261,10 +263,15 @@
  
  dnl we need both libusb header and a libusb providing usb_interrupt_read
  if test "${ac_cv_header_usb_h}" = "yes" && test "$USE_LIBUSB" = "yes" ; then
@@ -251,15 +393,14 @@ diff -urbB sane-backends-1.0.16.org/configure.in sane-backends-1.0.16/configure.
  fi
  
  dnl disable Linux SCSI generic version 3 to avoid 32/64 bit problems
-diff -urbB sane-backends-1.0.16.org/tools/Makefile.in sane-backends-1.0.16/tools/Makefile.in
---- sane-backends-1.0.16.org/tools/Makefile.in	2005-07-17 13:53:42.000000000 +0200
-+++ sane-backends-1.0.16/tools/Makefile.in	2005-08-09 18:07:30.784728216 +0200
+--- sane-backends-1.0.16/tools/Makefile.in.orig	2005-07-17 13:53:42.000000000 +0200
++++ sane-backends-1.0.16/tools/Makefile.in	2005-09-22 11:48:57.000000000 +0200
 @@ -95,7 +95,7 @@
  	../sanei/sanei_scsi.lo ../sanei/sanei_usb.lo ../sanei/sanei_init_debug.lo \
  	../sanei/sanei_config.lo
  	@$(LIBTOOL) $(MLINK) $(LINK) sane-find-scanner.o check-usb-chip.o \
 -	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS)
-+	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS) @USB_LIBS@ @IEEE1284_LIBS@
++	  ../backend/sane_strstatus.lo $(LIBSANEI) $(LIBLIB) $(LIBS) @USB_LIBS@ @IEEE1284_LIBS@ @LIBRESMGR@
  
  gamma4scanimage: gamma4scanimage.o
  	@$(LIBTOOL) $(MLINK) $(LINK) gamma4scanimage.o -lm
