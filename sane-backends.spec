@@ -1,4 +1,3 @@
-# TODO: don't link libsane with -lresmgr, only plugins which use it (sanei_{scsi,usb} based)
 #
 # Conditional build:
 %bcond_without	gphoto	# no gphoto backend (which requires libgphoto2)
@@ -20,7 +19,7 @@ Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.16
-Release:	2
+Release:	3
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
