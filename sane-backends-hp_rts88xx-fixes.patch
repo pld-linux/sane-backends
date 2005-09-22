@@ -19,7 +19,7 @@
 +libsane-hp_rts88xx.la: ../sanei/sanei_scsi.lo \
 +libsane-hp_rts88xx.la: ../sanei/sanei_usb.lo%' | sed '
 +s%^libsane-artec_eplus48u\.la: artec_eplus48u\.lo%libsane-hp_rts88xx.la: hp_rts88xx.lo hp_rts88xx-s.lo $(EXTRA) $(LIBOBJS)\
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ \\\
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \\\
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \\\
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)\
 +\
