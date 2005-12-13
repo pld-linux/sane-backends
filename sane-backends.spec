@@ -22,7 +22,7 @@ Version:	1.0.16
 Release:	3
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
-Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
 # Source0-md5:	bec9b9262246316b4ebfe2bc7451aa28
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
@@ -137,7 +137,7 @@ Bibliotecas estáticas para desenvolvimento de módulos do SANE.
 Summary:	SANE network daemon
 Summary(pl):	Demon sieciowy SANE
 Group:		Networking/Daemons
-PreReq:		rc-inetd
+Requires:	rc-inetd
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
@@ -155,8 +155,8 @@ clients to access image acquisition devices available on the local
 host.
 
 %description saned -l pl
-saned to demon SANE pozwalaj±cy zdalnym klientom na dostêp do
-urz±dzeñ odczytuj±cych obraz pod³±czonych lokalnie.
+saned to demon SANE pozwalaj±cy zdalnym klientom na dostêp do urz±dzeñ
+odczytuj±cych obraz pod³±czonych lokalnie.
 
 %package -n sane-mustek600IIN
 Summary:	Mustek 600 II N scanner tool
@@ -307,20 +307,20 @@ fi
 %doc doc/canon doc/gt68xx doc/leo doc/matsushita doc/mustek doc/mustek_usb
 %doc doc/plustek doc/sceptre doc/teco doc/umax
 %dir %{_sysconfdir}/sane.d
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/[!cghmp]*
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/c[!a]*
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon630u.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/genesys.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gt68xx.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp5400.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/m[!u]*
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/mustek.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/mustek_usb.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/p[!l]*
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/plustek.conf
-%{?with_rts88xx:%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hp_rt* }
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/[!cghmp]*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/c[!a]*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon630u.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/genesys.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/gt68xx.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp5400.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/m[!u]*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek_usb.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/p[!l]*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/plustek.conf
+%{?with_rts88xx:%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp_rt* }
 %dir %{_libdir}/sane
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(755,root,root) %{_libdir}/sane/libsane-[!cghmp]*.so.*
@@ -375,8 +375,8 @@ fi
 
 %files saned
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/rc-inetd/saned
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/saned.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/saned
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/saned.conf
 %attr(755,root,root) %{_sbindir}/saned
 %{_mandir}/man8/saned.8*
 
@@ -389,7 +389,7 @@ fi
 %if %{with gphoto}
 %files gphoto2
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/gphoto2.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/gphoto2.conf
 %attr(755,root,root) %{_libdir}/sane/libsane-gphoto2.so.*
 %{_mandir}/man5/sane-gphoto2.5*
 %endif
@@ -397,10 +397,10 @@ fi
 %if %{with lpt}
 %files pp
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/canon_pp.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/hpsj5s.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/mustek_pp.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sane.d/plustek_pp.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon_pp.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hpsj5s.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek_pp.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/plustek_pp.conf
 %attr(755,root,root) %{_libdir}/sane/libsane-canon_pp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hpsj5s.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek_pp.so.*
