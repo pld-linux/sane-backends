@@ -68,9 +68,9 @@ diff -urbB sane-backends-1.0.16.org/acinclude.m4 sane-backends-1.0.16/acinclude.
  ])
  
  #
---- sane-backends-1.0.16/backend/Makefile.in.orig	2005-07-30 14:28:10.000000000 +0200
-+++ sane-backends-1.0.16/backend/Makefile.in	2005-09-22 12:22:51.000000000 +0200
-@@ -165,6 +165,276 @@
+--- sane-backends-1.0.17/backend/Makefile.in.orig	2005-07-30 14:28:10.000000000 +0200
++++ sane-backends-1.0.17/backend/Makefile.in	2005-09-22 12:22:51.000000000 +0200
+@@ -165,6 +165,286 @@
  
  .PHONY: all clean depend dist distclean install uninstall
  
@@ -144,11 +144,6 @@ diff -urbB sane-backends-1.0.16.org/acinclude.m4 sane-backends-1.0.16/acinclude.
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
-+libsane-dll.la: dll.lo dll-s.lo $(EXTRA) $(LIBOBJS)
-+	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @JPEG_LIBS@ \
-+	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
-+	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
-+
 +libsane-dmc.la: dmc.lo dmc-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
@@ -184,6 +179,11 @@ diff -urbB sane-backends-1.0.16.org/acinclude.m4 sane-backends-1.0.16/acinclude.
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
++libsane-hp4200.la: hp4200.lo hp4200-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
 +libsane-hp5400.la: hp5400.lo hp5400-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
@@ -201,6 +201,11 @@ diff -urbB sane-backends-1.0.16.org/acinclude.m4 sane-backends-1.0.16/acinclude.
 +
 +libsane-leo.la: leo.lo leo-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-lexmark.la: lexmark.lo lexmark-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
@@ -235,6 +240,11 @@ diff -urbB sane-backends-1.0.16.org/acinclude.m4 sane-backends-1.0.16/acinclude.
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
 +
 +libsane-mustek_usb.la: mustek_usb.lo mustek_usb-s.lo $(EXTRA) $(LIBOBJS)
++	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
++	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
++	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
++
++libsane-mustek_usb2.la: mustek_usb2.lo mustek_usb2-s.lo $(EXTRA) $(LIBOBJS)
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \
 +	$(LDFLAGS) $(BACKENDLIBS) $^ -rpath $(libsanedir) \
 +	-version-info $(V_MAJOR):$(V_REV):$(V_MINOR) $(DYNAMIC_FLAG)
@@ -347,15 +357,6 @@ diff -urbB sane-backends-1.0.16.org/acinclude.m4 sane-backends-1.0.16/acinclude.
  libsane-%.la: %.lo %-s.lo $(EXTRA) $(LIBOBJS)
  	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) \
  	$(LDFLAGS) $(BACKENDLIBS) $^ @LIBTOOL_LINK_EXTRA@ -rpath $(libsanedir) \
-@@ -273,7 +543,7 @@
- 
- libsane.la: dll.lo dll-s.lo $(EXTRA) $(addsuffix .lo,$(DLL_PRELOAD)) $(LIBOBJS)
- 	@$(LIBTOOL) $(MLINK) $(CC) -o $@ $(LDFLAGS) $(BACKENDLIBS)  $^ \
--		$(addsuffix .lo,$(DLL_PRELOAD_EXTRAS)) @LIBTOOL_LINK_EXTRA@ \
-+		$(addsuffix .lo,$(DLL_PRELOAD_EXTRAS)) @LIBTOOL_LINK_EXTRA@ @LIBJPEG@ \
- 		-rpath $(libdir) -version-info $(V_MAJOR):$(V_REV):$(V_MINOR)
- 
- # additional dependencies
 --- sane-backends-1.0.16/configure.in.orig	2005-08-07 11:49:48.000000000 +0200
 +++ sane-backends-1.0.16/configure.in	2005-09-22 11:29:35.000000000 +0200
 @@ -128,15 +128,17 @@

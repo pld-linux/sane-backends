@@ -1,41 +1,60 @@
---- sane-backends-1.0.16/po/sane-backends.pl.po.orig	2005-07-09 14:41:13.000000000 +0200
-+++ sane-backends-1.0.16/po/sane-backends.pl.po	2005-08-13 22:42:39.969079912 +0200
-@@ -1,14 +1,15 @@
+--- sane-backends-1.0.17/po/sane-backends.pl.po.orig	2005-10-28 18:13:44.000000000 +0200
++++ sane-backends-1.0.17/po/sane-backends.pl.po	2005-12-26 21:15:42.423173976 +0100
+@@ -1,14 +1,14 @@
  # Polish translation for SANE backend options
  # Copyright (c) 2002-2003 Piotr Gogolewski
- # Piotr Gogolewski <docent@panoramix.net.pl>, 2003.
-+# Jakub Bogusz <qboosh@pld-linux.org>, 2005.
+-# Piotr Gogolewski <docent@panoramix.net.pl>, 2003.
++# Piotr Gogolewski <docent@panoramix.net.pl>, 2003-2005.
  msgid ""
  msgstr ""
- "Project-Id-Version: sane-backends 1.0.11\n"
+-"Project-Id-Version: sane-backends 1.0.11\n"
++"Project-Id-Version: sane-backends 1.0.17\n"
  "Report-Msgid-Bugs-To: \n"
- "POT-Creation-Date: 2005-07-09 14:41+0200\n"
+ "POT-Creation-Date: 2005-10-28 07:45+0200\n"
 -"PO-Revision-Date: 2005-04-13 16:23+0200\n"
 -"Last-Translator: Piotr Gogolewski <docent@panoramix.net.pl>\n"
 -"Language-Team: Polish <pl@li.org>\n"
-+"PO-Revision-Date: 2005-08-13 22:41+0200\n"
++"PO-Revision-Date: 2005-12-26 21:11+0100\n"
 +"Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
 +"Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
  "MIME-Version: 1.0\n"
  "Content-Type: text/plain; charset=UTF-8\n"
  "Content-Transfer-Encoding: 8bit\n"
-@@ -650,12 +651,12 @@
+@@ -119,14 +119,14 @@
+ msgstr "Wybiera numer ramki do skanowania"
+ 
+ #: .tmp/avision.h:609
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Duplex scan"
+-msgstr "Dwustronny"
++msgstr "Skanowanie dwustronne"
+ 
+ #: .tmp/avision.h:610
+ #, no-c-format
+ msgid "Duplex scan provide a scan of the front and back side of the document"
+-msgstr ""
++msgstr "Skanowanie dwustronne pozwala na skanowanie przedniej i tylnej strony dokumentu"
+ 
+ #: .tmp/canon630u.c:158
+ #, no-c-format
+@@ -660,12 +660,12 @@
  msgstr "Moduł do skanowania negatywów"
  
- #: .tmp/genesys.c:4012
+ #: .tmp/genesys.c:4024
 -#, fuzzy, no-c-format
 +#, no-c-format
  msgid "Extras"
 -msgstr "Bardzo szybki"
 +msgstr "Dodatki"
  
- #: .tmp/genesys.c:4021
+ #: .tmp/genesys.c:4033
 -#, fuzzy, no-c-format
 +#, no-c-format
  msgid "Lamp off time"
  msgstr "Czas wyłączenia lampy"
  
-@@ -665,6 +666,8 @@
+@@ -675,6 +675,8 @@
  "The lamp will be turned off after the given time (in minutes). A value of 0 "
  "means, that the lamp won't be turned off."
  msgstr ""
@@ -44,7 +63,7 @@
  
  #: .tmp/gt68xx.c:470
  #, no-c-format
-@@ -778,9 +781,9 @@
+@@ -788,9 +790,9 @@
  msgstr "Półtony"
  
  #: .tmp/hp-option.c:2983
@@ -56,7 +75,7 @@
  
  #: .tmp/hp-option.c:3040
  #, no-c-format
-@@ -820,12 +823,12 @@
+@@ -830,12 +832,12 @@
  #: .tmp/hp-option.c:3087
  #, no-c-format
  msgid "NTSC RGB"
@@ -71,7 +90,7 @@
  
  #: .tmp/hp-option.c:3089
  #, no-c-format
-@@ -907,12 +910,12 @@
+@@ -917,12 +919,12 @@
  #: .tmp/hp-option.c:3252
  #, no-c-format
  msgid "ADF"
@@ -86,7 +105,7 @@
  
  #: .tmp/hp-option.c:3326 .tmp/hp-option.c:3339
  #, no-c-format
-@@ -925,9 +928,9 @@
+@@ -935,9 +937,9 @@
  msgstr "Warunkowy"
  
  #: .tmp/hp-option.c:3413
@@ -98,7 +117,7 @@
  
  #: .tmp/hp-option.h:60
  #, no-c-format
-@@ -1226,7 +1229,7 @@
+@@ -1236,7 +1238,7 @@
  #: .tmp/matsushita.c:245
  #, no-c-format
  msgid "CRT"
@@ -107,7 +126,7 @@
  
  #: .tmp/matsushita.c:257
  #, no-c-format
-@@ -1706,24 +1709,24 @@
+@@ -1716,24 +1718,24 @@
  "jakości). To może być tryb niekolorowy lub niskiej rozdzielczości."
  
  #: .tmp/mustek.c:4337
@@ -139,29 +158,43 @@
  
  #: .tmp/mustek.c:4427
  #, no-c-format
-@@ -1956,20 +1959,21 @@
+@@ -1853,12 +1855,12 @@
+ #: .tmp/plustek.c:880
+ #, no-c-format
+ msgid "Speedup sensor"
+-msgstr ""
++msgstr "Przyspieszenie czujnika"
+ 
+ #: .tmp/plustek.c:881
+ #, no-c-format
+ msgid "Enables or disables speeding up sensor movement."
+-msgstr ""
++msgstr "Włącza lub wyłącza przyspieszanie ruchu czujnika."
+ 
+ #: .tmp/plustek.c:895
+ #, no-c-format
+@@ -1976,19 +1978,19 @@
  msgstr "Definiuje parametr wyłączenia niebieskiej lampy"
  
- #: .tmp/plustek.c:980
+ #: .tmp/plustek.c:996
 -#, fuzzy, no-c-format
 +#, no-c-format
  msgid "Buttons"
 -msgstr "Stan przycisku"
 +msgstr "Przyciski"
  
- #: .tmp/plustek.c:988
+ #: .tmp/plustek.c:1004
 -#, fuzzy, no-c-format
 +#, no-c-format
  msgid "Scanner button"
 -msgstr "Symulacja skanera ręcznego"
 +msgstr "Przycisk skanera"
  
- #: .tmp/plustek.c:989
+ #: .tmp/plustek.c:1005
  #, no-c-format
- msgid ""
- "This options reflects the front pannel scanner button pressed by the user."
- msgstr ""
-+"Opcje te odzwierciedlają przyciski przedniego panelu skanera naciśnięte przez użytkownika."
+ msgid "This option reflects the status of the scanner buttons."
+-msgstr ""
++msgstr "Opcja ta odzwierciedla stan przycisków skanera."
  
  #: .tmp/plustek_pp.c:194
  #, no-c-format
