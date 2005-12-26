@@ -2,12 +2,8 @@
 # Conditional build:
 %bcond_without	gphoto	# no gphoto backend (which requires libgphoto2)
 %bcond_without	lpt	# no parallel port backends (which require libieee1284)
-%bcond_without	usb	# without USB scanners support (which requires libusb)
 %bcond_without	rts88xx # rts88xx scanner support (hp4400/4470)
 #
-%ifarch sparc sparc64 sparcv9
-%undefine	with_usb
-%endif
 # XXX: really only x86*?
 %ifnarch %{ix86} %{x8664}
 %undefine	with_lpt
@@ -18,12 +14,12 @@ Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
 Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.16
-Release:	3
+Version:	1.0.17
+Release:	1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
-# Source0-md5:	bec9b9262246316b4ebfe2bc7451aa28
+# Source0-md5:	b51c10da8a81a04e1bae88c9e6556df2
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 # http://hp44x0backend.sourceforge.net/
@@ -45,7 +41,7 @@ BuildRequires:	gettext-devel
 %{?with_lpt:BuildRequires:	libieee1284-devel}
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtool
-%{?with_usb:BuildRequires:	libusb-devel}
+BuildRequires:	libusb-devel
 BuildRequires:	pkgconfig
 BuildRequires:	resmgr-devel
 BuildRequires:	rpmbuild(macros) >= 1.213
@@ -314,6 +310,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/genesys.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/gt68xx.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp4200.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp5400.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/m[!u]*
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek.conf
@@ -330,10 +327,12 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-genesys.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-gt68xx.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-hp4200.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp5400.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-m[!u]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek_usb.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-mustek_usb2.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-p[!l]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-plustek.so.*
 %{?with_rts88xx:%attr(755,root,root) %{_libdir}/sane/libsane-hp_rts88xx.so.* }
@@ -352,10 +351,12 @@ fi
 %{_mandir}/man5/sane-genesys.5*
 %{_mandir}/man5/sane-gt68xx.5*
 %{_mandir}/man5/sane-hp.5*
+%{_mandir}/man5/sane-hp4200.5*
 %{_mandir}/man5/sane-hp5400.5*
 %{_mandir}/man5/sane-m[!u]*
 %{_mandir}/man5/sane-mustek.5*
 %{_mandir}/man5/sane-mustek_usb.5*
+%{_mandir}/man5/sane-mustek_usb2.5*
 %{_mandir}/man5/sane-p[!l]*
 %{_mandir}/man5/sane-plustek.5*
 %{?with_rts88xx:%{_mandir}/man5/sane-hp_rts88xx* }
