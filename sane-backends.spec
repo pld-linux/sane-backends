@@ -44,7 +44,7 @@ BuildRequires:	libtool
 BuildRequires:	libusb-devel
 BuildRequires:	pkgconfig
 BuildRequires:	resmgr-devel
-BuildRequires:	rpmbuild(macros) >= 1.213
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-latex-psnfss
@@ -133,15 +133,15 @@ Bibliotecas estáticas para desenvolvimento de módulos do SANE.
 Summary:	SANE network daemon
 Summary(pl):	Demon sieciowy SANE
 Group:		Networking/Daemons
-Requires:	rc-inetd
+Requires(post,postun):	/sbin/ldconfig
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(post,postun):	/sbin/ldconfig
 Requires(preun):	/usr/sbin/groupdel
 Requires(preun):	/usr/sbin/userdel
 Requires:	%{name} = %{version}-%{release}
+Requires:	rc-inetd
 Provides:	group(saned)
 Provides:	user(saned)
 
@@ -193,9 +193,9 @@ Requires:	%{name} = %{version}-%{release}
 Obsoletes:	sane-backends-canon_pp
 Obsoletes:	sane-backends-hpsj5s
 # in case sb used parport scanner
-Obsoletes:	sane-backends-plustek
 Obsoletes:	kernel-char-plustek
 Obsoletes:	kernel-smp-char-plustek
+Obsoletes:	sane-backends-plustek
 
 %description pp
 SANE backends for parallel port scanners. It includes the following
@@ -282,17 +282,11 @@ rm -rf $RPM_BUILD_ROOT
 %useradd -u 90 -d /usr/share/empty -s /bin/false -c "SANE remote scanning daemon" -g saned saned
 
 %post saned
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd reload
-else
-	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server" 1>&2
-fi
+%service -q rc-inetd reload
 
 %postun saned
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/rc-inetd ]; then
-		/etc/rc.d/init.d/rc-inetd reload
-	fi
+	%service -q rc-inetd reload
 	%userremove saned
 	%groupremove saned
 fi
