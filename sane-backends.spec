@@ -15,7 +15,7 @@ Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.17
-Release:	2
+Release:	1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
@@ -308,7 +308,6 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp5400.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/m[!u]*
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek.conf
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek_pp.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek_usb.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/p[!l]*
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/plustek.conf
@@ -326,7 +325,6 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-hp5400.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-m[!u]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek.so.*
-%attr(755,root,root) %{_libdir}/sane/libsane-mustek_pp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek_usb.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek_usb2.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-p[!l]*.so.*
@@ -351,7 +349,6 @@ fi
 %{_mandir}/man5/sane-hp5400.5*
 %{_mandir}/man5/sane-m[!u]*
 %{_mandir}/man5/sane-mustek.5*
-%{_mandir}/man5/sane-mustek_pp.5*
 %{_mandir}/man5/sane-mustek_usb.5*
 %{_mandir}/man5/sane-mustek_usb2.5*
 %{_mandir}/man5/sane-p[!l]*
