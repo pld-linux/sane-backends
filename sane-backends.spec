@@ -14,32 +14,32 @@ Summary(ko):	½ºÄ³³Ê¸¦ ´Ù·ç´Â ¼ÒÇÁÆ®¿þ¾î
 Summary(pl):	SANE - prosta obs³uga skanerów lokalnych i sieciowych
 Summary(pt_BR):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.17
+Version:	1.0.18
 Release:	1
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
-# Source0-md5:	b51c10da8a81a04e1bae88c9e6556df2
+# Source0-md5:	7ca7e2908e24721471de92cf40c75e60
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
-# http://hp44x0backend.sourceforge.net/
-Source3:	http://dl.sourceforge.net/hp44x0backend/sane_hp_rts88xx-0.17n.tar.gz
-# Source3-md5:	01cae741a347fc73eeaf32aeb731d9af
-#Source3:	http://home.foni.net/~johanneshub/sane_hp_rts88xx-0.17k.tar.gz
+# http://hp44x0backend.sourceforge.net/ and http://home.foni.net/~johanneshub/
+Source3:	http://dl.sourceforge.net/hp44x0backend/sane_hp_rts88xx-0.18.tar.gz
+# Source3-md5:	09d3eaf73f35b7795cd8418b8dc60f69
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
 Patch4:		%{name}-pmake.patch
 Patch5:		%{name}-locale-names.patch
-Patch6:		%{name}-hp_rts88xx-fixes.patch
-Patch7:		%{name}-pl.po-update.patch
+Patch6:		%{name}-pl.po-update.patch
+Patch7:		%{name}-hp_rts88xx-fixes.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
 BuildRequires:	gettext-devel
 %{?with_gphoto:BuildRequires:	libgphoto2-devel >= 2.0.1}
-%{?with_lpt:BuildRequires:	libieee1284-devel}
+%{?with_lpt:BuildRequires:	libieee1284-devel >= 0.1.5}
 BuildRequires:	libjpeg-devel
+BuildRequires:	libtiff-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-devel
 BuildRequires:	pkgconfig
@@ -222,13 +222,13 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%if %{with rts88xx}
 %patch6 -p1
+%patch7 -p1
+%if %{with rts88xx}
 cd sane_hp_rts88xx/sane_hp_rts88xx
 sh -x patch-sane.sh `pwd`/../..
 cd ../..
 %endif
-%patch7 -p1
 mv -f po/sane-backends.{no,nb}.po
 
 %build
@@ -311,7 +311,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek_usb.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/p[!l]*
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/plustek.conf
-%{?with_rts88xx:%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp_rt* }
+%{?with_rts88xx:%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp_rt*}
 %dir %{_libdir}/sane
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(755,root,root) %{_libdir}/sane/libsane-[!cghmp]*.so.*
@@ -321,6 +321,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-genesys.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-gt68xx.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-hp3500.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp4200.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp5400.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-m[!u]*.so.*
@@ -329,7 +330,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek_usb2.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-p[!l]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-plustek.so.*
-%{?with_rts88xx:%attr(755,root,root) %{_libdir}/sane/libsane-hp_rts88xx.so.* }
+%{?with_rts88xx:%attr(755,root,root) %{_libdir}/sane/libsane-hp_rts88xx.so.*}
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/gamma4scanimage
@@ -345,6 +346,7 @@ fi
 %{_mandir}/man5/sane-genesys.5*
 %{_mandir}/man5/sane-gt68xx.5*
 %{_mandir}/man5/sane-hp.5*
+%{_mandir}/man5/sane-hp3500.5*
 %{_mandir}/man5/sane-hp4200.5*
 %{_mandir}/man5/sane-hp5400.5*
 %{_mandir}/man5/sane-m[!u]*
@@ -353,7 +355,7 @@ fi
 %{_mandir}/man5/sane-mustek_usb2.5*
 %{_mandir}/man5/sane-p[!l]*
 %{_mandir}/man5/sane-plustek.5*
-%{?with_rts88xx:%{_mandir}/man5/sane-hp_rts88xx* }
+%{?with_rts88xx:%{_mandir}/man5/sane-hp_rts88xx.5*}
 %{_mandir}/man7/*
 
 %files devel
