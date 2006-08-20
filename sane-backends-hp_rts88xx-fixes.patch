@@ -1,22 +1,12 @@
---- sane-backends-1.0.15/sane_hp_rts88xx/sane_hp_rts88xx/patch-sane.sh.orig	2004-10-22 20:08:26.000000000 +0200
-+++ sane-backends-1.0.15/sane_hp_rts88xx/sane_hp_rts88xx/patch-sane.sh	2004-11-08 08:25:50.114543264 +0100
-@@ -75,8 +75,8 @@
- 
- # Modifies the Makefile.in files (this is hairy stuff)
- echo -n "Modifying doc/Makefile.in..."
--sed "s/sane-dll.5/& sane_hp_rts88xx.5/g" $sane/doc/Makefile.in | \
--    sed "s/sane-dll.man/& sane_hp_rts88xx.man/g" > $sane/doc/tmp~
-+sed "s/sane-dll.5/& sane-hp_rts88xx.5/g" $sane/doc/Makefile.in | \
-+    sed "s/sane-dll.man/& sane-hp_rts88xx.man/g" > $sane/doc/tmp~
- evaluate_retval
- 
- echo -n "Modifying backend/Makefile.in..."
-@@ -85,7 +85,14 @@
+--- sane-backends-1.0.18/sane_hp_rts88xx/sane_hp_rts88xx/patch-sane.sh.orig	2004-11-21 14:28:11.000000000 +0100
++++ sane-backends-1.0.18/sane_hp_rts88xx/sane_hp_rts88xx/patch-sane.sh	2006-08-20 21:12:37.084515000 +0200
+@@ -82,9 +82,14 @@
+ sed "s/PRELOADABLE_BACKENDS =/& hp_rts88xx /g" $sane/backend/Makefile.in | \
+     sed "s/DISTFILES = /& hp_rts88xx.c hp_rts88xx.h /g"  | \
          sed 's%libsane-abaton.la: ../sanei/sanei_scsi.lo%& \
- libsane-hp_rts88xx.la: ../sanei/sanei_config2.lo \
+-libsane-hp_rts88xx.la: ../sanei/sanei_config2.lo \
  libsane-hp_rts88xx.la: ../sanei/sanei_constrain_value.lo \
 -libsane-hp_rts88xx.la: ../sanei/sanei_usb.lo%' >  $sane/backend/tmp~
-+libsane-hp_rts88xx.la: ../sanei/sanei_scsi.lo \
 +libsane-hp_rts88xx.la: ../sanei/sanei_usb.lo%' | sed '
 +s%^libsane-artec_eplus48u\.la: artec_eplus48u\.lo%libsane-hp_rts88xx.la: hp_rts88xx.lo hp_rts88xx-s.lo $(EXTRA) $(LIBOBJS)\
 +	@$(LIBTOOL) $(MLINK) $(CC) -export-dynamic -o $@ $($*_LIBS) @USB_LIBS@ @LIBRESMGR@ \\\
@@ -27,108 +17,47 @@
  evaluate_retval
  
  echo -n "Relocating files..."
---- sane-backends-1.0.15/sane_hp_rts88xx/sane_hp_rts88xx/sane-hp_rts88xx.man.orig	1970-01-01 01:00:00.000000000 +0100
-+++ sane-backends-1.0.15/sane_hp_rts88xx/sane_hp_rts88xx/sane-hp_rts88xx.man	2004-02-07 11:35:31.000000000 +0100
-@@ -0,0 +1,102 @@
-+.\" $Id$
-+.TH sane-hp_rts88xx 5 "02 Feb 2004"
-+.IX sane-hp_rts88xx
-+
-+.SH NAME
-+sane-hp_rts88xx - SANE backend for scanners based on the RTS8891 chipset.
-+
-+.SH DESCRIPTION
-+The
-+.B sane-hp_rts88xx
-+implements a SANE (Scanner Access Now Easy) backend that
-+provides access to RTS8891 chipset based scanners. This backend will try to support
-+the following models:
-+
-+MANUFACTURER:    MODEL:         USB ID:
-+.br
-+---------------  --------------  ---------
-+.br
-+Hewlett-Packard  Scanjet 4400c   03F0-0705
-+.br
-+Hewlett-Packard  Scanjet 4470c   03F0-0805
-+.br
-+.PP
-+.br
-+
-+.SH "DEVICE NAMES"
-+This backend expects device names of the form:
-+.PP
-+.RS
-+.I special
-+.RE
-+.PP
-+Where
-+.I special
-+is a path-name for the special device that corresponds to a USB scanner.
-+With GNU/Linux systems, such a device name could be
-+.I /dev/usb/scanner0
-+or
-+.IR /dev/usbscanner1 ,
-+for example.
-+
-+
-+.SH CONFIGURATION
-+The
-+.I hp_rts88xx.conf
-+file contains the device name that correspond to the hp44x0c
-+scanner.  Empty lines and lines starting with a hash mark (#) are
-+ignored.
-+.PP
-+A sample configuration file is shown below:
-+.PP
-+.RS
-+# Comment
-+.br
-+/dev/usbscanner
-+# option_CCD
-+# CCD0 or CCD1 allowed
-+# if you receive a black image, change it to CCD1
-+option CCD0
-+.RE
-+.PP
-+The first line is ignored. The second line is the device filename to use
-+in order to access the hp44x0c Scanner. If no device is given, the
-+backend will use libUSB.
-+
-+.SH FILES
-+.TP
-+.I @CONFIGDIR@/hp_rts88xx.conf
-+The backend configuration file (see also description of SANE_CONFIG_DIR below).
-+
-+.TP
-+.I @LIBDIR@/libsane-hp_rts88xx.a
-+The static library implementing this backend.
-+
-+.TP
-+.I @LIBDIR@/libsane-hp_rts88xx.so
-+The shared library implementing this backend (present on systems that
-+support dynamic loading).
-+.SH ENVIRONMENT
-+
-+.TP
-+.B SANE_CONFIG_DIR
-+This environment variable specifies the list of directories that may
-+contain the configuration file.  Under UNIX, the directories are
-+separated by a colon (`:'), under OS/2, they are separated by a
-+semi-colon (`;').  If this variable is not set, the configuration file
-+is searched in two default directories: first, the current working
-+directory (".") and then in @CONFIGDIR@.  If the value of the
-+environment variable ends with the directory separator character, then
-+the default directories are searched after the explicitly specified
-+directories.  For example, setting
-+.B SANE_CONFIG_DIR
-+to "/tmp/config:" would result in directories "tmp/config", ".", and
-+"@CONFIGDIR@" being searched (in this order).
-+.TP
-+
-+.SH "SEE ALSO"
-+sane(7), sane\-usb(5)
-+.br
-+http://home.foni.net/~johanneshub/rts88xx_sane
-+.SH AUTHOR
-+Johannes Hub <johanneshub@foni.net>
+@@ -99,10 +98,10 @@
+ evaluate_retval
+ 
+ # Adds a line with 'hp_rts88xx' to dll.conf
+-echo -n "Modifying backend/dll.conf..."
+-if [ -z $(grep hp_rts88xx $sane/backend/dll.conf) ]
++echo -n "Modifying backend/dll.conf.in..."
++if [ -z $(grep hp_rts88xx $sane/backend/dll.conf.in) ]
+     then
+-    echo "hp_rts88xx" >> $sane/backend/dll.conf
++    echo "hp_rts88xx" >> $sane/backend/dll.conf.in
+ fi
+ evaluate_retval
+ 
+--- sane-backends-1.0.18/sane_hp_rts88xx/sane_hp_rts88xx/hp_rts88xx.desc.orig	2004-11-21 12:32:09.000000000 +0100
++++ sane-backends-1.0.18/sane_hp_rts88xx/sane_hp_rts88xx/hp_rts88xx.desc	2006-08-20 21:17:49.436035750 +0200
+@@ -13,25 +13,12 @@
+ 
+ :model "HP4400C"                                      ; name models for above-specified mfg.
+ :interface "USB"
++:usbid "0x03f0" "0x0705"
+ :status :basic
+ :comment "grayscale 300/600 DPI"
+ 
+ :model "HP4470C"
+ :interface "USB"
++:usbid "0x03f0" "0x0805"
+ :status :basic
+ :comment "grayscale 300/600 DPI, XPA/bed mode"
+-
+-:model "HP3500C"
+-:interface "USB"
+-:status :basic
+-:comment "not tested"
+-
+-:model "HP3530C"
+-:interface "USB"
+-:status :basic
+-:comment "not tested"
+-
+-:model "HP3570C"
+-:interface "USB"
+-:status :basic
+-:comment "not tested"
