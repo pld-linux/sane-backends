@@ -39,6 +39,7 @@ BuildRequires:	gettext-devel
 %{?with_gphoto:BuildRequires:	libgphoto2-devel >= 2.0.1}
 %{?with_lpt:BuildRequires:	libieee1284-devel >= 0.1.5}
 BuildRequires:	libjpeg-devel
+BuildRequires:	libltdl-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-devel
