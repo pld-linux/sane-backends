@@ -9,10 +9,10 @@
 %undefine	with_lpt
 %endif
 Summary:	SANE - easy local and networked scanner access
-Summary(es.UTF-8):   SANE - acceso a scanners en red y locales
-Summary(ko.UTF-8):   스캐너를 다루는 소프트웨어
-Summary(pl.UTF-8):   SANE - prosta obsługa skanerów lokalnych i sieciowych
-Summary(pt_BR.UTF-8):   SANE - acesso a scanners locais e em rede
+Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
+Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
+Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
+Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.18
 Release:	1
@@ -92,9 +92,9 @@ digitais e de vídeo conectados diretamente ou através da rede.
 
 %package devel
 Summary:	Development part of SANE
-Summary(es.UTF-8):   Archivos necesarios para el desarrollo de programas que usen SANE
-Summary(pl.UTF-8):   Część SANE przeznaczona dla programistów
-Summary(pt_BR.UTF-8):   Arquivos necessários ao desenvolvimento de programas que usem o SANE
+Summary(es.UTF-8):	Archivos necesarios para el desarrollo de programas que usen SANE
+Summary(pl.UTF-8):	Część SANE przeznaczona dla programistów
+Summary(pt_BR.UTF-8):	Arquivos necessários ao desenvolvimento de programas que usem o SANE
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	sane-backends-sane-devel
@@ -114,8 +114,8 @@ Arquivos necessários ao desenvolvimento de programas que usem o SANE.
 
 %package static
 Summary:	Static SANE libraries
-Summary(pl.UTF-8):   Statyczne biblioteki SANE
-Summary(pt_BR.UTF-8):   Ferramentas de desenvolvimento para o SANE (bibliotecas estáticas)
+Summary(pl.UTF-8):	Statyczne biblioteki SANE
+Summary(pt_BR.UTF-8):	Ferramentas de desenvolvimento para o SANE (bibliotecas estáticas)
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Obsoletes:	sane-backends-sane-static
@@ -131,7 +131,7 @@ Bibliotecas estáticas para desenvolvimento de módulos do SANE.
 
 %package saned
 Summary:	SANE network daemon
-Summary(pl.UTF-8):   Demon sieciowy SANE
+Summary(pl.UTF-8):	Demon sieciowy SANE
 Group:		Networking/Daemons
 Requires(post,postun):	/sbin/ldconfig
 Requires(pre):	/bin/id
@@ -156,7 +156,7 @@ odczytujących obraz podłączonych lokalnie.
 
 %package -n sane-mustek600IIN
 Summary:	Mustek 600 II N scanner tool
-Summary(pl.UTF-8):   Narzędzie do skanera Mustek 600 II N
+Summary(pl.UTF-8):	Narzędzie do skanera Mustek 600 II N
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
@@ -175,7 +175,7 @@ Ten program wymaga uprawnień roota albo dostępu do /dev/port.
 
 %package gphoto2
 Summary:	SANE backend for gphoto2 supported cameras
-Summary(pl.UTF-8):   Sterownik SANE do aparatów obsługiwanych przez gphoto2
+Summary(pl.UTF-8):	Sterownik SANE do aparatów obsługiwanych przez gphoto2
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
@@ -187,7 +187,7 @@ Sterownik SANE do aparatów obsługiwanych przez gphoto2.
 
 %package pp
 Summary:	SANE backends for parallel port scanners
-Summary(pl.UTF-8):   Starowniki SANE dla skanerów podłączanych do portu równoległego
+Summary(pl.UTF-8):	Starowniki SANE dla skanerów podłączanych do portu równoległego
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	sane-backends-canon_pp
