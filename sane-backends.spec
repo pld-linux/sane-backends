@@ -9,10 +9,10 @@
 %undefine	with_lpt
 %endif
 Summary:	SANE - easy local and networked scanner access
-Summary(es):	SANE - acceso a scanners en red y locales
-Summary(ko):	Ω∫ƒ≥≥ ∏¶ ¥Ÿ∑Á¥¬ º“«¡∆Æø˛æÓ
-Summary(pl):	SANE - prosta obs≥uga skanerÛw lokalnych i sieciowych
-Summary(pt_BR):	SANE - acesso a scanners locais e em rede
+Summary(es.UTF-8):   SANE - acceso a scanners en red y locales
+Summary(ko.UTF-8):   Ïä§Ï∫êÎÑàÎ•º Îã§Î£®Îäî ÏÜåÌîÑÌä∏Ïõ®Ïñ¥
+Summary(pl.UTF-8):   SANE - prosta obs≈Çuga skaner√≥w lokalnych i sieciowych
+Summary(pt_BR.UTF-8):   SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.18
 Release:	1
@@ -68,14 +68,14 @@ Digital cameras: Kodak, Polaroid, Connectix QuickCam
 
 and other SANE devices via network.
 
-%description -l es
+%description -l es.UTF-8
 SANE - acceso a scanners en red y locales.
 
-%description -l pl
-SANE (Scanner Access Now Easy) jest rozs±dnym i prostym insterfejsem
-do skanerÛw, zarÛwno lokalnych jak i sieciowych, oraz innych urz±dzeÒ
-do pozyskiwania obrazÛw, jak cyfrowe aparaty i kamery. SANE aktualnie
-zawiera modu≥y do obs≥ugi:
+%description -l pl.UTF-8
+SANE (Scanner Access Now Easy) jest rozsƒÖdnym i prostym insterfejsem
+do skaner√≥w, zar√≥wno lokalnych jak i sieciowych, oraz innych urzƒÖdze≈Ñ
+do pozyskiwania obraz√≥w, jak cyfrowe aparaty i kamery. SANE aktualnie
+zawiera modu≈Çy do obs≈Çugi:
 
 Skanery: Abaton, Agfa, Apple, Artec, Avision, Bell+Howell, Canon,
 Epson, Fujitsu, HP, LEO, Microtek, Mustek, NEC, Nikon, Panasonic, PIE,
@@ -83,18 +83,18 @@ Plustek, Ricoh, Sceptre, Sharp, Siemens, Tamarack, Teco, UMAX
 
 Aparaty cyfrowe: Kodak, Polaroid, Connectix QuickCam
 
-oraz inne urz±dzenia dostÍpne przez sieÊ.
+oraz inne urzƒÖdzenia dostƒôpne przez sieƒá.
 
-%description -l pt_BR
-O SANE (Scanner Access Now Easy) È uma interface simples para scanners
-e outros dispositivos de captura de imagens como c‚meras fotogr·ficas
-digitais e de vÌdeo conectados diretamente ou atravÈs da rede.
+%description -l pt_BR.UTF-8
+O SANE (Scanner Access Now Easy) √© uma interface simples para scanners
+e outros dispositivos de captura de imagens como c√¢meras fotogr√°ficas
+digitais e de v√≠deo conectados diretamente ou atrav√©s da rede.
 
 %package devel
 Summary:	Development part of SANE
-Summary(es):	Archivos necesarios para el desarrollo de programas que usen SANE
-Summary(pl):	CzÍ∂Ê SANE przeznaczona dla programistÛw
-Summary(pt_BR):	Arquivos necess·rios ao desenvolvimento de programas que usem o SANE
+Summary(es.UTF-8):   Archivos necesarios para el desarrollo de programas que usen SANE
+Summary(pl.UTF-8):   Czƒô≈õƒá SANE przeznaczona dla programist√≥w
+Summary(pt_BR.UTF-8):   Arquivos necess√°rios ao desenvolvimento de programas que usem o SANE
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	sane-backends-sane-devel
@@ -103,19 +103,19 @@ Obsoletes:	sane-backends-sane-static
 %description devel
 Development part of SANE.
 
-%description devel -l es
+%description devel -l es.UTF-8
 Archivos necesarios para el desarrollo de programas que usen SANE.
 
-%description devel -l pl
-CzÍ∂Ê SANE dla programistÛw.
+%description devel -l pl.UTF-8
+Czƒô≈õƒá SANE dla programist√≥w.
 
-%description devel -l pt_BR
-Arquivos necess·rios ao desenvolvimento de programas que usem o SANE.
+%description devel -l pt_BR.UTF-8
+Arquivos necess√°rios ao desenvolvimento de programas que usem o SANE.
 
 %package static
 Summary:	Static SANE libraries
-Summary(pl):	Statyczne biblioteki SANE
-Summary(pt_BR):	Ferramentas de desenvolvimento para o SANE (bibliotecas est·ticas)
+Summary(pl.UTF-8):   Statyczne biblioteki SANE
+Summary(pt_BR.UTF-8):   Ferramentas de desenvolvimento para o SANE (bibliotecas est√°ticas)
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Obsoletes:	sane-backends-sane-static
@@ -123,15 +123,15 @@ Obsoletes:	sane-backends-sane-static
 %description static
 Static SANE libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Biblioteki statyczne SANE.
 
-%description static -l pt_BR
-Bibliotecas est·ticas para desenvolvimento de mÛdulos do SANE.
+%description static -l pt_BR.UTF-8
+Bibliotecas est√°ticas para desenvolvimento de m√≥dulos do SANE.
 
 %package saned
 Summary:	SANE network daemon
-Summary(pl):	Demon sieciowy SANE
+Summary(pl.UTF-8):   Demon sieciowy SANE
 Group:		Networking/Daemons
 Requires(post,postun):	/sbin/ldconfig
 Requires(pre):	/bin/id
@@ -150,13 +150,13 @@ saned is the SANE (Scanner Access Now Easy) daemon that allows remote
 clients to access image acquisition devices available on the local
 host.
 
-%description saned -l pl
-saned to demon SANE pozwalaj±cy zdalnym klientom na dostÍp do urz±dzeÒ
-odczytuj±cych obraz pod≥±czonych lokalnie.
+%description saned -l pl.UTF-8
+saned to demon SANE pozwalajƒÖcy zdalnym klientom na dostƒôp do urzƒÖdze≈Ñ
+odczytujƒÖcych obraz pod≈ÇƒÖczonych lokalnie.
 
 %package -n sane-mustek600IIN
 Summary:	Mustek 600 II N scanner tool
-Summary(pl):	NarzÍdzie do skanera Mustek 600 II N
+Summary(pl.UTF-8):   Narzƒôdzie do skanera Mustek 600 II N
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
@@ -166,28 +166,28 @@ and can't be turned off by (x)scanimage in normal way.
 
 Note: this program needs root privileges or access to /dev/port.
 
-%description -n sane-mustek600IIN -l pl
-NarzÍdzie wymuszaj±ce wy≥±czenie skanera Mustek 600 II N. Czasem
-skaner zawiesza siÍ i nie jest moøliwe wy≥±czenie go zwyk≥ym sposobem
+%description -n sane-mustek600IIN -l pl.UTF-8
+Narzƒôdzie wymuszajƒÖce wy≈ÇƒÖczenie skanera Mustek 600 II N. Czasem
+skaner zawiesza siƒô i nie jest mo≈ºliwe wy≈ÇƒÖczenie go zwyk≈Çym sposobem
 przez program (x)scanimage.
 
-Ten program wymaga uprawnieÒ roota albo dostÍpu do /dev/port.
+Ten program wymaga uprawnie≈Ñ roota albo dostƒôpu do /dev/port.
 
 %package gphoto2
 Summary:	SANE backend for gphoto2 supported cameras
-Summary(pl):	Sterownik SANE do aparatÛw obs≥ugiwanych przez gphoto2
+Summary(pl.UTF-8):   Sterownik SANE do aparat√≥w obs≈Çugiwanych przez gphoto2
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
 %description gphoto2
 SANE backend for gphoto2 supported cameras.
 
-%description gphoto2 -l pl
-Sterownik SANE do aparatÛw obs≥ugiwanych przez gphoto2.
+%description gphoto2 -l pl.UTF-8
+Sterownik SANE do aparat√≥w obs≈Çugiwanych przez gphoto2.
 
 %package pp
 Summary:	SANE backends for parallel port scanners
-Summary(pl):	Starowniki SANE dla skanerÛw pod≥±czanych do portu rÛwnoleg≥ego
+Summary(pl.UTF-8):   Starowniki SANE dla skaner√≥w pod≈ÇƒÖczanych do portu r√≥wnoleg≈Çego
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	sane-backends-canon_pp
@@ -205,8 +205,8 @@ drivers:
 - mustek_pp (Mustek CIS and CCD scanners)
 - plustek_pp (Plustek)
 
-%description pp -l pl
-Starowniki SANE dla skanerÛw pod≥±czanych do portu rÛwnoleg≥ego:
+%description pp -l pl.UTF-8
+Starowniki SANE dla skaner√≥w pod≈ÇƒÖczanych do portu r√≥wnoleg≈Çego:
 - canon_pp (Canon CanoScan FBxxxP, CanoScan NxxxP)
 - hpsj5s (HP ScanJet 5S)
 - mustek_pp (skanery Mustek CIS i CCD)
