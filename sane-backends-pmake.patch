@@ -9,3 +9,14 @@
  install:
  
  uninstall:
+--- sane-backends-1.0.18/lib/Makefile.in.orig	2007-12-24 12:24:55.104167218 +0100
++++ sane-backends-1.0.18/lib/Makefile.in	2007-12-24 12:36:52.494724793 +0100
+@@ -69,7 +69,7 @@
+ 
+ all:	$(TARGETS)
+ 
+-liblib.a: $(LIBLIB_OBJS)
++liblib.a: $(LIBLIB_LTOBJS)
+ 	ar r $@ $(LIBLIB_OBJS)
+ 	$(RANLIB) $@
+ 
