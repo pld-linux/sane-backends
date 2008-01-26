@@ -4,10 +4,6 @@
 %bcond_without	lpt	# no parallel port backends (which require libieee1284)
 %bcond_without	rts88xx # rts88xx scanner support (hp4400/4470)
 #
-# XXX: really only x86*?
-%ifnarch %{ix86} %{x8664}
-%undefine	with_lpt
-%endif
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
 Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
