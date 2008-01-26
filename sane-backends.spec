@@ -11,7 +11,7 @@ Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.18
-Release:	1
+Release:	2
 License:	relaxed LGPL (libraries), and Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
@@ -309,7 +309,8 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/plustek.conf
 %{?with_rts88xx:%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp_rt*}
 %dir %{_libdir}/sane
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
+%attr(755,root,root) %{_libdir}/libsane.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libsane.so.1
 %attr(755,root,root) %{_libdir}/sane/libsane-[!cghmp]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-c[!a]*.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon.so.*
@@ -357,14 +358,14 @@ fi
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/sane-config
-%attr(755,root,root) %{_libdir}/*.so
-%{_libdir}/*.la
+%attr(755,root,root) %{_libdir}/libsane.so
+%{_libdir}/libsane.la
 %{_includedir}/sane
-%{_aclocaldir}/*.m4
+%{_aclocaldir}/sane-backends.m4
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libsane.a
 
 %files saned
 %defattr(644,root,root,755)
