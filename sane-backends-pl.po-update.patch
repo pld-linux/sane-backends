@@ -1,379 +1,924 @@
---- sane-backends-1.0.18/po/sane-backends.pl.po.orig	2006-06-11 13:11:02.000000000 +0200
-+++ sane-backends-1.0.18/po/sane-backends.pl.po	2006-08-20 20:47:54.599865500 +0200
-@@ -1,14 +1,15 @@
+--- sane-backends-1.0.19/po/sane-backends.pl.po.orig	2007-12-19 11:47:04.000000000 +0100
++++ sane-backends-1.0.19/po/sane-backends.pl.po	2008-05-30 18:27:05.190143919 +0200
+@@ -1,12 +1,12 @@
  # Polish translation for SANE backend options
  # Copyright (c) 2002-2003 Piotr Gogolewski
--# Piotr Gogolewski <docent@panoramix.net.pl>, 2003.
-+# Piotr Gogolewski <docent@panoramix.net.pl>, 2003-2005.
-+# Jakub Bogusz <qboosh@pld-linux.org>, 2005-2006.
+ # Piotr Gogolewski <docent@panoramix.net.pl>, 2003-2005.
+-# Jakub Bogusz <qboosh@pld-linux.org>, 2005-2006.
++# Jakub Bogusz <qboosh@pld-linux.org>, 2005-2008.
  msgid ""
  msgstr ""
--"Project-Id-Version: sane-backends 1.0.11\n"
-+"Project-Id-Version: sane-backends 1.0.18\n"
+-"Project-Id-Version: sane-backends 1.0.18\n"
++"Project-Id-Version: sane-backends 1.0.19\n"
  "Report-Msgid-Bugs-To: \n"
- "POT-Creation-Date: 2006-06-08 06:19+0200\n"
--"PO-Revision-Date: 2006-06-06 13:09+0200\n"
--"Last-Translator: Piotr Gogolewski <docent@panoramix.net.pl>\n"
--"Language-Team: Polish <pl@li.org>\n"
-+"PO-Revision-Date: 2006-08-20 20:20+0200\n"
-+"Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
-+"Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
- "MIME-Version: 1.0\n"
- "Content-Type: text/plain; charset=UTF-8\n"
- "Content-Transfer-Encoding: 8bit\n"
-@@ -123,14 +124,14 @@
- msgstr "Wybiera numer ramki do skanowania"
- 
- #: .tmp/avision.h:690
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Duplex scan"
--msgstr "Dwustronny"
-+msgstr "Skanowanie dwustronne"
- 
- #: .tmp/avision.h:691
+-"POT-Creation-Date: 2007-12-17 22:31+0100\n"
++"POT-Creation-Date: 2008-05-30 17:50+0200\n"
+ "PO-Revision-Date: 2007-12-17 23:03+0100\n"
+ "Last-Translator: Jakub Bogusz <qboosh@pld-linux.org>\n"
+ "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
+@@ -213,39 +213,39 @@
+ #: .tmp/canon.c:146 .tmp/canon-sane.c:1323
  #, no-c-format
- msgid "Duplex scan provide a scan of the front and back side of the document"
+ msgid "Raw"
 -msgstr ""
-+msgstr "Skanowanie dwustronne pozwala na skanowanie przedniej i tylnej strony dokumentu"
++msgstr "Surowy"
  
- #: .tmp/canon630u.c:158
+ #: .tmp/canon.c:152 .tmp/canon-sane.c:732 .tmp/canon-sane.c:940
+ #: .tmp/canon-sane.c:1076 .tmp/canon-sane.c:1318 .tmp/canon-sane.c:1487
+ #: .tmp/canon-sane.c:1636
  #, no-c-format
-@@ -670,14 +671,14 @@
- msgstr "Moduł do skanowania negatywów"
- 
- #: .tmp/genesys.c:4635
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Extras"
--msgstr "Bardzo szybki"
-+msgstr "Dodatki"
- 
- #: .tmp/genesys.c:4655
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Disable interpolation"
--msgstr "Nie wykonuj nawracania"
-+msgstr "Wyłącz interpolację"
- 
- #: .tmp/genesys.c:4658
- #, no-c-format
-@@ -685,28 +686,30 @@
- "When using high resolutions where the horizontal resolution is smaller than "
- "the vertical resolution this disables horizontal interpolation."
- msgstr ""
-+"Lampa zostanie wyłączona po upłynięciu podanego czasu (w minutach). Wartość 0 "
-+"oznacza, że lampa nie zostanie wyłączona."
- 
- #: .tmp/genesys.c:4667
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Color Filter"
--msgstr "Kolorowy tryb kreski"
-+msgstr "Filtr kolorów"
- 
- #: .tmp/genesys.c:4670
- #, no-c-format
- msgid "When using gray or lineart this option selects the used color."
+ msgid "Fine color"
 -msgstr ""
-+msgstr "W trybie szarości lub kreski ta opcja wybiera używany kolor."
++msgstr "Dobry kolor"
  
- #: .tmp/genesys.c:4679
+ #: .tmp/canon.c:161
 -#, fuzzy, no-c-format
 +#, no-c-format
- msgid "Lamp off time"
--msgstr "Czas wyłączenia lampy"
-+msgstr "Czas wyłączania lampy"
+ msgid "No transparency correction"
+-msgstr "Korekcja koloru"
++msgstr "Brak korekcji dla klisz"
  
- #: .tmp/genesys.c:4682
+ #: .tmp/canon.c:162 .tmp/canon-sane.c:680
+ #, no-c-format
+ msgid "Correction according to film type"
+-msgstr ""
++msgstr "Korekcja zgodna z rodzajem filmu"
+ 
+ #: .tmp/canon.c:163 .tmp/canon-sane.c:674
+ #, no-c-format
+ msgid "Correction according to transparency ratio"
+-msgstr ""
++msgstr "Korekcja zgodna ze współczynnikiem przezroczystości"
+ 
+ #: .tmp/canon.c:168 .tmp/canon-sane.c:776
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Negatives"
+-msgstr "Negatyw"
++msgstr "Negatywy"
+ 
+ #: .tmp/canon.c:168
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Slides"
+-msgstr "Slajd"
++msgstr "Slajdy"
+ 
+ #: .tmp/canon.c:178 .tmp/matsushita.c:178
+ #, no-c-format
+@@ -253,190 +253,190 @@
+ msgstr "Automatycznie"
+ 
+ #: .tmp/canon.c:178
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Normal speed"
+-msgstr "Zwykły"
++msgstr "Zwykła prędkość"
+ 
+ #: .tmp/canon.c:179
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "1/2 normal speed"
+-msgstr "2x2 zwykły"
++msgstr "1/2 zwykłej prędkości"
+ 
+ #: .tmp/canon.c:179
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "1/3 normal speed"
+-msgstr "3x3 zwykły"
++msgstr "1/3 zwykłej prędkości"
+ 
+ #: .tmp/canon.c:362
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "rounded parameter"
+-msgstr "Parametry rozmyte"
++msgstr "parametr zaokrąglony"
+ 
+ #: .tmp/canon.c:365 .tmp/canon.c:381 .tmp/canon.c:416 .tmp/canon.c:466
+ #: .tmp/canon.c:484 .tmp/canon.c:527
+ #, no-c-format
+ msgid "unknown"
+-msgstr ""
++msgstr "nieznany"
+ 
+ #: .tmp/canon.c:375
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "ADF jam"
+-msgstr "ADF"
++msgstr "zakleszczenie ADF"
+ 
+ #: .tmp/canon.c:378
+ #, no-c-format
+ msgid "ADF cover open"
+-msgstr ""
++msgstr "pokrywa ADF otwarta"
+ 
+ #: .tmp/canon.c:391
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "lamp failure"
+-msgstr "Wartość gamma"
++msgstr "awaria lampy"
+ 
+ #: .tmp/canon.c:394
+ #, no-c-format
+ msgid "scan head positioning error"
+-msgstr ""
++msgstr "błąd pozycjonowania głowicy skanera"
+ 
+ #: .tmp/canon.c:397
+ #, no-c-format
+ msgid "CPU check error"
+-msgstr ""
++msgstr "błąd kontroli CPU"
+ 
+ #: .tmp/canon.c:400
+ #, no-c-format
+ msgid "RAM check error"
+-msgstr ""
++msgstr "błąd kontroli RAM"
+ 
+ #: .tmp/canon.c:403
+ #, no-c-format
+ msgid "ROM check error"
+-msgstr ""
++msgstr "błąd kontroli ROM"
+ 
+ #: .tmp/canon.c:406
+ #, no-c-format
+ msgid "hardware check error"
+-msgstr ""
++msgstr "błąd kontroli sprzętu"
+ 
+ #: .tmp/canon.c:409
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "transparency unit lamp failure"
+-msgstr "Moduł do skanowania przezroczy"
++msgstr "awaria lampy do skanowania przezroczy"
+ 
+ #: .tmp/canon.c:412
+ #, no-c-format
+ msgid "transparency unit scan head positioning failure"
+-msgstr ""
++msgstr "błąd pozycjonowania głowicy do skanowania przezroczy"
+ 
+ #: .tmp/canon.c:426
+ #, no-c-format
+ msgid "parameter list length error"
+-msgstr ""
++msgstr "błąd długości listy parametrów"
+ 
+ #: .tmp/canon.c:430
+ #, no-c-format
+ msgid "invalid command operation code"
+-msgstr ""
++msgstr "błędny kod operacji"
+ 
+ #: .tmp/canon.c:434
+ #, no-c-format
+ msgid "invalid field in CDB"
+-msgstr ""
++msgstr "błędne pole w CDB"
+ 
+ #: .tmp/canon.c:438
+ #, no-c-format
+ msgid "unsupported LUN"
+-msgstr ""
++msgstr "nieobsługiwany LUN"
+ 
+ #: .tmp/canon.c:442
+ #, no-c-format
+ msgid "invalid field in parameter list"
+-msgstr ""
++msgstr "błędne pole w liście parametrów"
+ 
+ #: .tmp/canon.c:446
+ #, no-c-format
+ msgid "command sequence error"
+-msgstr ""
++msgstr "błąd sekwencji poleceń"
+ 
+ #: .tmp/canon.c:450
+ #, no-c-format
+ msgid "too many windows specified"
+-msgstr ""
++msgstr "podano zbyt dużo okien"
+ 
+ #: .tmp/canon.c:454
+ #, no-c-format
+ msgid "medium not present"
+-msgstr ""
++msgstr "brak nośnika"
+ 
+ #: .tmp/canon.c:458
+ #, no-c-format
+ msgid "invalid bit IDENTIFY message"
+-msgstr ""
++msgstr "błędny komunikat bitowy IDENTIFY"
+ 
+ #: .tmp/canon.c:462
+ #, no-c-format
+ msgid "option not connect"
+-msgstr ""
++msgstr "opcja nie podłączona"
+ 
+ #: .tmp/canon.c:476
+ #, no-c-format
+ msgid "power on reset / bus device reset"
+-msgstr ""
++msgstr "reset po włączeniu zasilania / reset szyny"
+ 
+ #: .tmp/canon.c:480
+ #, no-c-format
+ msgid "parameter changed by another initiator"
+-msgstr ""
++msgstr "parametr zmieniony przez inny inicjator"
+ 
+ #: .tmp/canon.c:494
+ #, no-c-format
+ msgid "no additional sense information"
+-msgstr ""
++msgstr "brak dodatkowej informacji o stanie"
+ 
+ #: .tmp/canon.c:498
+ #, no-c-format
+ msgid "reselect failure"
+-msgstr ""
++msgstr "niepowodzenie ponownego wyboru"
+ 
+ #: .tmp/canon.c:502
+ #, no-c-format
+ msgid "SCSI parity error"
+-msgstr ""
++msgstr "błąd parzystości SCSI"
+ 
+ #: .tmp/canon.c:506
+ #, no-c-format
+ msgid "initiator detected error message received"
+-msgstr ""
++msgstr "otrzymano komunikat błędu wykryty przez inicjator"
+ 
+ #: .tmp/canon.c:511
+ #, no-c-format
+ msgid "invalid message error"
+-msgstr ""
++msgstr "błędny komunikat"
+ 
+ #: .tmp/canon.c:515
+ #, no-c-format
+ msgid "timeout error"
+-msgstr ""
++msgstr "błąd przekroczenia czasu"
+ 
+ #: .tmp/canon.c:519
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "transparency unit shading error"
+-msgstr "Moduł do skanowania przezroczy"
++msgstr "błąd cieniowania modułu do skanowania przezroczy"
+ 
+ #: .tmp/canon.c:523
+ #, no-c-format
+ msgid "lamp not stabilized"
+-msgstr ""
++msgstr "lampa nie ustabilizowana"
+ 
+ #: .tmp/canon.c:537
+ #, no-c-format
+ msgid "problem not analyzed (unknown SCSI class)"
+-msgstr ""
++msgstr "problem nie przeanalizowany (nieznana klasa SCSI)"
+ 
+ #: .tmp/canon.c:855 .tmp/canon.c:870
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "film scanner"
+-msgstr "skaner płaski"
++msgstr "skaner filmów"
+ 
+ #: .tmp/canon.c:885 .tmp/canon.c:900 .tmp/canon.c:915
+ #: .tmp/hp3900_sane.c:1694 .tmp/plustek.c:1334 .tmp/plustek_pp.c:1014
+@@ -454,22 +454,22 @@
+ #: .tmp/canon.c:1171 .tmp/epson2.c:2160 .tmp/epson.c:3376
+ #, no-c-format
+ msgid "Film type"
+-msgstr "rodzaj filmu"
++msgstr "Rodzaj filmu"
+ 
+ #: .tmp/canon.c:1172
+ #, no-c-format
+ msgid "Selects the film type, i.e. negatives or slides"
+-msgstr ""
++msgstr "Wybór rodzaju filmu, np. negatywów lub slajdów"
+ 
+ #: .tmp/canon.c:1184
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Negative film type"
+-msgstr "Negatyw"
++msgstr "Rodzaj negatywu"
+ 
+ #: .tmp/canon.c:1185
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Selects the negative film type"
+-msgstr "Wybierz obraz testowy"
++msgstr "Wybór rodzaju negatywu"
+ 
+ #: .tmp/canon.c:1209 .tmp/saneopts.h:146
+ #, no-c-format
+@@ -477,59 +477,59 @@
+ msgstr "Rozdzielczość skanowania"
+ 
+ #: .tmp/canon.c:1224
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Hardware resolution"
+-msgstr "Rozdzielczość skanowania"
++msgstr "Rozdzielczość sprzętowa"
+ 
+ #: .tmp/canon.c:1225
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Use only hardware resolutions"
+-msgstr "Wyświetl krótką listę rozdzielczości"
++msgstr "Użycie tylko rozdzielczości sprzętowych"
+ 
+ #: .tmp/canon.c:1306
+ #, no-c-format
+ msgid "Focus"
+-msgstr ""
++msgstr "Ostrość"
+ 
+ #: .tmp/canon.c:1316
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Auto focus"
+-msgstr "Wysuwanie automatyczne"
++msgstr "Ostrość automatyczna"
+ 
+ #: .tmp/canon.c:1317
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Enable/disable auto focus"
+-msgstr "Zablokuj wstępne ustawianie ostrości"
++msgstr "Włączenie/wyłączenie automatycznego ustawiania ostrości"
+ 
+ #: .tmp/canon.c:1324
+ #, no-c-format
+ msgid "Auto focus only once"
+-msgstr ""
++msgstr "Jednokrotny autofocus"
+ 
+ #: .tmp/canon.c:1325
+ #, no-c-format
+ msgid "Do auto focus only once between ejects"
+-msgstr ""
++msgstr "Automatyczne ustawianie ostrości tylko po wymianie nośnika"
+ 
+ #: .tmp/canon.c:1333
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Manual focus position"
+-msgstr "Popraw pozycję skupienia"
++msgstr "Ręczne ustawianie ostrości"
+ 
+ #: .tmp/canon.c:1334
+ #, no-c-format
+ msgid "Set the optical system's focus position by hand (default: 128)."
+-msgstr ""
++msgstr "Ręczne ustawianie pozycji ostrości optyki (domyślnie: 128)."
+ 
+ #: .tmp/canon.c:1344
+ #, no-c-format
+ msgid "Scan margins"
+-msgstr ""
++msgstr "Marginesy skanowania"
+ 
+ #: .tmp/canon.c:1391
+ #, no-c-format
+ msgid "Extra color adjustments"
+-msgstr ""
++msgstr "Dodatkowe ustawienia kolorów"
+ 
+ #: .tmp/canon.c:1522 .tmp/epson2.c:2040 .tmp/epson.c:3195
+ #, no-c-format
+@@ -537,145 +537,145 @@
+ msgstr "Odbicie lustrzane obrazka"
+ 
+ #: .tmp/canon.c:1523
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Mirror the image horizontally"
+-msgstr "Poziome, lustrzane odbicie obrazka."
++msgstr "Poziome odbicie lustrzane obrazu"
+ 
+ #: .tmp/canon.c:1592
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Auto exposure"
+-msgstr "Ustawia czas ekspozycji"
++msgstr "Ekspozycja automatyczna"
+ 
+ #: .tmp/canon.c:1593
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Enable/disable the auto exposure feature"
+-msgstr "Włącz wybór czasu ekspozycji"
++msgstr "Włączenie/wyłączenie automatycznego wyboru ekspozycji"
+ 
+ #: .tmp/canon.c:1609
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Calibration now"
+-msgstr "Kalibracja"
++msgstr "Kalibruj teraz"
+ 
+ #: .tmp/canon.c:1610
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Execute calibration *now*"
+-msgstr "Zdefiniuj tryb kalibracji"
++msgstr "Uruchomienie kalibracji *teraz*"
+ 
+ #: .tmp/canon.c:1620
+ #, no-c-format
+ msgid "Self diagnosis"
+-msgstr ""
++msgstr "Autodiagnostyka"
+ 
+ #: .tmp/canon.c:1621
+ #, no-c-format
+ msgid "Perform scanner self diagnosis"
+-msgstr ""
++msgstr "Wykonanie autodiagnostyki skanera"
+ 
+ #: .tmp/canon.c:1632
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Reset scanner"
+-msgstr "skaner arkuszy"
++msgstr "Reset skanera"
+ 
+ #: .tmp/canon.c:1633
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Reset the scanner"
+-msgstr "skaner arkuszy"
++msgstr "Zresetowanie skanera"
+ 
+ #: .tmp/canon.c:1643
+ #, no-c-format
+ msgid "Medium handling"
+-msgstr ""
++msgstr "Obsługa medium"
+ 
+ #: .tmp/canon.c:1652
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Eject film after each scan"
+-msgstr "Wysuń dokument po zeskanowaniu"
++msgstr "Wysuń film po zeskanowaniu"
+ 
+ #: .tmp/canon.c:1653
+ #, no-c-format
+ msgid "Automatically eject the film from the device after each scan"
+-msgstr ""
++msgstr "Automatyczne wysuwanie filmu z urządzenia po każdym skanowaniu"
+ 
+ #: .tmp/canon.c:1662
+ #, no-c-format
+ msgid "Eject film before exit"
+-msgstr ""
++msgstr "Wysuń film przed zakończeniem"
+ 
+ #: .tmp/canon.c:1663
  #, no-c-format
  msgid ""
- "The lamp will be turned off after the given time (in minutes). A value of 0 "
- "means, that the lamp won't be turned off."
+ "Automatically eject the film from the device before exiting the program"
 -msgstr ""
-+msgstr "Lampa zostanie wyłączona po podanym czasie (w minutach). Wartość 0 oznacza, że lampa nie będzie wyłączana."
++msgstr "Automatyczne wysuwanie filmu z urządzenia przed zakończeniem programu"
  
- #: .tmp/gt68xx.c:472
+ #: .tmp/canon.c:1672
  #, no-c-format
-@@ -823,24 +826,24 @@
- msgstr "Różne"
- 
- #: .tmp/hp5400_sane.c:358
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "offset X"
--msgstr "Offset"
-+msgstr "offset X"
- 
- #: .tmp/hp5400_sane.c:359
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Hardware internal X position of the scanning area."
--msgstr "Lewa krawędź skanowanego obszaru (górny lewy x)."
-+msgstr "Wewnętrzne sprzętowe położenie X obszaru skanowania."
- 
- #: .tmp/hp5400_sane.c:368
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "offset Y"
--msgstr "Offset"
-+msgstr "offset Y"
- 
- #: .tmp/hp5400_sane.c:369
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Hardware internal Y position of the scanning area."
--msgstr "Lewa krawędź skanowanego obszaru (górny lewy x)."
-+msgstr "Wewnętrzne sprzętowe położenie Y obszaru skanowania."
- 
- #: .tmp/hp5400_sane.c:381 .tmp/niash.c:718
- #, no-c-format
-@@ -871,9 +874,9 @@
- msgstr "Półtony"
- 
- #: .tmp/hp-option.c:2983
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Advanced Options"
--msgstr "Aktualizuj opcje"
-+msgstr "Opcje zaawansowane"
- 
- #: .tmp/hp-option.c:3040
- #, no-c-format
-@@ -913,12 +916,12 @@
- #: .tmp/hp-option.c:3087
- #, no-c-format
- msgid "NTSC RGB"
+ msgid "Eject film now"
 -msgstr ""
-+msgstr "NTSC RBG"
++msgstr "Wysuń film teraz"
  
- #: .tmp/hp-option.c:3088
+ #: .tmp/canon.c:1673
  #, no-c-format
- msgid "XPA RGB"
+ msgid "Eject the film *now*"
 -msgstr ""
-+msgstr "XPA RGB"
++msgstr "Wysunięcie filmu *teraz*"
  
- #: .tmp/hp-option.c:3089
- #, no-c-format
-@@ -1000,12 +1003,12 @@
- #: .tmp/hp-option.c:3252
- #, no-c-format
- msgid "ADF"
--msgstr ""
-+msgstr "ADF"
- 
- #: .tmp/hp-option.c:3253
- #, no-c-format
- msgid "XPA"
--msgstr ""
-+msgstr "XPA"
- 
- #: .tmp/hp-option.c:3326 .tmp/hp-option.c:3339
- #, no-c-format
-@@ -1018,9 +1021,9 @@
- msgstr "Warunkowy"
- 
- #: .tmp/hp-option.c:3413
+ #: .tmp/canon.c:1682
 -#, fuzzy, no-c-format
 +#, no-c-format
- msgid "Experiment"
--msgstr "Czas ekspozycji"
-+msgstr "Eksperyment"
+ msgid "Document feeder extras"
+-msgstr "podajnik dokumentów"
++msgstr "Dodatkowy podajnik dokumentów"
  
- #: .tmp/hp-option.h:60
- #, no-c-format
-@@ -1242,9 +1245,9 @@
- msgstr "Rozmiar papieru"
- 
- #: .tmp/lexmark.h:57
+ #: .tmp/canon.c:1689
 -#, fuzzy, no-c-format
 +#, no-c-format
- msgid "Selects the size of the area to be scanned."
--msgstr "Wybiera numer ramki do skanowania"
-+msgstr "Wybiera rozmiar obszaru do skanowania."
+ msgid "Flatbed only"
+-msgstr "Płyta"
++msgstr "Tylko płyta"
  
- #: .tmp/matsushita.c:139
+ #: .tmp/canon.c:1690
  #, no-c-format
-@@ -1324,7 +1327,7 @@
- #: .tmp/matsushita.c:245
- #, no-c-format
- msgid "CRT"
+ msgid "Disable auto document feeder and use flatbed only"
 -msgstr ""
-+msgstr "CRT"
++msgstr "Wyłączenie automatycznego podajnika dokumentów, używanie tylko płyty"
  
- #: .tmp/matsushita.c:257
- #, no-c-format
-@@ -1799,24 +1802,24 @@
- "jakości). To może być tryb niekolorowy lub niskiej rozdzielczości."
- 
- #: .tmp/mustek.c:4337
+ #: .tmp/canon.c:1700 .tmp/canon.c:1710
 -#, fuzzy, no-c-format
 +#, no-c-format
- msgid "Lamp off time (minutes)"
--msgstr "Czas wyłączenia lampy w sekundach."
-+msgstr "Czas wyłączenia lampy (w minutach)"
+ msgid "Transparency unit"
+ msgstr "Moduł do skanowania przezroczy"
  
- #: .tmp/mustek.c:4338
+ #: .tmp/canon.c:1711
  #, no-c-format
- msgid "Set the time (in minutes) after which the lamp is shut off."
+ msgid "Switch on/off the transparency unit (FAU, film adapter unit)"
 -msgstr ""
-+msgstr "Czas (w minutach), po którym lampa jest wyłączana."
++msgstr "Włączenie/wyłączenie modułu do skanowania przezroczy (FAU)"
  
- #: .tmp/mustek.c:4349
+ #: .tmp/canon.c:1721
 -#, fuzzy, no-c-format
 +#, no-c-format
- msgid "Turn lamp off"
--msgstr "Wyłącz zieloną lampę"
-+msgstr "Wyłącz lampę"
+ msgid "Negative film"
+ msgstr "Negatyw"
  
- #: .tmp/mustek.c:4350
+ #: .tmp/canon.c:1722
 -#, fuzzy, no-c-format
 +#, no-c-format
- msgid "Turns the lamp off immediately."
--msgstr "Włącza bądź wyłącza lampę główną skanera"
-+msgstr "Wyłącza lampę natychmiast."
+ msgid "Positive or negative film"
+-msgstr "Pozytyw"
++msgstr "Pozytyw lub negatyw"
  
- #: .tmp/mustek.c:4427
+ #: .tmp/canon.c:1731
  #, no-c-format
-@@ -1901,10 +1904,10 @@
- #: .tmp/mustek_usb2.c:119
- #, no-c-format
- msgid "Reflective"
+ msgid "Density control"
 -msgstr ""
-+msgstr "Odbijający światło"
++msgstr "Kontrola gęstości"
  
- #: .tmp/mustek_usb2.c:120
+ #: .tmp/canon.c:1732
+ #, no-c-format
+ msgid "Set density control mode"
+-msgstr ""
++msgstr "Ustawienie trybu kontroli gęstości"
+ 
+ #: .tmp/canon.c:1743
 -#, fuzzy, no-c-format
 +#, no-c-format
- msgid "Positive"
+ msgid "Transparency ratio"
+-msgstr "Moduł do skanowania przezroczy"
++msgstr "Współczynnik przezroczystości"
+ 
+ #: .tmp/canon.c:1757
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Select film type"
+-msgstr "rodzaj filmu"
++msgstr "Rodzaj filmu"
+ 
+ #: .tmp/canon.c:1758
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Select the film type"
+-msgstr "Wybór półcieni"
++msgstr "Wybór rodzaju filmu"
+ 
+ #: .tmp/epson2.c:193 .tmp/epson.c:488
+ #, no-c-format
+@@ -723,12 +723,12 @@
+ msgstr "Negatyw"
+ 
+ #: .tmp/epson2.c:231
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Positive Slide"
  msgstr "Pozytyw"
  
-@@ -1920,12 +1923,12 @@
- #: .tmp/pixma.c:116
+ #: .tmp/epson2.c:232
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Negative Slide"
+ msgstr "Negatyw"
+ 
+@@ -1036,7 +1036,7 @@
+ msgstr "Krótka lista rozdzielczości"
+ 
+ #: .tmp/epson2.c:2066
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Display a shortened resolution list"
+ msgstr "Wyświetl krótką listę rozdzielczości"
+ 
+@@ -1332,14 +1332,14 @@
+ msgstr "Ustawia wartość gamma dla wszystkich kanałów"
+ 
+ #: .tmp/hp3500.c:977
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Geometry Group"
+-msgstr "Krawędzie obszaru skanowania"
++msgstr "Grupa geometrii"
+ 
+ #: .tmp/hp3500.c:1033 .tmp/hp3500.c:1034
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Scan Mode Group"
+-msgstr "Tryb skanowania"
++msgstr "Grupa trybu skanowania"
+ 
+ #: .tmp/hp3900_sane.c:429 .tmp/hp3900_sane.c:1009 .tmp/hp-option.c:3173
  #, no-c-format
- msgid "multi-function peripheral"
+@@ -1354,54 +1354,54 @@
+ msgstr "Negatyw"
+ 
+ #: .tmp/hp3900_sane.c:1411
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Scanner model"
+-msgstr "Tryb skanowania"
++msgstr "Model skanera"
+ 
+ #: .tmp/hp3900_sane.c:1414
+ #, no-c-format
+ msgid "Allows to test device behaviour with other supported models"
 -msgstr ""
-+msgstr "urządzenie wielofunkcyjne"
++msgstr "Umożliwia sprawdzenie zachowania urządzenia z innymi obsługiwanymi modelami"
  
- #: .tmp/pixma_sane_options.c:91
+ #: .tmp/hp3900_sane.c:1428
  #, no-c-format
- msgid "Button-controlled scan (experimental)"
+ msgid "Image colours will be inverted"
 -msgstr ""
-+msgstr "Skanowanie sterowane przyciskiem (eksperymentalne)"
++msgstr "Kolory obrazu będą odwrócone"
  
- #: .tmp/pixma_sane_options.c:94
+ #: .tmp/hp3900_sane.c:1442
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Disable gamma correction"
+-msgstr "Analogowa korekcja gamma"
++msgstr "Wyłącz korekcję gamma"
+ 
+ #: .tmp/hp3900_sane.c:1443
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Gamma correction will be disabled"
+-msgstr "Korekcja gamma"
++msgstr "Korekcja gamma będzie wyłączona"
+ 
+ #: .tmp/hp3900_sane.c:1457
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Disable white shading correction"
+-msgstr "Przeprowadź tylko korektę cieniowania"
++msgstr "Wyłącz korekcję cieniowania bieli"
+ 
+ #: .tmp/hp3900_sane.c:1459
  #, no-c-format
-@@ -1933,27 +1936,27 @@
- "When enabled, scan process will not start immediately. To proceed, press "
- "\"SCAN\" button (for MP150) or \"COLOR\" button (for other models). To "
- "cancel, press \"GRAY\" button."
+ msgid "White shading correction will be disabled"
 -msgstr ""
-+msgstr "Kiedy jest włączone, proces skanowania nie zacznie się natychmiast. Aby kontynuować, należy nacisnąć przycisk \"SCAN\" (dla MP150) lub przycisk \"COLOR\" (dla innych modeli). Aby anulować, należy nacisnąć przycisk \"GRAY\"."
++msgstr "Korekcja cieniowania bieli będzie wyłączona"
  
- #: .tmp/pixma_sane_options.c:210 .tmp/plustek.c:1068
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Buttons"
--msgstr "Stan przycisku"
-+msgstr "Przyciski"
- 
- #: .tmp/pixma_sane_options.c:216
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Update button state"
--msgstr "Stan przycisku"
-+msgstr "Uaktualnij stan przycisku"
- 
- #: .tmp/pixma_sane_options.c:228
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Button 1"
--msgstr "Stan przycisku"
-+msgstr "Przycisk 1"
- 
- #: .tmp/pixma_sane_options.c:242
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Button 2"
--msgstr "Stan przycisku"
-+msgstr "Przycisk 2"
- 
- #: .tmp/plustek.c:233 .tmp/plustek_pp.c:201 .tmp/u12.c:156
+ #: .tmp/hp3900_sane.c:1473
  #, no-c-format
-@@ -1986,19 +1989,19 @@
- msgstr "Włącza lub wyłącza pamięć podręczną danych kalibracji."
+ msgid "Skip warmup process"
+-msgstr ""
++msgstr "Pomiń proces rozgrzewania"
  
- #: .tmp/plustek.c:929
+ #: .tmp/hp3900_sane.c:1474
+ #, no-c-format
+ msgid "Warmup process will be disabled"
+-msgstr ""
++msgstr "Proces rozgrzewania będzie pominięty"
+ 
+ #: .tmp/hp3900_sane.c:1488
+ #, no-c-format
+ msgid "Force real depth"
+-msgstr ""
++msgstr "Wymuś prawdziwą głębię"
+ 
+ #: .tmp/hp3900_sane.c:1491
+ #, no-c-format
+@@ -1410,11 +1410,12 @@
+ "image quality and then converted to the selected depth. This option "
+ "avoids depth emulation."
+ msgstr ""
++"Jeśli korekcja gamma jest wyłączona, wszystkie skanowania będą wykonane z 16-bitową głębią w celu poprawy jakości obrazu, a następnie konwertowane do wybranej głębi. Ta opcja zapobiega emulacji głębi."
+ 
+ #: .tmp/hp3900_sane.c:1505
 -#, fuzzy, no-c-format
 +#, no-c-format
- msgid "Performs calibration"
+ msgid "Emulate Grayscale"
+-msgstr "Skala szarości"
++msgstr "Emulacja skali szarości"
+ 
+ #: .tmp/hp3900_sane.c:1508
+ #, no-c-format
+@@ -1423,11 +1424,12 @@
+ "grayscale by software. This may improve image quality in some "
+ "circumstances."
+ msgstr ""
++"Jeśli jest włączona, obraz będzie skanowany w trybie kolorowym, a następnie konwertowany programowo do skali szarości. Może to poprawić jakość obrazu w pewnych przypadkach."
+ 
+ #: .tmp/hp3900_sane.c:1522
+ #, no-c-format
+ msgid "Save debugging images"
+-msgstr ""
++msgstr "Zapisuj obrazy diagnostyczne"
+ 
+ #: .tmp/hp3900_sane.c:1525
+ #, no-c-format
+@@ -1435,66 +1437,67 @@
+ "If enabled, some images involved in scanner processing are saved to "
+ "analyze them."
+ msgstr ""
++"Jeśli jest włączona, obrazy uczestniczące w dostrajaniu skanera są zapisywane w celu analizy."
+ 
+ #: .tmp/hp3900_sane.c:1539
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Reset chipset"
+-msgstr "skaner arkuszy"
++msgstr "Reset układów"
+ 
+ #: .tmp/hp3900_sane.c:1540
+ #, no-c-format
+ msgid "Resets chipset data"
+-msgstr ""
++msgstr "Zresetowanie danych układów"
+ 
+ #: .tmp/hp3900_sane.c:1553
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Information"
+-msgstr "Ignoruj kalibrację"
++msgstr "Informacje"
+ 
+ #: .tmp/hp3900_sane.c:1566
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Chipset name"
+-msgstr "Nazwa pliku"
++msgstr "Nazwa układów"
+ 
+ #: .tmp/hp3900_sane.c:1567
+ #, no-c-format
+ msgid "Shows chipset name used in device."
+-msgstr ""
++msgstr "Pokazuje nazwy układów (chipsetu) użytych w urządzeniu."
+ 
+ #: .tmp/hp3900_sane.c:1573
+ #, no-c-format
+ msgid "Unknown"
+-msgstr ""
++msgstr "Nieznany"
+ 
+ #: .tmp/hp3900_sane.c:1578
+ #, no-c-format
+ msgid "Chipset ID"
+-msgstr ""
++msgstr "ID chipsetu"
+ 
+ #: .tmp/hp3900_sane.c:1579
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Shows the chipset ID"
+-msgstr "skaner arkuszy"
++msgstr "Pokazuje ID chipsetu"
+ 
+ #: .tmp/hp3900_sane.c:1591
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Scan counter"
+-msgstr "Źródło skanowania"
++msgstr "Licznik skanowań"
+ 
+ #: .tmp/hp3900_sane.c:1593
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Shows the number of scans made by scanner"
+-msgstr "Wybiera numer ramki do skanowania"
++msgstr "Pokazuje liczbę wykonanych skanowań"
+ 
+ #: .tmp/hp3900_sane.c:1605
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Update information"
+-msgstr "Aktualizuj opcje"
++msgstr "Aktualizuj informacje"
+ 
+ #: .tmp/hp3900_sane.c:1606
+ #, no-c-format
+ msgid "Updates information about device"
+-msgstr ""
++msgstr "Uaktualnia informacje o urządzeniu"
+ 
+ #: .tmp/hp3900_sane.c:1619 .tmp/pixma_sane_options.c:210
+ #: .tmp/plustek.c:1079
+@@ -1503,9 +1506,9 @@
+ msgstr "Przyciski"
+ 
+ #: .tmp/hp3900_sane.c:1646
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "This option reflects a front panel scanner button"
+-msgstr "Opcja ta odzwierciedla stan przycisków skanera."
++msgstr "Opcja ta odzwierciedla stan przycisku przedniego panelu skanera"
+ 
+ #: .tmp/hp5400_sane.c:313 .tmp/niash.c:683
+ #, no-c-format
+@@ -1564,44 +1567,44 @@
+ msgstr "ADF"
+ 
+ #: .tmp/hp5590.c:82 .tmp/pixma.c:643
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "ADF Duplex"
+-msgstr "Dwustronny"
++msgstr "ADF dwustronny"
+ 
+ #: .tmp/hp5590.c:83
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "TMA Slides"
+-msgstr "Slajd"
++msgstr "TMA - slajdy"
+ 
+ #: .tmp/hp5590.c:84
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "TMA Negatives"
+-msgstr "Negatyw"
++msgstr "TMA - negatywy"
+ 
+ #: .tmp/hp5590.c:87
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Color (48 bits)"
+-msgstr "Kolor 48"
++msgstr "Kolor (48 bitów)"
+ 
+ #: .tmp/hp5590.c:90
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Extend lamp timeout"
+-msgstr "Czas wyłączenia lampy"
++msgstr "Powiększ czas wyłączenia lampy"
+ 
+ #: .tmp/hp5590.c:91
+ #, no-c-format
+ msgid "Extends lamp timeout (from 15 minutes to 1 hour)"
+-msgstr ""
++msgstr "Powiększa czas wyłączenia lampy (z 15 minut do 1 godziny)"
+ 
+ #: .tmp/hp5590.c:93
+ #, no-c-format
+ msgid "Wait for button"
+-msgstr "Czekaj na Przycisk"
++msgstr "Czekaj na przycisk"
+ 
+ #: .tmp/hp5590.c:94
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Waits for button before scanning"
+-msgstr "Rozgrzej lampę przed skanowaniem"
++msgstr "Oczekiwanie na naciśnięcie przycisku przed skanowaniem"
+ 
+ #: .tmp/hp-option.c:2983
+ #, no-c-format
+@@ -2726,14 +2729,14 @@
+ msgstr "Ręczne włączanie lamp(y)."
+ 
+ #: .tmp/plustek.c:925
+-#, fuzzy, no-c-format
++#, no-c-format
+ msgid "Lamp off during dark calibration"
 -msgstr "Kalibracja ziarnistości"
-+msgstr "Wykonuje kalibrację"
++msgstr "Wyłącz lampę podczas kalibracji ciemności"
  
- #: .tmp/plustek.c:947
+ #: .tmp/plustek.c:926
  #, no-c-format
- msgid "Speedup sensor"
+ msgid "Always switches lamp off when doing dark calibration."
 -msgstr ""
-+msgstr "Przyspieszenie czujnika"
++msgstr "Wyłączanie lampy zawsze podczas kalibracji ciemności."
  
- #: .tmp/plustek.c:948
+ #: .tmp/plustek.c:934
  #, no-c-format
- msgid "Enables or disables speeding up sensor movement."
+@@ -3780,7 +3783,7 @@
+ #: .tmp/sm3840.c:770
+ #, no-c-format
+ msgid "Threshold value for lineart mode"
 -msgstr ""
-+msgstr "Włącza lub wyłącza przyspieszanie ruchu czujnika."
- 
- #: .tmp/plustek.c:962
- #, no-c-format
-@@ -2116,14 +2119,14 @@
- msgstr "Definiuje parametr wyłączenia niebieskiej lampy"
- 
- #: .tmp/plustek.c:1076
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Scanner button"
--msgstr "Symulacja skanera ręcznego"
-+msgstr "Przycisk skanera"
- 
- #: .tmp/plustek.c:1077
- #, no-c-format
- msgid "This option reflects the status of the scanner buttons."
--msgstr ""
-+msgstr "Opcja ta odzwierciedla stan przycisków skanera."
- 
- #: .tmp/plustek_pp.c:194
- #, no-c-format
-@@ -3024,14 +3027,14 @@
- msgstr "skaner płaski"
- 
- #: .tmp/sm3840.c:689
--#, fuzzy, no-c-format
-+#, no-c-format
- msgid "Lamp timeout"
- msgstr "Czas wyłączenia lampy"
- 
- #: .tmp/sm3840.c:691
- #, no-c-format
- msgid "Minutes until lamp is turned off after scan"
--msgstr ""
-+msgstr "Liczba minut do wyłączenia lampy po skanowaniu"
++msgstr "Wartość progowa dla trybu kreski"
  
  #: .tmp/snapscan-options.c:84
- #, no-c-format
-@@ -3121,7 +3124,7 @@
- #: .tmp/stv680.c:974
- #, no-c-format
- msgid "webcam"
--msgstr ""
-+msgstr "kamera internetowa"
- 
- #: .tmp/stv680.h:115
- #, no-c-format
-@@ -3228,7 +3231,7 @@
- msgid ""
- "If Automatic Document Feeder is selected, the feeder will be 'empty' after "
- "10 scans."
--msgstr ""
-+msgstr "Jeśli wybrano automatyczny podajnij dokumentów (ADF), podajnik będzie 'pusty' po 10 skanach."
- 
- #: .tmp/test.c:426
  #, no-c-format
