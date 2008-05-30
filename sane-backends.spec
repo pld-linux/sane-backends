@@ -10,24 +10,24 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.18
-Release:	2
-License:	relaxed LGPL (libraries), and Public Domain (docs)
+Version:	1.0.19
+Release:	1
+License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
-# Source0-md5:	7ca7e2908e24721471de92cf40c75e60
+# Source0-md5:	8c0936272dcfd4e98c51512699f1c06f
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 # http://hp44x0backend.sourceforge.net/ and http://home.foni.net/~johanneshub/
 Source3:	http://dl.sourceforge.net/hp44x0backend/sane_hp_rts88xx-0.18.tar.gz
 # Source3-md5:	09d3eaf73f35b7795cd8418b8dc60f69
+Patch0:		%{name}-missing-files.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
-Patch4:		%{name}-pmake.patch
-Patch5:		%{name}-locale-names.patch
-Patch6:		%{name}-pl.po-update.patch
-Patch7:		%{name}-hp_rts88xx-fixes.patch
+Patch4:		%{name}-pl.po-update.patch
+Patch5:		%{name}-hp_rts88xx-fixes.patch
+Patch6:		%{name}-configure.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -210,26 +210,26 @@ Starowniki SANE dla skanerów podłączanych do portu równoległego:
 
 %prep
 %setup -q -a3
-# kill libtool.m4 copy
-grep -B 100000 'libtool.m4 - Configure libtool for the host system' acinclude.m4 > acinclude.m4.tmp
+# kill libtool.m4 inclusion
+grep -v '^m4_include' acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
 %if %{with rts88xx}
 cd sane_hp_rts88xx/sane_hp_rts88xx
 sh -x patch-sane.sh `pwd`/../..
 cd ../..
 %endif
-mv -f po/sane-backends.{no,nb}.po
 
 %build
 %{__libtoolize}
-%{__aclocal}
+cp -f /usr/share/automake/config.* .
+%{__aclocal} -I m4
 %{__autoconf}
 %configure \
 	--enable-static \
@@ -291,69 +291,234 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog LICENSE NEWS PROBLEMS PROJECTS README README.linux
 %doc doc/canon doc/gt68xx doc/leo doc/matsushita doc/mustek doc/mustek_usb
-%doc doc/plustek doc/sceptre doc/teco doc/umax
+%doc doc/mustek_usb2 doc/niash doc/plustek doc/sceptre doc/teco doc/u12 doc/umax
+%attr(755,root,root) %{_bindir}/sane-find-scanner
+%attr(755,root,root) %{_bindir}/scanimage
+%attr(755,root,root) %{_bindir}/gamma4scanimage
 %dir %{_sysconfdir}/sane.d
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/[!cghmp]*
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/c[!a]*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/abaton.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/agfafocus.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/apple.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/artec.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/artec_eplus48u.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/avision.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/bh.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon630u.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/cardscan.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/coolscan.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/coolscan2.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/dc210.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/dc240.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/dc25.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/dell1600n_net.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/dll.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/dmc.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/epjitsu.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/epson.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/epson2.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/fujitsu.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/genesys.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/gt68xx.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp3900.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp4200.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp5400.conf
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/m[!u]*
+%if %{with rts88xx}
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp_rts88xx.conf
+%endif
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hs2p.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ibm.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/leo.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/lexmark.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ma1509.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/matsushita.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/microtek.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/microtek2.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek_usb.conf
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/p[!l]*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/nec.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/net.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/pie.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/plustek.conf
-%{?with_rts88xx:%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp_rt*}
-%dir %{_libdir}/sane
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/qcam.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ricoh.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/s9036.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/sceptre.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/sharp.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/sm3840.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/snapscan.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/sp15c.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/st400.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/stv680.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/tamarack.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/teco1.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/teco2.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/teco3.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/test.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/u12.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/umax.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/umax1220u.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/umax_pp.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/v4l.conf
 %attr(755,root,root) %{_libdir}/libsane.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libsane.so.1
-%attr(755,root,root) %{_libdir}/sane/libsane-[!cghmp]*.so.*
-%attr(755,root,root) %{_libdir}/sane/libsane-c[!a]*.so.*
+%dir %{_libdir}/sane
+%attr(755,root,root) %{_libdir}/sane/libsane-abaton.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-agfafocus.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-apple.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-artec.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-artec_eplus48u.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-as6e.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-avision.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-bh.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon630u.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-cardscan.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-coolscan.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-coolscan2.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-dc210.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-dc240.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-dc25.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-dell1600n_net.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-dll.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-dmc.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-epjitsu.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-epson.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-epson2.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-fujitsu.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-genesys.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-gt68xx.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp3500.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-hp3900.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp4200.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp5400.so.*
-%attr(755,root,root) %{_libdir}/sane/libsane-m[!u]*.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-hp5590.so.*
+%if %{with rts88xx}
+%attr(755,root,root) %{_libdir}/sane/libsane-hp_rts88xx.so.*
+%endif
+%attr(755,root,root) %{_libdir}/sane/libsane-hpljm1005.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-hs2p.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-ibm.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-leo.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-lexmark.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-ma1509.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-matsushita.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-microtek.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-microtek2.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek_usb.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-mustek_usb2.so.*
-%attr(755,root,root) %{_libdir}/sane/libsane-p[!l]*.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-nec.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-net.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-niash.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-pie.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-pixma.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-plustek.so.*
-%{?with_rts88xx:%attr(755,root,root) %{_libdir}/sane/libsane-hp_rts88xx.so.*}
-%attr(755,root,root) %{_bindir}/sane-find-scanner
-%attr(755,root,root) %{_bindir}/scanimage
-%attr(755,root,root) %{_bindir}/gamma4scanimage
+%attr(755,root,root) %{_libdir}/sane/libsane-pnm.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-qcam.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-ricoh.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-s9036.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-sceptre.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-sharp.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-sm3600.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-sm3840.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-snapscan.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-sp15c.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-st400.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-stv680.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-tamarack.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-teco1.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-teco2.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-teco3.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-test.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-u12.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-umax.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-umax1220u.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-umax_pp.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-v4l.so.*
 %dir %attr(775,root,usb) /var/lock/sane
 %{_mandir}/man1/sane-find-scanner.1*
 %{_mandir}/man1/scanimage.1*
 %{_mandir}/man1/gamma4scanimage.1*
 %{_mandir}/man1/sane-config.1*
-%{_mandir}/man5/sane-[!cghmp]*
-%{_mandir}/man5/sane-c[!a]*
+%{_mandir}/man5/sane-abaton.5*
+%{_mandir}/man5/sane-agfafocus.5*
+%{_mandir}/man5/sane-apple.5*
+%{_mandir}/man5/sane-artec.5*
+%{_mandir}/man5/sane-artec_eplus48u.5*
+%{_mandir}/man5/sane-as6e.5*
+%{_mandir}/man5/sane-avision.5*
+%{_mandir}/man5/sane-bh.5*
 %{_mandir}/man5/sane-canon.5*
 %{_mandir}/man5/sane-canon630u.5*
+%{_mandir}/man5/sane-cardscan.5*
+%{_mandir}/man5/sane-coolscan.5*
+%{_mandir}/man5/sane-coolscan2.5*
+%{_mandir}/man5/sane-dc210.5*
+%{_mandir}/man5/sane-dc240.5*
+%{_mandir}/man5/sane-dc25.5*
+%{_mandir}/man5/sane-dll.5*
+%{_mandir}/man5/sane-dmc.5*
+%{_mandir}/man5/sane-epjitsu.5*
+%{_mandir}/man5/sane-epson.5*
+%{_mandir}/man5/sane-fujitsu.5*
 %{_mandir}/man5/sane-genesys.5*
 %{_mandir}/man5/sane-gt68xx.5*
 %{_mandir}/man5/sane-hp.5*
 %{_mandir}/man5/sane-hp3500.5*
+%{_mandir}/man5/sane-hp3900.5*
 %{_mandir}/man5/sane-hp4200.5*
 %{_mandir}/man5/sane-hp5400.5*
-%{_mandir}/man5/sane-m[!u]*
+%{_mandir}/man5/sane-hp5590.5*
+%if %{with rts88xx}
+%{_mandir}/man5/sane-hp_rts88xx.5*
+%endif
+%{_mandir}/man5/sane-hpljm1005.5*
+%{_mandir}/man5/sane-hs2p.5*
+%{_mandir}/man5/sane-ibm.5*
+%{_mandir}/man5/sane-leo.5*
+%{_mandir}/man5/sane-lexmark.5*
+%{_mandir}/man5/sane-ma1509.5*
+%{_mandir}/man5/sane-matsushita.5*
+%{_mandir}/man5/sane-microtek.5*
+%{_mandir}/man5/sane-microtek2.5*
 %{_mandir}/man5/sane-mustek.5*
 %{_mandir}/man5/sane-mustek_usb.5*
 %{_mandir}/man5/sane-mustek_usb2.5*
-%{_mandir}/man5/sane-p[!l]*
+%{_mandir}/man5/sane-nec.5*
+%{_mandir}/man5/sane-net.5*
+%{_mandir}/man5/sane-niash.5*
+%{_mandir}/man5/sane-pie.5*
+%{_mandir}/man5/sane-pint.5*
+%{_mandir}/man5/sane-pixma.5*
 %{_mandir}/man5/sane-plustek.5*
-%{?with_rts88xx:%{_mandir}/man5/sane-hp_rts88xx.5*}
-%{_mandir}/man7/*
+%{_mandir}/man5/sane-pnm.5*
+%{_mandir}/man5/sane-qcam.5*
+%{_mandir}/man5/sane-ricoh.5*
+%{_mandir}/man5/sane-s9036.5*
+%{_mandir}/man5/sane-sceptre.5*
+%{_mandir}/man5/sane-scsi.5*
+%{_mandir}/man5/sane-sharp.5*
+%{_mandir}/man5/sane-sm3600.5*
+%{_mandir}/man5/sane-sm3840.5*
+%{_mandir}/man5/sane-snapscan.5*
+%{_mandir}/man5/sane-sp15c.5*
+%{_mandir}/man5/sane-st400.5*
+%{_mandir}/man5/sane-stv680.5*
+%{_mandir}/man5/sane-tamarack.5*
+%{_mandir}/man5/sane-teco1.5*
+%{_mandir}/man5/sane-teco2.5*
+%{_mandir}/man5/sane-teco3.5*
+%{_mandir}/man5/sane-test.5*
+%{_mandir}/man5/sane-u12.5*
+%{_mandir}/man5/sane-umax.5*
+%{_mandir}/man5/sane-umax1220u.5*
+%{_mandir}/man5/sane-umax_pp.5*
+%{_mandir}/man5/sane-usb.5*
+%{_mandir}/man5/sane-v4l.5*
+%{_mandir}/man7/sane.7*
 
 %files devel
 %defattr(644,root,root,755)
