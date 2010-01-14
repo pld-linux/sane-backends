@@ -11,7 +11,7 @@ Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.19
-Release:	6
+Release:	7
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
@@ -44,7 +44,9 @@ BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-latex-psnfss
+%if "%{pld_release}" != "ti"
 BuildRequires:	texlive-latex-effects
+%endif
 Requires:	setup >= 2.4.10-1
 Obsoletes:	sane
 Obsoletes:	sane-backends-sm3600
