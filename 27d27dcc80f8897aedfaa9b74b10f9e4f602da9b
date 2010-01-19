@@ -1,0 +1,3 @@
+- updated to 1.0.8,
+- build plustek kernel modules only on %{ix86} (package is now also sparc* ready),
+- removed outdate DESTDIR patch.
