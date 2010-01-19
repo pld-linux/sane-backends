@@ -1,0 +1,4 @@
+- Release 2.9.
+- Renamed plustek-up_smp_switch patch to plustek-Makefile.
+- No longer use subshells. The do not propagate exit codes correctly.
+  STBR for /test
