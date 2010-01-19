@@ -1,0 +1,4 @@
+- enabled pnm backend and translations
+- new %doc
+- don't run automake - this package doesn't use am
+- release 3
