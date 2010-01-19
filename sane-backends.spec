@@ -10,24 +10,23 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.19
-Release:	7
+Version:	1.0.20
+Release:	0.1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
-# Source0-md5:	8c0936272dcfd4e98c51512699f1c06f
+# Source0-md5:	a0cfdfdebca2feb4f2ba5d3418b15a42
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 # http://hp44x0backend.sourceforge.net/ and http://home.foni.net/~johanneshub/
 Source3:	http://dl.sourceforge.net/hp44x0backend/sane_hp_rts88xx-0.18.tar.gz
 # Source3-md5:	09d3eaf73f35b7795cd8418b8dc60f69
-Patch0:		%{name}-missing-files.patch
+Patch0:		%{name}-lockpath_group.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
-Patch3:		%{name}-link.patch
-Patch4:		%{name}-pl.po-update.patch
-Patch5:		%{name}-hp_rts88xx-fixes.patch
-Patch6:		%{name}-configure.patch
+Patch3:		%{name}-pl.po-update.patch
+Patch10:	%{name}-hp_rts88xx.patch
+Patch11:	%{name}-hp_rts88xx-fixes.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -38,6 +37,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-compat-devel
+BuildRequires:	libv4l-devel
 BuildRequires:	pkgconfig
 BuildRequires:	resmgr-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -219,21 +219,26 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
+# needs update
+#%%patch3 -p1
+
 %if %{with rts88xx}
-cd sane_hp_rts88xx/sane_hp_rts88xx
-sh -x patch-sane.sh `pwd`/../..
-cd ../..
+%patch10 -p1
+%patch11 -p1
+cp sane_hp_rts88xx/sane_hp_rts88xx/*.[ch] backend/
+cp sane_hp_rts88xx/sane_hp_rts88xx/hp_rts88xx.conf backend/hp_rts88xx.conf.in
+cp sane_hp_rts88xx/sane_hp_rts88xx/hp_rts88xx.conf backend/hp_rts88xx.conf
+ln -s stubs.c backend/hp_rts88xx-s.c
+
+cp sane_hp_rts88xx/sane_hp_rts88xx/hp_rts88xx.desc doc/descriptions/
+cp sane_hp_rts88xx/sane_hp_rts88xx/sane-hp_rts88xx.man doc/
 %endif
 
 %build
 %{__libtoolize}
-cp -f /usr/share/automake/config.* .
 %{__aclocal} -I m4
 %{__autoconf}
+%{__automake}
 %configure \
 	--enable-static \
 	--enable-pnm-backend \
@@ -242,9 +247,9 @@ cp -f /usr/share/automake/config.* .
 
 %{__make}
 
-%ifarch %{ix86}
+%ifarch %{ix86} %{x8664}
 cd tools
-%{__cc} -DHAVE_SYS_IO_H %{rpmcflags} \
+%{__cc} %{rpmcppflags} -DHAVE_SYS_IO_H %{rpmcflags} %{rpmldflags} \
 	-I../include -o mustek600iin-off mustek600iin-off.c
 cd ..
 %endif
@@ -259,14 +264,14 @@ install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_aclocaldir},/var/lock/sane
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 install %{SOURCE2} $RPM_BUILD_ROOT%{_aclocaldir}
 
-%ifarch %{ix86}
+%ifarch %{ix86} %{x8664}
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %endif
 
-rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
+%{__rm} -rf $RPM_BUILD_ROOT%{_prefix}/doc
 
 # only shared modules - shut up check-files
-rm -f $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la,a}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la,a}
 
 %find_lang %{name} --all-name
 
@@ -308,9 +313,11 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/bh.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon630u.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon_dr.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/cardscan.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/coolscan.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/coolscan2.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/coolscan3.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/dc210.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/dc240.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/dc25.conf
@@ -343,9 +350,11 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/nec.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/net.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/pie.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/pixma.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/plustek.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/qcam.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ricoh.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/rts8891.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/s9036.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/sceptre.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/sharp.conf
@@ -364,6 +373,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/umax1220u.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/umax_pp.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/v4l.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/xerox_mfp.conf
 %attr(755,root,root) %{_libdir}/libsane.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libsane.so.1
 %dir %{_libdir}/sane
@@ -377,9 +387,11 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-bh.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon630u.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-canon_dr.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-cardscan.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-coolscan.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-coolscan2.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-coolscan3.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-dc210.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-dc240.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-dc25.so.*
@@ -422,6 +434,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-pnm.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-qcam.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-ricoh.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-rts8891.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-s9036.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-sceptre.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-sharp.so.*
@@ -441,6 +454,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-umax1220u.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-umax_pp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-v4l.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-xerox_mfp.so.*
 %dir %attr(775,root,usb) /var/lock/sane
 %{_mandir}/man1/sane-find-scanner.1*
 %{_mandir}/man1/scanimage.1*
@@ -456,9 +470,11 @@ fi
 %{_mandir}/man5/sane-bh.5*
 %{_mandir}/man5/sane-canon.5*
 %{_mandir}/man5/sane-canon630u.5*
+%{_mandir}/man5/sane-canon_dr.5*
 %{_mandir}/man5/sane-cardscan.5*
 %{_mandir}/man5/sane-coolscan.5*
 %{_mandir}/man5/sane-coolscan2.5*
+%{_mandir}/man5/sane-coolscan3.5*
 %{_mandir}/man5/sane-dc210.5*
 %{_mandir}/man5/sane-dc240.5*
 %{_mandir}/man5/sane-dc25.5*
@@ -466,6 +482,7 @@ fi
 %{_mandir}/man5/sane-dmc.5*
 %{_mandir}/man5/sane-epjitsu.5*
 %{_mandir}/man5/sane-epson.5*
+%{_mandir}/man5/sane-epson2.5*
 %{_mandir}/man5/sane-fujitsu.5*
 %{_mandir}/man5/sane-genesys.5*
 %{_mandir}/man5/sane-gt68xx.5*
@@ -494,12 +511,12 @@ fi
 %{_mandir}/man5/sane-net.5*
 %{_mandir}/man5/sane-niash.5*
 %{_mandir}/man5/sane-pie.5*
-%{_mandir}/man5/sane-pint.5*
 %{_mandir}/man5/sane-pixma.5*
 %{_mandir}/man5/sane-plustek.5*
 %{_mandir}/man5/sane-pnm.5*
 %{_mandir}/man5/sane-qcam.5*
 %{_mandir}/man5/sane-ricoh.5*
+%{_mandir}/man5/sane-rts8891.5*
 %{_mandir}/man5/sane-s9036.5*
 %{_mandir}/man5/sane-sceptre.5*
 %{_mandir}/man5/sane-scsi.5*
@@ -521,6 +538,7 @@ fi
 %{_mandir}/man5/sane-umax_pp.5*
 %{_mandir}/man5/sane-usb.5*
 %{_mandir}/man5/sane-v4l.5*
+%{_mandir}/man5/sane-xerox_mfp.5*
 %{_mandir}/man7/sane.7*
 
 %files devel
@@ -542,7 +560,7 @@ fi
 %attr(755,root,root) %{_sbindir}/saned
 %{_mandir}/man8/saned.8*
 
-%ifarch %{ix86}
+%ifarch %{ix86} %{x8664}
 %files -n sane-mustek600IIN
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mustek600iin-off
