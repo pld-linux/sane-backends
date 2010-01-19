@@ -1,0 +1,3 @@
+- relese 2,
+- rename sane-backends-sane-devel -> sane-backends-devel,
+  	 sane-backends-sane-static -> sane-backends-staic.
