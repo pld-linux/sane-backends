@@ -11,7 +11,7 @@ Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.20
-Release:	0.1
+Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
@@ -236,6 +236,7 @@ ln -s stubs.c backend/hp_rts88xx-s.c
 
 cp sane_hp_rts88xx/sane_hp_rts88xx/hp_rts88xx.desc doc/descriptions/
 cp sane_hp_rts88xx/sane_hp_rts88xx/sane-hp_rts88xx.man doc/
+echo "hp_rts88xx" >> backend/dll.conf.in
 %endif
 
 %build
