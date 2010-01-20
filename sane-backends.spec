@@ -36,7 +36,11 @@ BuildRequires:	gettext-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
+%if "%{pld_release}" == "ac"
+BuildRequires:	libusb-devel < 1.0
+%else
 BuildRequires:	libusb-compat-devel
+%endif
 BuildRequires:	libv4l-devel
 BuildRequires:	pkgconfig
 BuildRequires:	resmgr-devel
@@ -44,7 +48,7 @@ BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-latex-psnfss
-%if "%{pld_release}" != "ti"
+%if "%{pld_release}" != "ti" && "%{pld_release}" != "ac"
 BuildRequires:	texlive-latex-effects
 %endif
 Requires:	setup >= 2.4.10-1
