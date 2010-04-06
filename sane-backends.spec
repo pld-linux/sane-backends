@@ -11,7 +11,7 @@ Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.20
-Release:	2
+Release:	3
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
@@ -100,6 +100,8 @@ Summary(pl.UTF-8):	Część SANE przeznaczona dla programistów
 Summary(pt_BR.UTF-8):	Arquivos necessários ao desenvolvimento de programas que usem o SANE
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libv4l-devel
+Requires:	resmgr-devel
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
 
