@@ -2,7 +2,6 @@
 # Conditional build:
 %bcond_without	gphoto	# no gphoto backend (which requires libgphoto2)
 %bcond_without	lpt	# no parallel port backends (which require libieee1284)
-%bcond_without	rts88xx # rts88xx scanner support (hp4400/4470)
 #
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
@@ -10,23 +9,20 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.20
-Release:	3
+Version:	1.0.21
+Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
-# Source0-md5:	a0cfdfdebca2feb4f2ba5d3418b15a42
+# Source0-md5:	be586a23633949cf2ecf0c9c6d769130
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
-# http://hp44x0backend.sourceforge.net/ and http://home.foni.net/~johanneshub/
-Source3:	http://dl.sourceforge.net/hp44x0backend/sane_hp_rts88xx-0.18.tar.gz
-# Source3-md5:	09d3eaf73f35b7795cd8418b8dc60f69
 Patch0:		%{name}-lockpath_group.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-pl.po-update.patch
-Patch10:	%{name}-hp_rts88xx.patch
-Patch11:	%{name}-hp_rts88xx-fixes.patch
+Patch4:		%{name}-link.patch
+Patch5:		ftp://ftp.sane-project.org/pub/sane/sane-backends-1.0.21/sane-backends-1.0.21-i18n.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -39,7 +35,7 @@ BuildRequires:	libtool
 %if "%{pld_release}" == "ac"
 BuildRequires:	libusb-devel < 1.0
 %else
-BuildRequires:	libusb-compat-devel
+BuildRequires:	libusb-compat-devel >= 0.1.0
 %endif
 BuildRequires:	libv4l-devel
 BuildRequires:	pkgconfig
@@ -100,7 +96,8 @@ Summary(pl.UTF-8):	Część SANE przeznaczona dla programistów
 Summary(pt_BR.UTF-8):	Arquivos necessários ao desenvolvimento de programas que usem o SANE
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libv4l-devel
+Requires:	libieee1284-devel
+Requires:	libusb-compat-devel >= 0.1.0
 Requires:	resmgr-devel
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
@@ -217,40 +214,45 @@ Starowniki SANE dla skanerów podłączanych do portu równoległego:
 - mustek_pp (skanery Mustek CIS i CCD)
 - plustek_pp (Plustek)
 
+%package v4l
+Summary:	SANE backend for Video4Linux supported devices
+Summary(pl.UTF-8):	Sterownik SANE do urządzeń obsługiwanych przez system Video4Linux
+Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
+
+%description v4l
+SANE backend for Video4Linux supported devicecameras.
+
+%description v4l -l pl.UTF-8
+Sterownik SANE do urządzeń obsługiwanych przez system Video4Linux.
+
 %prep
-%setup -q -a3
+%setup -q
 # kill libtool.m4 inclusion
 grep -v '^m4_include' acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-# needs update
-#%%patch3 -p1
-
-%if %{with rts88xx}
-%patch10 -p1
-%patch11 -p1
-cp sane_hp_rts88xx/sane_hp_rts88xx/*.[ch] backend/
-cp sane_hp_rts88xx/sane_hp_rts88xx/hp_rts88xx.conf backend/hp_rts88xx.conf.in
-cp sane_hp_rts88xx/sane_hp_rts88xx/hp_rts88xx.conf backend/hp_rts88xx.conf
-ln -s stubs.c backend/hp_rts88xx-s.c
-
-cp sane_hp_rts88xx/sane_hp_rts88xx/hp_rts88xx.desc doc/descriptions/
-cp sane_hp_rts88xx/sane_hp_rts88xx/sane-hp_rts88xx.man doc/
-echo "hp_rts88xx" >> backend/dll.conf.in
-%endif
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
 
 %build
 %{__libtoolize}
 %{__aclocal} -I m4
 %{__autoconf}
+%{__autoheader}
 %{__automake}
 %configure \
+	--enable-pthread \
 	--enable-static \
 	--enable-pnm-backend \
 	--enable-translations \
 	%{?with_gphoto:--with-gphoto2}
+
+# --enable-avahi? (BR: avahi-devel >= 0.6.24, R: for net backend)
+# --enable-libusb_1_0 to use libusb 1.0 (but libgphoto2 still uses old libusb, so stick to this for now)
 
 %{__make}
 
@@ -304,7 +306,7 @@ fi
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog LICENSE NEWS PROBLEMS PROJECTS README README.linux
+%doc AUTHORS ChangeLog* LICENSE NEWS PROBLEMS PROJECTS README README.linux
 %doc doc/canon doc/gt68xx doc/leo doc/matsushita doc/mustek doc/mustek_usb
 %doc doc/mustek_usb2 doc/niash doc/plustek doc/sceptre doc/teco doc/u12 doc/umax
 %attr(755,root,root) %{_bindir}/sane-find-scanner
@@ -341,11 +343,9 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp3900.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp4200.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp5400.conf
-%if %{with rts88xx}
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hp_rts88xx.conf
-%endif
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hs2p.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ibm.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/kodak.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/leo.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/lexmark.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ma1509.conf
@@ -356,6 +356,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/mustek_usb.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/nec.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/net.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/p5.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/pie.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/pixma.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/plustek.conf
@@ -379,7 +380,6 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/umax.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/umax1220u.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/umax_pp.conf
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/v4l.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/xerox_mfp.conf
 %attr(755,root,root) %{_libdir}/libsane.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libsane.so.1
@@ -417,12 +417,11 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-hp4200.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp5400.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hp5590.so.*
-%if %{with rts88xx}
-%attr(755,root,root) %{_libdir}/sane/libsane-hp_rts88xx.so.*
-%endif
 %attr(755,root,root) %{_libdir}/sane/libsane-hpljm1005.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-hs2p.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-ibm.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-kodak.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-kvs1025.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-leo.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-lexmark.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-ma1509.so.*
@@ -435,6 +434,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-nec.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-net.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-niash.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-p5.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-pie.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-pixma.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-plustek.so.*
@@ -460,7 +460,6 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-umax.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-umax1220u.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-umax_pp.so.*
-%attr(755,root,root) %{_libdir}/sane/libsane-v4l.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-xerox_mfp.so.*
 %dir %attr(775,root,usb) /var/lock/sane
 %{_mandir}/man1/sane-find-scanner.1*
@@ -499,12 +498,11 @@ fi
 %{_mandir}/man5/sane-hp4200.5*
 %{_mandir}/man5/sane-hp5400.5*
 %{_mandir}/man5/sane-hp5590.5*
-%if %{with rts88xx}
-%{_mandir}/man5/sane-hp_rts88xx.5*
-%endif
 %{_mandir}/man5/sane-hpljm1005.5*
 %{_mandir}/man5/sane-hs2p.5*
 %{_mandir}/man5/sane-ibm.5*
+%{_mandir}/man5/sane-kodak.5*
+%{_mandir}/man5/sane-kvs1025.5*
 %{_mandir}/man5/sane-leo.5*
 %{_mandir}/man5/sane-lexmark.5*
 %{_mandir}/man5/sane-ma1509.5*
@@ -517,6 +515,7 @@ fi
 %{_mandir}/man5/sane-nec.5*
 %{_mandir}/man5/sane-net.5*
 %{_mandir}/man5/sane-niash.5*
+%{_mandir}/man5/sane-p5.5*
 %{_mandir}/man5/sane-pie.5*
 %{_mandir}/man5/sane-pixma.5*
 %{_mandir}/man5/sane-plustek.5*
@@ -544,7 +543,6 @@ fi
 %{_mandir}/man5/sane-umax1220u.5*
 %{_mandir}/man5/sane-umax_pp.5*
 %{_mandir}/man5/sane-usb.5*
-%{_mandir}/man5/sane-v4l.5*
 %{_mandir}/man5/sane-xerox_mfp.5*
 %{_mandir}/man7/sane.7*
 
@@ -597,3 +595,9 @@ fi
 %{_mandir}/man5/sane-mustek_pp.5*
 %{_mandir}/man5/sane-plustek_pp.5*
 %endif
+
+%files v4l
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/v4l.conf
+%attr(755,root,root) %{_libdir}/sane/libsane-v4l.so.*
+%{_mandir}/man5/sane-v4l.5*
