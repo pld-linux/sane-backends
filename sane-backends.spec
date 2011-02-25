@@ -9,20 +9,18 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.21
+Version:	1.0.22
 Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
-# Source0-md5:	be586a23633949cf2ecf0c9c6d769130
+# Source0-md5:	fadf56a60f4776bfb24491f66b617cf5
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-lockpath_group.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
-Patch3:		%{name}-pl.po-update.patch
 Patch4:		%{name}-link.patch
-Patch5:		ftp://ftp.sane-project.org/pub/sane/sane-backends-1.0.21/sane-backends-1.0.21-i18n.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -234,9 +232,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 %build
 %{__libtoolize}
