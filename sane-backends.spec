@@ -36,6 +36,7 @@ BuildRequires:	libusb-devel < 1.0
 BuildRequires:	libusb-compat-devel >= 0.1.0
 %endif
 BuildRequires:	libv4l-devel
+BuildRequires:	net-snmp-devel
 BuildRequires:	pkgconfig
 BuildRequires:	resmgr-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -185,9 +186,22 @@ SANE backend for gphoto2 supported cameras.
 %description gphoto2 -l pl.UTF-8
 Sterownik SANE do aparatów obsługiwanych przez gphoto2.
 
+%package magicolor
+Summary:	SANE backend for KONICA MINOLTA Magicolor scanners
+Summary(pl.UTF-8):	Sterownik SANE dla skanerów Magicolor firmy KONICA MINOLTA
+Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
+# uses usb or net+snmp
+
+%description magicolor
+SANE backend for KONICA MINOLTA Magicolor scanners.
+
+%description magicolor -l pl.UTF-8
+Sterownik SANE dla skanerów Magicolor firmy KONICA MINOLTA.
+
 %package pp
 Summary:	SANE backends for parallel port scanners
-Summary(pl.UTF-8):	Starowniki SANE dla skanerów podłączanych do portu równoległego
+Summary(pl.UTF-8):	Sterowniki SANE dla skanerów podłączanych do portu równoległego
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	sane-backends-canon_pp
@@ -206,7 +220,7 @@ drivers:
 - plustek_pp (Plustek)
 
 %description pp -l pl.UTF-8
-Starowniki SANE dla skanerów podłączanych do portu równoległego:
+Sterowniki SANE dla skanerów podłączanych do portu równoległego:
 - canon_pp (Canon CanoScan FBxxxP, CanoScan NxxxP)
 - hpsj5s (HP ScanJet 5S)
 - mustek_pp (skanery Mustek CIS i CCD)
@@ -418,6 +432,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-ibm.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-kodak.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-kvs1025.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-kvs20xx.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-leo.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-lexmark.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-ma1509.so.*
@@ -499,6 +514,7 @@ fi
 %{_mandir}/man5/sane-ibm.5*
 %{_mandir}/man5/sane-kodak.5*
 %{_mandir}/man5/sane-kvs1025.5*
+%{_mandir}/man5/sane-kvs20xx.5*
 %{_mandir}/man5/sane-leo.5*
 %{_mandir}/man5/sane-lexmark.5*
 %{_mandir}/man5/sane-ma1509.5*
@@ -566,6 +582,12 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mustek600iin-off
 %endif
+
+%files magicolor
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/magicolor.conf
+%attr(755,root,root) %{_libdir}/sane/libsane-magicolor.so.*
+%{_mandir}/man5/sane-magicolor.5*
 
 %if %{with gphoto}
 %files gphoto2
