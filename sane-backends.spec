@@ -10,7 +10,7 @@ Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.22
-Release:	6
+Release:	7
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
@@ -22,6 +22,7 @@ Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch4:		%{name}-link.patch
 Patch5:		http://patch-tracker.debian.org/patch/series/dl/sane-backends/1.0.22-6/xerox_mfp_fix_usb_devices.patch
+Patch6:		sane-backends-1.0.22-v4l.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -249,6 +250,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch2 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 %{__libtoolize}
