@@ -17,14 +17,4 @@
    fi
    if test $use_locking = yes ; then
      INSTALL_LOCKPATH=install-lockpath
---- sane-backends-1.0.20/backend/Makefile.am~	2010-01-19 23:59:26.081372025 +0100
-+++ sane-backends-1.0.20/backend/Makefile.am	2010-01-20 00:02:20.477725218 +0100
-@@ -137,7 +137,7 @@
- 	  done
- 
- install-lockpath:
--	$(mkinstalldirs) -m 775 -g $(LOCKPATH_GROUP) $(DESTDIR)$(locksanedir)
-+	$(mkinstalldirs) -m 775 $(DESTDIR)$(locksanedir)
- 
- uninstall-hook:
- 	rm -rf $(DESTDIR)$(libdir)/sane $(DESTDIR)$(configdir) $(DESTDIR)$(locksanedir)
+

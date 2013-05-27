@@ -9,20 +9,22 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.22
-Release:	9
+Version:	1.0.23
+Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
-Source0:	ftp://ftp.sane-project.org/pub/sane/%{name}-%{version}/sane-backends-%{version}.tar.gz
-# Source0-md5:	fadf56a60f4776bfb24491f66b617cf5
+# Source0:	ftp://ftp2.sane-project.org/pub/sane/%{name}-%{version}.tar.gz
+Source0:	http://ftp.de.debian.org/debian/pool/main/s/sane-backends/%{name}_%{version}.orig.tar.gz
+# Source0-md5:	e226a89c54173efea80e91e9a5eb6573
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-lockpath_group.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch4:		%{name}-link.patch
-Patch5:		http://patch-tracker.debian.org/patch/series/dl/sane-backends/1.0.22-6/xerox_mfp_fix_usb_devices.patch
-Patch6:		sane-backends-1.0.22-v4l.patch
+Patch5:		sane-backends-1.0.23-sane-config-multilib.patch
+Patch6:		sane-backends-1.0.23-umax-init-error.patch
+Patch7:		%{name}-format.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -251,6 +253,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 %{__libtoolize}
@@ -360,6 +363,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/hs2p.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ibm.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/kodak.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/kodakaio.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/leo.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/lexmark.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ma1509.conf
@@ -435,8 +439,10 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-hs2p.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-ibm.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-kodak.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-kodakaio.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-kvs1025.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-kvs20xx.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-kvs40xx.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-leo.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-lexmark.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-ma1509.so.*
@@ -517,8 +523,10 @@ fi
 %{_mandir}/man5/sane-hs2p.5*
 %{_mandir}/man5/sane-ibm.5*
 %{_mandir}/man5/sane-kodak.5*
+%{_mandir}/man5/sane-kodakaio.5*
 %{_mandir}/man5/sane-kvs1025.5*
 %{_mandir}/man5/sane-kvs20xx.5*
+%{_mandir}/man5/sane-kvs40xx.5*
 %{_mandir}/man5/sane-leo.5*
 %{_mandir}/man5/sane-lexmark.5*
 %{_mandir}/man5/sane-ma1509.5*
@@ -569,6 +577,7 @@ fi
 %{_libdir}/libsane.la
 %{_includedir}/sane
 %{_aclocaldir}/sane-backends.m4
+%{_pkgconfigdir}/sane-backends.pc
 
 %files static
 %defattr(644,root,root,755)
