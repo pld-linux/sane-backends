@@ -1,0 +1,20 @@
+--- sane-backends-1.0.23/frontend/scanimage.c~	2011-11-21 21:17:48.000000000 +0100
++++ sane-backends-1.0.23/frontend/scanimage.c	2013-05-27 22:02:29.600562624 +0200
+@@ -1893,7 +1893,7 @@
+ 				printf (start, int_arg);
+ 				break;
+ 			      case 0:
+-				printf (start);
++				printf ("%s", start);
+ 				break;
+ 			      }
+ 			    *percent = cc;
+@@ -1907,7 +1907,7 @@
+ 			  }
+ 		      }
+ 		    if (*start)
+-		      printf (start);
++		      printf ("%s", start);
+ 		  }
+ 	      }
+ 	    if (i == 0 && ch != 'f')
