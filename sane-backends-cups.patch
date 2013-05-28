@@ -1,0 +1,28 @@
+--- sane-backends-1.0.23/configure.in.orig	2012-08-19 22:31:34.000000000 +0200
++++ sane-backends-1.0.23/configure.in	2013-05-28 18:03:13.483572312 +0200
+@@ -331,12 +331,13 @@
+ if test -e /usr/include/cups/cups.h ; then
+     AC_DEFINE(HAVE_CUPS, 1, [Is /usr/include/cups/cups.h available?])
+ 	with_cups="yes"
+-	LIBS="-lcups  $LIBS"
++	CUPS_LIBS="-lcups"
+ else
+ 	$as_echo "cups.h not found, you may want to install a cups development package"
+ 	$as_echo "in order to autodetect network scanners in kodakaio."
+ 	with_cups="no"
+ fi
++AC_SUBST([CUPS_LIBS])
+ 
+ dnl ***********
+ dnl USB Support
+--- sane-backends-1.0.23/backend/Makefile.am.orig	2013-05-28 18:08:38.883558658 +0200
++++ sane-backends-1.0.23/backend/Makefile.am	2013-05-28 18:14:56.790209468 +0200
+@@ -627,7 +627,7 @@
+ nodist_libsane_kodakaio_la_SOURCES = kodakaio-s.c
+ libsane_kodakaio_la_CPPFLAGS = $(AM_CPPFLAGS) -DBACKEND_NAME=kodakaio
+ libsane_kodakaio_la_LDFLAGS = $(DIST_SANELIBS_LDFLAGS)
+-libsane_kodakaio_la_LIBADD = $(COMMON_LIBS) libkodakaio.la ../sanei/sanei_init_debug.lo ../sanei/sanei_constrain_value.lo  ../sanei/sanei_config.lo ../sanei/sanei_config2.lo sane_strstatus.lo ../sanei/sanei_usb.lo ../sanei/sanei_scsi.lo ../sanei/sanei_tcp.lo ../sanei/sanei_udp.lo  $(USB_LIBS) $(SOCKET_LIBS) $(MATH_LIB) $(RESMGR_LIBS)
++libsane_kodakaio_la_LIBADD = $(COMMON_LIBS) libkodakaio.la ../sanei/sanei_init_debug.lo ../sanei/sanei_constrain_value.lo  ../sanei/sanei_config.lo ../sanei/sanei_config2.lo sane_strstatus.lo ../sanei/sanei_usb.lo ../sanei/sanei_scsi.lo ../sanei/sanei_tcp.lo ../sanei/sanei_udp.lo  $(USB_LIBS) $(SOCKET_LIBS) $(MATH_LIB) $(RESMGR_LIBS) $(CUPS_LIBS)
+ EXTRA_DIST += kodakaio.conf.in
+ 
+ libkvs1025_la_SOURCES = kvs1025.c kvs1025_low.c kvs1025_opt.c kvs1025_usb.c \

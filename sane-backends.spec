@@ -1,7 +1,8 @@
 #
 # Conditional build:
-%bcond_without	gphoto	# no gphoto backend (which requires libgphoto2)
-%bcond_without	lpt	# no parallel port backends (which require libieee1284)
+%bcond_without	gphoto	# gphoto backend (which requires libgphoto2)
+%bcond_without	lpt	# parallel port backends (which require libieee1284)
+%bcond_with	avahi	# Avahi support for saned and net backend
 #
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
@@ -25,22 +26,21 @@ Patch4:		%{name}-link.patch
 Patch5:		sane-backends-1.0.23-sane-config-multilib.patch
 Patch6:		sane-backends-1.0.23-umax-init-error.patch
 Patch7:		%{name}-format.patch
+Patch8:		%{name}-cups.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
+%{?with_avahi:BuildRequires:	avahi-devel >= 0.6.24}
+BuildRequires:	cups-devel
 BuildRequires:	gettext-devel
 %{?with_gphoto:BuildRequires:	libgphoto2-devel >= 2.0.1}
 %{?with_lpt:BuildRequires:	libieee1284-devel >= 0.1.5}
-BuildRequires:	libjpeg-devel
+BuildRequires:	libjpeg-devel >= 6a
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
-%if "%{pld_release}" == "ac"
-BuildRequires:	libusb-devel < 1.0
-%else
-BuildRequires:	libusb-compat-devel >= 0.1.0
-%endif
+BuildRequires:	libusb-devel >= 1.0
 BuildRequires:	libv4l-devel
-BuildRequires:	net-snmp-devel
+BuildRequires:	net-snmp-devel >= 5.6
 BuildRequires:	pkgconfig
 BuildRequires:	resmgr-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -50,6 +50,8 @@ BuildRequires:	tetex-latex-psnfss
 %if "%{pld_release}" != "ti" && "%{pld_release}" != "ac"
 BuildRequires:	texlive-latex-effects
 %endif
+%{?with_avahi:Requires:	avahi-libs >= 0.6.24}
+Requires:	net-snmp-libs >= 5.6
 Requires:	setup >= 2.4.10-1
 Obsoletes:	sane
 Obsoletes:	sane-backends-sm3600
@@ -99,8 +101,8 @@ Summary(pl.UTF-8):	Część SANE przeznaczona dla programistów
 Summary(pt_BR.UTF-8):	Arquivos necessários ao desenvolvimento de programas que usem o SANE
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libieee1284-devel
-Requires:	libusb-compat-devel >= 0.1.0
+%{?with_lpt:Requires:	libieee1284-devel}
+Requires:	libusb-devel >= 1.0
 Requires:	resmgr-devel
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
@@ -254,6 +256,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %build
 %{__libtoolize}
@@ -262,14 +265,13 @@ mv -f acinclude.m4.tmp acinclude.m4
 %{__autoheader}
 %{__automake}
 %configure \
+	%{?with_avahi:--enable-avahi} \
+	--enable-libusb_1_0 \
+	--enable-pnm-backend \
 	--enable-pthread \
 	--enable-static \
-	--enable-pnm-backend \
 	--enable-translations \
 	%{?with_gphoto:--with-gphoto2}
-
-# --enable-avahi? (BR: avahi-devel >= 0.6.24, R: for net backend)
-# --enable-libusb_1_0 to use libusb 1.0 (but libgphoto2 still uses old libusb, so stick to this for now)
 
 %{__make}
 
