@@ -3,7 +3,7 @@
 %bcond_without	gphoto		# gphoto backend (which requires libgphoto2)
 %bcond_without	lpt		# parallel port backends (which require libieee1284)
 %bcond_with	avahi		# Avahi support for saned and net backend
-%bcond_without	libusb10	# libusb-1.0 support
+%bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
 #
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
@@ -40,6 +40,7 @@ BuildRequires:	libjpeg-devel >= 6a
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-devel >= 1.0
+%{!?with_libusb0:BuildRequires:	libusb-compat-devel >= 0.1.0}
 BuildRequires:	libv4l-devel
 BuildRequires:	net-snmp-devel >= 5.6
 BuildRequires:	pkgconfig
@@ -104,6 +105,7 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 %{?with_lpt:Requires:	libieee1284-devel}
 Requires:	libusb-devel >= 1.0
+%{!?with_libusb0:Requires:	libusb-compat-devel >= 0.1.0}
 Requires:	resmgr-devel
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
@@ -267,7 +269,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 %{__automake}
 %configure \
 	%{?with_avahi:--enable-avahi} \
-	%{?with_libusb10:--enable-libusb_1_0} \
+	%{!?with_libusb0:--enable-libusb_1_0} \
 	--enable-pnm-backend \
 	--enable-pthread \
 	--enable-static \
