@@ -11,13 +11,13 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.23
-Release:	2
+Version:	1.0.24
+Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 # Source0:	ftp://ftp2.sane-project.org/pub/sane/%{name}-%{version}.tar.gz
 Source0:	http://ftp.de.debian.org/debian/pool/main/s/sane-backends/%{name}_%{version}.orig.tar.gz
-# Source0-md5:	e226a89c54173efea80e91e9a5eb6573
+# Source0-md5:	1ca68e536cd7c1852322822f5f6ac3a4
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-lockpath_group.patch
@@ -25,9 +25,8 @@ Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch4:		%{name}-link.patch
 Patch5:		sane-backends-1.0.23-sane-config-multilib.patch
-Patch6:		sane-backends-1.0.23-umax-init-error.patch
-Patch7:		%{name}-format.patch
-Patch8:		%{name}-cups.patch
+Patch6:		%{name}-format.patch
+Patch7:		%{name}-cups.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -259,7 +258,6 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
 
 %build
 %{__libtoolize}
