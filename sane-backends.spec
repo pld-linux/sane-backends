@@ -5,19 +5,21 @@
 %bcond_with	avahi		# Avahi support for saned and net backend
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
 #
+%define		snap	git20140814
+#
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
 Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.24
-Release:	1
+Version:	1.0.25
+Release:	0.%{snap}.1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
-# Source0:	ftp://ftp2.sane-project.org/pub/sane/%{name}-%{version}.tar.gz
-Source0:	http://ftp.de.debian.org/debian/pool/main/s/sane-backends/%{name}_%{version}.orig.tar.gz
-# Source0-md5:	1ca68e536cd7c1852322822f5f6ac3a4
+#Source0:	ftp://ftp2.sane-project.org/pub/sane/%{name}-%{version}.tar.gz
+Source0:	http://www.sane-project.org/snapshots/%{name}-%{snap}.tar.gz
+# Source0-md5:	94f93862827d929e10b7a11aebfb8cbd
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-lockpath_group.patch
@@ -247,7 +249,7 @@ SANE backend for Video4Linux supported devicecameras.
 Sterownik SANE do urządzeń obsługiwanych przez system Video4Linux.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{snap}
 # kill libtool.m4 inclusion
 grep -v '^m4_include' acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
@@ -256,8 +258,8 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch2 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
-%patch7 -p1
+#%patch6 -p1
+#%patch7 -p1
 
 %build
 %{__libtoolize}
