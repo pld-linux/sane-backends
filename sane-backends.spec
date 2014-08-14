@@ -6,6 +6,7 @@
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
 #
 %define		snap	git20140814
+%define		rel	0.1
 #
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
@@ -14,7 +15,7 @@ Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.25
-Release:	0.%{snap}.1
+Release:	0.%{snap}.%{rel}
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 #Source0:	ftp://ftp2.sane-project.org/pub/sane/%{name}-%{version}.tar.gz
@@ -27,8 +28,6 @@ Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch4:		%{name}-link.patch
 Patch5:		sane-backends-1.0.23-sane-config-multilib.patch
-Patch6:		%{name}-format.patch
-Patch7:		%{name}-cups.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -258,8 +257,6 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch2 -p1
 %patch4 -p1
 %patch5 -p1
-#%patch6 -p1
-#%patch7 -p1
 
 %build
 %{__libtoolize}
