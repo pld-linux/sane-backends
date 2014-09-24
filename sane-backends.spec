@@ -6,7 +6,7 @@
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
 #
 %define		snap	git20140814
-%define		rel	0.1
+%define		rel	0.2
 #
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
@@ -23,11 +23,12 @@ Source0:	http://www.sane-project.org/snapshots/%{name}-%{snap}.tar.gz
 # Source0-md5:	94f93862827d929e10b7a11aebfb8cbd
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
+Source3:	%{name}.tmpfiles
 Patch0:		%{name}-lockpath_group.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch4:		%{name}-link.patch
-Patch5:		sane-backends-1.0.23-sane-config-multilib.patch
+Patch5:		%{name}-1.0.23-sane-config-multilib.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -284,13 +285,14 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_aclocaldir},/var/lock/sane}
+install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_aclocaldir},/var/lock/sane,%{systemdtmpfilesdir}}
 
 %{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 install %{SOURCE2} $RPM_BUILD_ROOT%{_aclocaldir}
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 %ifarch %{ix86} %{x8664}
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
@@ -484,6 +486,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-umax1220u.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-umax_pp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-xerox_mfp.so.*
+%{systemdtmpfilesdir}/%{name}.conf
 %dir %attr(775,root,usb) /var/lock/sane
 %{_mandir}/man1/sane-find-scanner.1*
 %{_mandir}/man1/scanimage.1*
