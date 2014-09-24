@@ -6,7 +6,7 @@
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
 #
 %define		snap	git20140814
-%define		rel	0.1
+%define		rel	1
 #
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
@@ -271,7 +271,8 @@ mv -f acinclude.m4.tmp acinclude.m4
 	--enable-pthread \
 	--enable-static \
 	--enable-translations \
-	%{?with_gphoto:--with-gphoto2}
+	%{?with_gphoto:--with-gphoto2} \
+	--disable-locking
 
 %{__make}
 
@@ -284,7 +285,7 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_aclocaldir},/var/lock/sane}
+install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_aclocaldir}}
 
 %{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -484,7 +485,6 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-umax1220u.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-umax_pp.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-xerox_mfp.so.*
-%dir %attr(775,root,usb) /var/lock/sane
 %{_mandir}/man1/sane-find-scanner.1*
 %{_mandir}/man1/scanimage.1*
 %{_mandir}/man1/gamma4scanimage.1*
