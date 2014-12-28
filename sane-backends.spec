@@ -33,7 +33,7 @@ BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
 %{?with_avahi:BuildRequires:	avahi-devel >= 0.6.24}
 BuildRequires:	cups-devel
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 %{?with_gphoto:BuildRequires:	libgphoto2-devel >= 2.0.1}
 %{?with_lpt:BuildRequires:	libieee1284-devel >= 0.1.5}
 BuildRequires:	libjpeg-devel >= 6a
