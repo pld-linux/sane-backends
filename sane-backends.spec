@@ -276,7 +276,7 @@ mv -f acinclude.m4.tmp acinclude.m4
 
 %{__make}
 
-%ifarch %{ix86} %{x8664}
+%ifarch %{ix86} %{x8664} x32
 cd tools
 %{__cc} %{rpmcppflags} -DHAVE_SYS_IO_H %{rpmcflags} %{rpmldflags} \
 	-I../include -o mustek600iin-off mustek600iin-off.c
@@ -293,7 +293,7 @@ install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_aclocaldir}}
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
 install %{SOURCE2} $RPM_BUILD_ROOT%{_aclocaldir}
 
-%ifarch %{ix86} %{x8664}
+%ifarch %{ix86} %{x8664} x32
 install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %endif
 
@@ -592,7 +592,7 @@ fi
 %attr(755,root,root) %{_sbindir}/saned
 %{_mandir}/man8/saned.8*
 
-%ifarch %{ix86} %{x8664}
+%ifarch %{ix86} %{x8664} x32
 %files -n sane-mustek600IIN
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mustek600iin-off
