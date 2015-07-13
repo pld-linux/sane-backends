@@ -6,7 +6,7 @@
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
 #
 %define		snap	git20140814
-%define		rel	2
+%define		rel	3
 #
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
