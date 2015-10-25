@@ -42,6 +42,7 @@ BuildRequires:	net-snmp-devel >= 5.6
 BuildRequires:	pkgconfig
 BuildRequires:	resmgr-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	systemd-devel
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-latex-psnfss
