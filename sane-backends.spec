@@ -5,9 +5,6 @@
 %bcond_with	avahi		# Avahi support for saned and net backend
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
 #
-%define		snap	git20140814
-%define		rel	3
-#
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
 Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
@@ -15,19 +12,18 @@ Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.25
-Release:	0.%{snap}.%{rel}
+Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
-#Source0:	ftp://ftp2.sane-project.org/pub/sane/%{name}-%{version}.tar.gz
-Source0:	http://www.sane-project.org/snapshots/%{name}-%{snap}.tar.gz
-# Source0-md5:	94f93862827d929e10b7a11aebfb8cbd
+Source0:	https://alioth.debian.org/frs/download.php/file/4146/%{name}-%{version}.tar.bz2
+# Source0-md5:	f9ed5405b3c12f07c6ca51ee60225fe7
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-lockpath_group.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch4:		%{name}-link.patch
-Patch5:		sane-backends-1.0.23-sane-config-multilib.patch
+Patch5:		%{name}-1.0.23-sane-config-multilib.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -39,8 +35,8 @@ BuildRequires:	gettext-tools
 BuildRequires:	libjpeg-devel >= 6a
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
-BuildRequires:	libusb-devel >= 1.0
 %{!?with_libusb0:BuildRequires:	libusb-compat-devel >= 0.1.0}
+BuildRequires:	libusb-devel >= 1.0
 BuildRequires:	libv4l-devel
 BuildRequires:	net-snmp-devel >= 5.6
 BuildRequires:	pkgconfig
@@ -49,7 +45,7 @@ BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	tetex-dvips
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-latex-psnfss
-%if "%{pld_release}" != "ti" && "%{pld_release}" != "ac"
+%if "%{pld_release}" != "ac"
 BuildRequires:	texlive-latex-effects
 %endif
 %{?with_avahi:Requires:	avahi-libs >= 0.6.24}
@@ -103,9 +99,9 @@ Summary(pl.UTF-8):	Część SANE przeznaczona dla programistów
 Summary(pt_BR.UTF-8):	Arquivos necessários ao desenvolvimento de programas que usem o SANE
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-%{?with_lpt:Requires:	libieee1284-devel}
-Requires:	libusb-devel >= 1.0
+%{?with_lpt:Requires: libieee1284-devel}
 %{!?with_libusb0:Requires:	libusb-compat-devel >= 0.1.0}
+Requires:	libusb-devel >= 1.0
 Requires:	resmgr-devel
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
@@ -248,7 +244,7 @@ SANE backend for Video4Linux supported devicecameras.
 Sterownik SANE do urządzeń obsługiwanych przez system Video4Linux.
 
 %prep
-%setup -q -n %{name}-%{snap}
+%setup -q
 # kill libtool.m4 inclusion
 grep -v '^m4_include' acinclude.m4 > acinclude.m4.tmp
 mv -f acinclude.m4.tmp acinclude.m4
@@ -290,11 +286,11 @@ install -d $RPM_BUILD_ROOT{/etc/sysconfig/rc-inetd,%{_aclocaldir}}
 %{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
-install %{SOURCE2} $RPM_BUILD_ROOT%{_aclocaldir}
+cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/saned
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_aclocaldir}
 
 %ifarch %{ix86} %{x8664} x32
-install tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
+cp -p tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %endif
 
 %{__rm} -rf $RPM_BUILD_ROOT%{_prefix}/doc
@@ -332,6 +328,7 @@ fi
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/gamma4scanimage
+%attr(755,root,root) %{_bindir}/umax_pp
 %dir %{_sysconfdir}/sane.d
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/abaton.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/agfafocus.conf
@@ -356,6 +353,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/epjitsu.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/epson.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/epson2.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/epsonds.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/fujitsu.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/genesys.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/gt68xx.conf
@@ -379,6 +377,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/net.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/p5.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/pie.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/pieusb.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/pixma.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/plustek.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/qcam.conf
@@ -429,6 +428,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-epjitsu.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-epson.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-epson2.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-epsonds.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-fujitsu.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-genesys.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-gt68xx.so.*
@@ -460,6 +460,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-niash.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-p5.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-pie.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-pieusb.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-pixma.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-plustek.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-pnm.so.*
@@ -512,6 +513,7 @@ fi
 %{_mandir}/man5/sane-epjitsu.5*
 %{_mandir}/man5/sane-epson.5*
 %{_mandir}/man5/sane-epson2.5*
+%{_mandir}/man5/sane-epsonds.5*
 %{_mandir}/man5/sane-fujitsu.5*
 %{_mandir}/man5/sane-genesys.5*
 %{_mandir}/man5/sane-gt68xx.5*
@@ -543,6 +545,7 @@ fi
 %{_mandir}/man5/sane-niash.5*
 %{_mandir}/man5/sane-p5.5*
 %{_mandir}/man5/sane-pie.5*
+%{_mandir}/man5/sane-pieusb.5*
 %{_mandir}/man5/sane-pixma.5*
 %{_mandir}/man5/sane-plustek.5*
 %{_mandir}/man5/sane-pnm.5*
