@@ -2,7 +2,7 @@
 # Conditional build:
 %bcond_without	gphoto		# gphoto backend (which requires libgphoto2)
 %bcond_without	lpt		# parallel port backends (which require libieee1284)
-%bcond_with	avahi		# Avahi support for saned and net backend
+%bcond_without	avahi		# Avahi support for saned and net backend
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
 #
 Summary:	SANE - easy local and networked scanner access
@@ -11,19 +11,19 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.25
+Version:	1.0.27
 Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
-Source0:	https://alioth.debian.org/frs/download.php/file/4146/%{name}-%{version}.tar.bz2
-# Source0-md5:	f9ed5405b3c12f07c6ca51ee60225fe7
+Source0:	https://alioth.debian.org/frs/download.php/file/4224/%{name}-%{version}.tar.bz2
+# Source0-md5:	b10a08785f92a4c07ad961f4d843c934
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-lockpath_group.patch
 Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
-Patch4:		%{name}-link.patch
-Patch5:		%{name}-1.0.23-sane-config-multilib.patch
+Patch3:		%{name}-link.patch
+Patch4:		%{name}-1.0.23-sane-config-multilib.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
@@ -252,8 +252,8 @@ mv -f acinclude.m4.tmp acinclude.m4
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 %build
 %{__libtoolize}
@@ -263,11 +263,9 @@ mv -f acinclude.m4.tmp acinclude.m4
 %{__automake}
 %configure \
 	%{?with_avahi:--enable-avahi} \
-	%{!?with_libusb0:--enable-libusb_1_0} \
 	--enable-pnm-backend \
 	--enable-pthread \
 	--enable-static \
-	--enable-translations \
 	%{?with_gphoto:--with-gphoto2} \
 	--disable-locking
 
@@ -366,6 +364,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ibm.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/kodak.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/kodakaio.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/kvs1025.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/leo.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/lexmark.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ma1509.conf
