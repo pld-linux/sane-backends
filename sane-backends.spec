@@ -269,7 +269,8 @@ mv -f acinclude.m4.tmp acinclude.m4
 	%{?with_gphoto:--with-gphoto2} \
 	--disable-locking
 
-%{__make}
+# -j1 for .tex build
+%{__make} -j1
 
 %ifarch %{ix86} %{x8664} x32
 cd tools
