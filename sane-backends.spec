@@ -24,7 +24,7 @@ Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
 Patch4:		%{name}-1.0.23-sane-config-multilib.patch
-URL:		http://www.sane-project.org/
+URL:		http://sane-project.org/
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake
 %{?with_avahi:BuildRequires:	avahi-devel >= 0.6.24}
