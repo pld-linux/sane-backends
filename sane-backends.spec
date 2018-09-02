@@ -12,10 +12,12 @@ Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
 Version:	1.0.27
-Release:	2
+Release:	3
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
-Source0:	https://alioth.debian.org/frs/download.php/file/4224/%{name}-%{version}.tar.bz2
+# http://www.sane-project.org/source.html is out of date atm. (20180902)
+#Source0Download: https://gitlab.com/sane-project/backends/tags
+Source0:	https://gitlab.com/sane-project/backends/uploads/a3ba9fff29253a94e84074917bff581a/%{name}-%{version}.tar.gz
 # Source0-md5:	b10a08785f92a4c07ad961f4d843c934
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
@@ -24,17 +26,17 @@ Patch1:		%{name}-mustek-path.patch
 Patch2:		%{name}-spatc.patch
 Patch3:		%{name}-link.patch
 Patch4:		%{name}-1.0.23-sane-config-multilib.patch
-URL:		http://sane-project.org/
-BuildRequires:	autoconf >= 2.54
-BuildRequires:	automake
+URL:		http://www.sane-project.org/
+BuildRequires:	autoconf >= 2.69
+BuildRequires:	automake >= 1:1.11.6
 %{?with_avahi:BuildRequires:	avahi-devel >= 0.6.24}
 BuildRequires:	cups-devel
-BuildRequires:	gettext-tools
-%{?with_gphoto:BuildRequires:	libgphoto2-devel >= 2.0.1}
+BuildRequires:	gettext-tools >= 0.18.1
+%{?with_gphoto:BuildRequires:	libgphoto2-devel >= 2.5.0}
 %{?with_lpt:BuildRequires:	libieee1284-devel >= 0.1.5}
 BuildRequires:	libjpeg-devel >= 6a
 BuildRequires:	libtiff-devel
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:2.4.2
 %{!?with_libusb0:BuildRequires:	libusb-compat-devel >= 0.1.0}
 BuildRequires:	libusb-devel >= 1.0
 BuildRequires:	libv4l-devel
@@ -185,6 +187,7 @@ Summary:	SANE backend for gphoto2 supported cameras
 Summary(pl.UTF-8):	Sterownik SANE do aparatów obsługiwanych przez gphoto2
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
+Requires:	libgphoto2 >= 2.5.0
 
 %description gphoto2
 SANE backend for gphoto2 supported cameras.
@@ -293,7 +296,9 @@ cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_aclocaldir}
 cp -p tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %endif
 
-%{__rm} -rf $RPM_BUILD_ROOT%{_prefix}/doc
+# packaged as %doc
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/sane-backends/{AUTHORS,COPYING,ChangeLog,LICENSE,NEWS,PROBLEMS,PROJECTS,README*,backend-writing.txt,sane-*.html,sane.{pdf,ps}}
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/sane-backends/{canon,gt68xx,leo,matsushita,mustek,mustek_usb,mustek_usb2,niash,plustek,sceptre,teco,u12,umax}
 
 # only shared modules - shut up check-files
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la,a}
@@ -322,9 +327,8 @@ fi
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog* LICENSE NEWS PROBLEMS PROJECTS README README.linux
-%doc doc/canon doc/gt68xx doc/leo doc/matsushita doc/mustek doc/mustek_usb
-%doc doc/mustek_usb2 doc/niash doc/plustek doc/sceptre doc/teco doc/u12 doc/umax
+%doc AUTHORS ChangeLog LICENSE NEWS PROBLEMS PROJECTS README README.linux doc/sane-*.html
+%doc doc/{canon,gt68xx,leo,matsushita,mustek,mustek_usb,mustek_usb2,niash,plustek,sceptre,teco,u12,umax}
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_bindir}/scanimage
 %attr(755,root,root) %{_bindir}/gamma4scanimage
@@ -578,6 +582,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
+%doc doc/backend-writing.txt
 %attr(755,root,root) %{_bindir}/sane-config
 %attr(755,root,root) %{_libdir}/libsane.so
 %{_libdir}/libsane.la
