@@ -1,23 +1,44 @@
---- sane-backends-1.0.21/backend/Makefile.am.orig	2010-11-06 21:29:14.551101613 +0100
-+++ sane-backends-1.0.21/backend/Makefile.am	2010-11-07 10:26:58.167102452 +0100
-@@ -271,7 +271,7 @@ libartec_eplus48u_la_CPPFLAGS = $(AM_CPP
+--- sane-backends-1.0.29/backend/Makefile.am.orig	2020-04-19 08:47:07.661491206 +0200
++++ sane-backends-1.0.29/backend/Makefile.am	2020-04-19 08:48:21.261092483 +0200
+@@ -284,7 +284,7 @@
  nodist_libsane_artec_eplus48u_la_SOURCES = artec_eplus48u-s.c
  libsane_artec_eplus48u_la_CPPFLAGS = $(AM_CPPFLAGS) -DBACKEND_NAME=artec_eplus48u
  libsane_artec_eplus48u_la_LDFLAGS = $(DIST_SANELIBS_LDFLAGS)
--libsane_artec_eplus48u_la_LIBADD = $(COMMON_LIBS) libartec_eplus48u.la ../sanei/sanei_init_debug.lo ../sanei/sanei_constrain_value.lo ../sanei/sanei_config.lo  sane_strstatus.lo ../sanei/sanei_usb.lo ../sanei/sanei_thread.lo $(MATH_LIB) $(USB_LIBS) $(PTHREAD_LIBS) $(RESMEG_LIBS)
-+libsane_artec_eplus48u_la_LIBADD = $(COMMON_LIBS) libartec_eplus48u.la ../sanei/sanei_init_debug.lo ../sanei/sanei_constrain_value.lo ../sanei/sanei_config.lo  sane_strstatus.lo ../sanei/sanei_usb.lo ../sanei/sanei_thread.lo $(MATH_LIB) $(USB_LIBS) $(PTHREAD_LIBS) $(RESMGR_LIBS)
+-libsane_artec_eplus48u_la_LIBADD = $(COMMON_LIBS) libartec_eplus48u.la ../sanei/sanei_init_debug.lo ../sanei/sanei_constrain_value.lo ../sanei/sanei_config.lo  sane_strstatus.lo ../sanei/sanei_usb.lo ../sanei/sanei_thread.lo $(MATH_LIB) $(USB_LIBS) $(SANEI_THREAD_LIBS) $(RESMEG_LIBS)
++libsane_artec_eplus48u_la_LIBADD = $(COMMON_LIBS) libartec_eplus48u.la ../sanei/sanei_init_debug.lo ../sanei/sanei_constrain_value.lo ../sanei/sanei_config.lo  sane_strstatus.lo ../sanei/sanei_usb.lo ../sanei/sanei_thread.lo $(MATH_LIB) $(USB_LIBS) $(SANEI_THREAD_LIBS) $(RESMGR_LIBS)
  EXTRA_DIST += artec_eplus48u.conf.in
  
  libas6e_la_SOURCES = as6e.c as6e.h
-
---- a/tools/Makefile.am~	2016-10-09 02:54:58.000000000 +0200
-+++ b/tools/Makefile.am	2018-05-09 15:43:07.450971874 +0200
-@@ -39,7 +39,7 @@ if have_usblib
+@@ -969,7 +969,7 @@
+ nodist_libsane_ricoh2_la_SOURCES = ricoh2-s.c
+ libsane_ricoh2_la_CPPFLAGS = $(AM_CPPFLAGS) -DBACKEND_NAME=ricoh2
+ libsane_ricoh2_la_LDFLAGS = $(DIST_SANELIBS_LDFLAGS)
+-libsane_ricoh2_la_LIBADD = $(COMMON_LIBS) libricoh2.la ../sanei/sanei_init_debug.lo ../sanei/sanei_constrain_value.lo ../sanei/sanei_usb.lo ../sanei/sanei_config.lo sane_strstatus.lo $(USB_LIBS)
++libsane_ricoh2_la_LIBADD = $(COMMON_LIBS) libricoh2.la ../sanei/sanei_init_debug.lo ../sanei/sanei_constrain_value.lo ../sanei/sanei_usb.lo ../sanei/sanei_config.lo sane_strstatus.lo $(USB_LIBS) $(RESMGR_LIBS)
+ EXTRA_DIST += ricoh2_buffer.c
+ 
+ librts8891_la_SOURCES = rts8891.c rts8891.h rts88xx_lib.c rts88xx_lib.h
+@@ -1178,10 +1178,10 @@
+ 
+ libdll_preload_la_SOURCES =  dll.c
+ libdll_preload_la_CPPFLAGS = $(AM_CPPFLAGS) -DBACKEND_NAME=dll -DENABLE_PRELOAD
+-libdll_preload_la_LIBADD = ../sanei/sanei_usb.lo $(USB_LIBS) $(XML_LIBS)
++libdll_preload_la_LIBADD = ../sanei/sanei_usb.lo $(USB_LIBS) $(RESMGR_LIBS) $(XML_LIBS)
+ libdll_la_SOURCES =  dll.c
+ libdll_la_CPPFLAGS = $(AM_CPPFLAGS) -DBACKEND_NAME=dll
+-libdll_la_LIBADD = ../sanei/sanei_usb.lo $(USB_LIBS) $(XML_LIBS)
++libdll_la_LIBADD = ../sanei/sanei_usb.lo $(USB_LIBS) $(RESMGR_LIBS) $(XML_LIBS)
+ BUILT_SOURCES = dll-preload.h
+ CLEANFILES += dll-preload.h
+ 
+--- sane-backends-1.0.29/tools/Makefile.am.orig	2020-04-19 08:47:07.661491206 +0200
++++ sane-backends-1.0.29/tools/Makefile.am	2020-04-19 08:49:11.890818198 +0200
+@@ -42,7 +42,7 @@
  sane_find_scanner_SOURCES += check-usb-chip.c
  endif
  sane_find_scanner_LDADD = ../sanei/libsanei.la ../lib/liblib.la \
--			  $(USB_LIBS) $(IEEE1284_LIBS) $(SCSI_LIBS) \
-+			  $(USB_LIBS) $(IEEE1284_LIBS) $(SCSI_LIBS) $(RESMGR_LIBS) \
+-                          $(USB_LIBS) $(IEEE1284_LIBS) $(SCSI_LIBS) $(XML_LIBS) \
++                          $(USB_LIBS) $(IEEE1284_LIBS) $(SCSI_LIBS) $(RESMGR_LIBS) $(XML_LIBS) \
  			  ../backend/sane_strstatus.lo
  
  gamma4scanimage_SOURCES = gamma4scanimage.c

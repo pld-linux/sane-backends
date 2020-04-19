@@ -11,14 +11,14 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.27
-Release:	3
+Version:	1.0.29
+Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 # http://www.sane-project.org/source.html is out of date atm. (20180902)
 #Source0Download: https://gitlab.com/sane-project/backends/tags
-Source0:	https://gitlab.com/sane-project/backends/uploads/a3ba9fff29253a94e84074917bff581a/%{name}-%{version}.tar.gz
-# Source0-md5:	b10a08785f92a4c07ad961f4d843c934
+Source0:	https://gitlab.com/sane-project/backends/uploads/54f858b20a364fc35d820df935a86478/%{name}-%{version}.tar.gz
+# Source0-md5:	f2618408712399661358ed1ad995f046
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-lockpath_group.patch
@@ -28,30 +28,33 @@ Patch3:		%{name}-link.patch
 Patch4:		%{name}-1.0.23-sane-config-multilib.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.69
-BuildRequires:	automake >= 1:1.11.6
+BuildRequires:	automake >= 1:1.15
 %{?with_avahi:BuildRequires:	avahi-devel >= 0.6.24}
 BuildRequires:	cups-devel
-BuildRequires:	gettext-tools >= 0.18.1
+BuildRequires:	curl-devel
+BuildRequires:	gettext-tools >= 0.19.8
 %{?with_gphoto:BuildRequires:	libgphoto2-devel >= 2.5.0}
 %{?with_lpt:BuildRequires:	libieee1284-devel >= 0.1.5}
-BuildRequires:	libjpeg-devel >= 6a
+BuildRequires:	libjpeg-devel >= 6b
+BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
-BuildRequires:	libtool >= 2:2.4.2
+BuildRequires:	libtool >= 2:2.4.6
 %{!?with_libusb0:BuildRequires:	libusb-compat-devel >= 0.1.0}
 BuildRequires:	libusb-devel >= 1.0
 BuildRequires:	libv4l-devel
+BuildRequires:	libxml2-devel >= 2.0
 BuildRequires:	net-snmp-devel >= 5.6
 BuildRequires:	pkgconfig
 BuildRequires:	resmgr-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	sed >= 4.0
 BuildRequires:	systemd-devel
-BuildRequires:	tetex-dvips
-BuildRequires:	tetex-latex
-BuildRequires:	tetex-latex-psnfss
-%if "%{pld_release}" != "ac"
+BuildRequires:	texlive-dvips
+BuildRequires:	texlive-latex
 BuildRequires:	texlive-latex-effects
-%endif
+BuildRequires:	texlive-latex-psnfss
 %{?with_avahi:Requires:	avahi-libs >= 0.6.24}
+%{?with_lpt:Requires:	libieee1284 >= 0.1.5}
 Requires:	net-snmp-libs >= 5.6
 Requires:	setup >= 2.4.10-1
 Obsoletes:	sane
@@ -102,9 +105,10 @@ Summary(pl.UTF-8):	Część SANE przeznaczona dla programistów
 Summary(pt_BR.UTF-8):	Arquivos necessários ao desenvolvimento de programas que usem o SANE
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-%{?with_lpt:Requires: libieee1284-devel}
+%{?with_lpt:Requires: libieee1284-devel >= 0.1.5}
 %{!?with_libusb0:Requires:	libusb-compat-devel >= 0.1.0}
 Requires:	libusb-devel >= 1.0
+Requires:	libxml2-devel >= 2.0
 Requires:	resmgr-devel
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
@@ -182,6 +186,28 @@ przez program (x)scanimage.
 
 Ten program wymaga uprawnień roota albo dostępu do /dev/port.
 
+%package escl
+Summary:	SANE backend for eSCL protocol scanners
+Summary(pl.UTF-8):	Sterownik SANE do skanerów wykorzystujących protokół eSCL
+Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
+
+%description escl
+The "escl" backend for SANE supports AirScan/eSCL devices that
+announce themselves on mDNS as _uscan._utcp or _uscans._utcp. If the
+device is available, the "escl" backend recovers these capacities. The
+user configures and starts scanning. A list of devices that use the
+eSCL protocol can be found at
+<https://support.apple.com/en-us/HT201311>.
+
+%description escl -l pl.UTF-8
+Sterownik "escl" dla SANE obsługuje urządzenia AirScan/eSCL,
+rozgłaszające się poprzez mDNS jako _uscan._utcp lub _uscans._utcp.
+Jeśli urządzenie jest dostępne, sterownik "escl" pobiera jego
+możliwości, a użytkownik konfiguruje i rozpoczyna skanowanie. Listę
+urządzeń wykorzystujących protokół eSCL można znaleźć pod adresem:
+<https://support.apple.com/en-us/HT201311>.
+
 %package gphoto2
 Summary:	SANE backend for gphoto2 supported cameras
 Summary(pl.UTF-8):	Sterownik SANE do aparatów obsługiwanych przez gphoto2
@@ -250,13 +276,15 @@ Sterownik SANE do urządzeń obsługiwanych przez system Video4Linux.
 %prep
 %setup -q
 # kill libtool.m4 inclusion
-grep -v '^m4_include' acinclude.m4 > acinclude.m4.tmp
-mv -f acinclude.m4.tmp acinclude.m4
+#grep -v '^m4_include' acinclude.m4 > acinclude.m4.tmp
+#%{__mv} acinclude.m4.tmp acinclude.m4
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+
+%{__sed} -i -e 's/m4_esyscmd_s(\[git describe --dirty\])/[%{version}]/' configure.ac
 
 %build
 %{__libtoolize}
@@ -298,7 +326,7 @@ cp -p tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 
 # packaged as %doc
 %{__rm} $RPM_BUILD_ROOT%{_docdir}/sane-backends/{AUTHORS,COPYING,ChangeLog,LICENSE,NEWS,PROBLEMS,PROJECTS,README*,backend-writing.txt,sane-*.html,sane.{pdf,ps}}
-%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/sane-backends/{canon,gt68xx,leo,matsushita,mustek,mustek_usb,mustek_usb2,niash,plustek,sceptre,teco,u12,umax}
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/sane-backends/{ChangeLogs,canon,gt68xx,leo,matsushita,mustek,mustek_usb,mustek_usb2,niash,plustek,sceptre,teco,u12,umax}
 
 # only shared modules - shut up check-files
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la,a}
@@ -327,7 +355,7 @@ fi
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog LICENSE NEWS PROBLEMS PROJECTS README README.linux doc/sane-*.html
+%doc AUTHORS ChangeLog LICENSE NEWS PROBLEMS PROJECTS README README.linux doc/sane-*.html ChangeLogs
 %doc doc/{canon,gt68xx,leo,matsushita,mustek,mustek_usb,mustek_usb2,niash,plustek,sceptre,teco,u12,umax}
 %attr(755,root,root) %{_bindir}/sane-find-scanner
 %attr(755,root,root) %{_bindir}/scanimage
@@ -471,6 +499,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-pnm.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-qcam.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-ricoh.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-ricoh2.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-rts8891.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-s9036.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-sceptre.so.*
@@ -556,6 +585,7 @@ fi
 %{_mandir}/man5/sane-pnm.5*
 %{_mandir}/man5/sane-qcam.5*
 %{_mandir}/man5/sane-ricoh.5*
+%{_mandir}/man5/sane-ricoh2.5*
 %{_mandir}/man5/sane-rts8891.5*
 %{_mandir}/man5/sane-s9036.5*
 %{_mandir}/man5/sane-sceptre.5*
@@ -607,11 +637,11 @@ fi
 %attr(755,root,root) %{_bindir}/mustek600iin-off
 %endif
 
-%files magicolor
+%files escl
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/magicolor.conf
-%attr(755,root,root) %{_libdir}/sane/libsane-magicolor.so.*
-%{_mandir}/man5/sane-magicolor.5*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/escl.conf
+%attr(755,root,root) %{_libdir}/sane/libsane-escl.so.*
+%{_mandir}/man5/sane-escl.5*
 
 %if %{with gphoto}
 %files gphoto2
@@ -620,6 +650,12 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-gphoto2.so.*
 %{_mandir}/man5/sane-gphoto2.5*
 %endif
+
+%files magicolor
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/magicolor.conf
+%attr(755,root,root) %{_libdir}/sane/libsane-magicolor.so.*
+%{_mandir}/man5/sane-magicolor.5*
 
 %if %{with lpt}
 %files pp
