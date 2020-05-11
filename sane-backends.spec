@@ -8,7 +8,7 @@
 #
 
 # requires (ioperm, inb and outb) or portaccess function
-%ifnarch aarch64
+%ifarch %{ix86} %{x8664} x32 ia64 alpha
 %define		with_qcam	1
 %endif
 
