@@ -4,6 +4,7 @@
 %bcond_without	lpt		# parallel port backends (which require libieee1284)
 %bcond_without	avahi		# Avahi support for saned and net backend
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
+%bcond_without	resmgr		# without resmgr
 #
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
@@ -45,7 +46,7 @@ BuildRequires:	libv4l-devel
 BuildRequires:	libxml2-devel >= 2.0
 BuildRequires:	net-snmp-devel >= 5.6
 BuildRequires:	pkgconfig
-BuildRequires:	resmgr-devel
+%{?with_resmgr:BuildRequires:	resmgr-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	systemd-devel
@@ -109,7 +110,7 @@ Requires:	%{name} = %{version}-%{release}
 %{!?with_libusb0:Requires:	libusb-compat-devel >= 0.1.0}
 Requires:	libusb-devel >= 1.0
 Requires:	libxml2-devel >= 2.0
-Requires:	resmgr-devel
+%{?with_resmgr:Requires:	resmgr-devel}
 Obsoletes:	sane-backends-sane-devel
 Obsoletes:	sane-backends-sane-static
 
