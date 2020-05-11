@@ -6,6 +6,12 @@
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
 %bcond_without	resmgr		# without resmgr
 #
+
+# requires (ioperm, inb and outb) or portaccess function
+%ifnarch aarch64
+%define		with_qcam	1
+%endif
+
 Summary:	SANE - easy local and networked scanner access
 Summary(es.UTF-8):	SANE - acceso a scanners en red y locales
 Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
@@ -418,7 +424,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/pieusb.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/pixma.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/plustek.conf
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/qcam.conf
+%{?with_qcam:%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/qcam.conf}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ricoh.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/rts8891.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/s9036.conf
@@ -502,7 +508,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-pixma.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-plustek.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-pnm.so.*
-%attr(755,root,root) %{_libdir}/sane/libsane-qcam.so.*
+%{?with_qcam:%attr(755,root,root) %{_libdir}/sane/libsane-qcam.so.*}
 %attr(755,root,root) %{_libdir}/sane/libsane-ricoh.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-ricoh2.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-rts8891.so.*
@@ -588,7 +594,7 @@ fi
 %{_mandir}/man5/sane-pixma.5*
 %{_mandir}/man5/sane-plustek.5*
 %{_mandir}/man5/sane-pnm.5*
-%{_mandir}/man5/sane-qcam.5*
+%{?with_qcam:%{_mandir}/man5/sane-qcam.5*}
 %{_mandir}/man5/sane-ricoh.5*
 %{_mandir}/man5/sane-ricoh2.5*
 %{_mandir}/man5/sane-rts8891.5*
