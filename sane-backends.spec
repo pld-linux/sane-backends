@@ -33,7 +33,9 @@ BuildRequires:	automake >= 1:1.15
 %{?with_avahi:BuildRequires:	avahi-devel >= 0.6.24}
 BuildRequires:	cups-devel
 BuildRequires:	curl-devel
+BuildRequires:	fig2dev
 BuildRequires:	gettext-tools >= 0.19.8
+BuildRequires:	ghostscript
 %{?with_gphoto:BuildRequires:	libgphoto2-devel >= 2.5.0}
 %{?with_lpt:BuildRequires:	libieee1284-devel >= 0.1.5}
 BuildRequires:	libjpeg-devel >= 6b
@@ -51,9 +53,11 @@ BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	systemd-devel
 BuildRequires:	texlive-dvips
+BuildRequires:	texlive-format-pdflatex
 BuildRequires:	texlive-latex
 BuildRequires:	texlive-latex-effects
 BuildRequires:	texlive-latex-psnfss
+BuildRequires:	texlive-makeindex
 %{?with_avahi:Requires:	avahi-libs >= 0.6.24}
 %{?with_lpt:Requires:	libieee1284 >= 0.1.5}
 Requires:	net-snmp-libs >= 5.6
