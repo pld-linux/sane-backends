@@ -18,14 +18,14 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.29
+Version:	1.0.31
 Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 # http://www.sane-project.org/source.html is out of date atm. (20180902)
-#Source0Download: https://gitlab.com/sane-project/backends/tags
-Source0:	https://gitlab.com/sane-project/backends/uploads/54f858b20a364fc35d820df935a86478/%{name}-%{version}.tar.gz
-# Source0-md5:	f2618408712399661358ed1ad995f046
+#Source0Download: https://gitlab.com/sane-project/backends/-/tags [URLs from //gitlab.com/sane-project/backends/-/releases with JS support]
+Source0:	https://gitlab.com/sane-project/backends/uploads/8bf1cae2e1803aefab9e5331550e5d5d/%{name}-%{version}.tar.gz
+# Source0-md5:	9c79ed2f9af7ac9b1204c9ac7e377f2b
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-lockpath_group.patch
@@ -304,12 +304,12 @@ Sterownik SANE do urządzeń obsługiwanych przez system Video4Linux.
 %{__autoheader}
 %{__automake}
 %configure \
-	%{?with_avahi:--enable-avahi} \
+	--disable-locking \
 	--enable-pnm-backend \
 	--enable-pthread \
 	--enable-static \
-	%{?with_gphoto:--with-gphoto2} \
-	--disable-locking
+	--with-avahi%{!?with_avahi:=no} \
+	%{?with_gphoto:--with-gphoto2}
 
 # -j1 for .tex build
 %{__make} -j1
@@ -336,7 +336,7 @@ cp -p tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %endif
 
 # packaged as %doc
-%{__rm} $RPM_BUILD_ROOT%{_docdir}/sane-backends/{AUTHORS,COPYING,ChangeLog,LICENSE,NEWS,PROBLEMS,PROJECTS,README*,backend-writing.txt,sane-*.html,sane.{pdf,ps}}
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/sane-backends/{AUTHORS,COPYING,ChangeLog,LICENSE,NEWS,PROBLEMS,PROJECTS,README*,backend-writing.txt,sane-*.html}
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/sane-backends/{ChangeLogs,canon,gt68xx,leo,matsushita,mustek,mustek_usb,mustek_usb2,niash,plustek,sceptre,teco,u12,umax}
 
 # only shared modules - shut up check-files
@@ -383,6 +383,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon630u.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon_dr.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/canon_lide70.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/cardscan.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/coolscan.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/coolscan2.conf
@@ -459,6 +460,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-canon.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon630u.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-canon_dr.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-canon_lide70.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-cardscan.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-coolscan.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-coolscan2.so.*
@@ -546,6 +548,7 @@ fi
 %{_mandir}/man5/sane-canon.5*
 %{_mandir}/man5/sane-canon630u.5*
 %{_mandir}/man5/sane-canon_dr.5*
+%{_mandir}/man5/sane-canon_lide70.5*
 %{_mandir}/man5/sane-cardscan.5*
 %{_mandir}/man5/sane-coolscan.5*
 %{_mandir}/man5/sane-coolscan2.5*
