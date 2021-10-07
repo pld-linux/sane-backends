@@ -18,14 +18,14 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.31
-Release:	2
+Version:	1.0.32
+Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 # http://www.sane-project.org/source.html is out of date atm. (20180902)
 #Source0Download: https://gitlab.com/sane-project/backends/-/tags [URLs from //gitlab.com/sane-project/backends/-/releases with JS support]
-Source0:	https://gitlab.com/sane-project/backends/uploads/8bf1cae2e1803aefab9e5331550e5d5d/%{name}-%{version}.tar.gz
-# Source0-md5:	9c79ed2f9af7ac9b1204c9ac7e377f2b
+Source0:	https://gitlab.com/sane-project/backends/uploads/104f09c07d35519cc8e72e604f11643f/%{name}-%{version}.tar.gz
+# Source0-md5:	51ff581b911fc9b7b6b5ae6959f9089b
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-lockpath_group.patch
@@ -35,6 +35,7 @@ Patch3:		%{name}-link.patch
 Patch4:		%{name}-1.0.23-sane-config-multilib.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.69
+BuildRequires:	autoconf-archive
 BuildRequires:	automake >= 1:1.15
 %{?with_avahi:BuildRequires:	avahi-devel >= 0.6.24}
 BuildRequires:	cups-devel
@@ -44,7 +45,7 @@ BuildRequires:	gettext-tools >= 0.19.8
 BuildRequires:	ghostscript
 %{?with_gphoto:BuildRequires:	libgphoto2-devel >= 2.5.0}
 %{?with_lpt:BuildRequires:	libieee1284-devel >= 0.1.5}
-BuildRequires:	libjpeg-devel >= 6b
+BuildRequires:	libjpeg-turbo-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool >= 2:2.4.6
@@ -54,6 +55,8 @@ BuildRequires:	libv4l-devel
 BuildRequires:	libxml2-devel >= 2.0
 BuildRequires:	net-snmp-devel >= 5.6
 BuildRequires:	pkgconfig
+BuildRequires:	python3
+BuildRequires:	python3-modules
 %{?with_resmgr:BuildRequires:	resmgr-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0

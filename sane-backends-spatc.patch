@@ -10,7 +10,7 @@
 +
  #ifdef HAVE_SYS_IO_H
  # include <sys/io.h>	/* use where available (glibc 2.x, for example) */
- #elif HAVE_ASM_IO_H
+ # ifndef SANE_HAVE_SYS_IO_H_WITH_INB_OUTB
 @@ -72,6 +76,8 @@
  
  #else
@@ -19,12 +19,12 @@
 +
  #endif
  
- #include <sane/sane.h>
+ #include "../include/sane/sane.h"
 --- sane-1.0.2/sanei/sanei_pio.c.orig	Thu May 18 18:24:42 2000
 +++ sane-1.0.2/sanei/sanei_pio.c	Thu May 18 18:25:31 2000
 @@ -58,6 +58,10 @@
- # include <unistd.h>
  #endif
+ #include <sys/types.h>
  
 +#ifdef __sparc__
 +#define IO_SUPPORT_MISSING
@@ -32,7 +32,7 @@
 +
  #ifdef HAVE_SYS_IO_H
  # include <sys/io.h>	/* use where available (glibc 2.x, for example) */
- #elif HAVE_ASM_IO_H
+ # ifndef SANE_HAVE_SYS_IO_H_WITH_INB_OUTB
 @@ -83,6 +87,7 @@
  
  #else
@@ -40,4 +40,4 @@
 +#endif
  #endif
  
- #include <sane/sane.h>
+ #include "../include/sane/sane.h"
