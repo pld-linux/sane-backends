@@ -5,6 +5,7 @@
 %bcond_without	avahi		# Avahi support for saned and net backend
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
 %bcond_without	resmgr		# without resmgr
+%bcond_without	static_libs	# static library
 #
 
 # requires (ioperm, inb and outb) or portaccess function
@@ -58,7 +59,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python3
 BuildRequires:	python3-modules
 %{?with_resmgr:BuildRequires:	resmgr-devel}
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.527
 BuildRequires:	sed >= 4.0
 BuildRequires:	systemd-devel
 BuildRequires:	texlive-dvips
@@ -310,7 +311,7 @@ Sterownik SANE do urządzeń obsługiwanych przez system Video4Linux.
 	--disable-locking \
 	--enable-pnm-backend \
 	--enable-pthread \
-	--enable-static \
+	%{__enable_disable static_libs static} \
 	--with-avahi%{!?with_avahi:=no} \
 	%{?with_gphoto:--with-gphoto2}
 
@@ -343,7 +344,7 @@ cp -p tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/sane-backends/{ChangeLogs,canon,gt68xx,leo,matsushita,mustek,mustek_usb,mustek_usb2,niash,plustek,sceptre,teco,u12,umax}
 
 # only shared modules - shut up check-files
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la,a}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la%{?with_static_libs:,a}}
 
 %find_lang %{name} --all-name
 
@@ -637,9 +638,11 @@ fi
 %{_aclocaldir}/sane-backends.m4
 %{_pkgconfigdir}/sane-backends.pc
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libsane.a
+%endif
 
 %files saned
 %defattr(644,root,root,755)
