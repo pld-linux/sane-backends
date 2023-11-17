@@ -19,21 +19,19 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.0.32
+Version:	1.2.1
 Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 # http://www.sane-project.org/source.html is out of date atm. (20180902)
 #Source0Download: https://gitlab.com/sane-project/backends/-/tags [URLs from //gitlab.com/sane-project/backends/-/releases with JS support]
-Source0:	https://gitlab.com/sane-project/backends/uploads/104f09c07d35519cc8e72e604f11643f/%{name}-%{version}.tar.gz
-# Source0-md5:	51ff581b911fc9b7b6b5ae6959f9089b
+Source0:	https://gitlab.com/sane-project/backends/uploads/110fc43336d0fb5e514f1fdc7360dd87/%{name}-%{version}.tar.gz
+# Source0-md5:	302159419ed1ee216c6e1edbe97c2a8c
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
-Patch0:		%{name}-lockpath_group.patch
-Patch1:		%{name}-mustek-path.patch
-Patch2:		%{name}-spatc.patch
-Patch3:		%{name}-link.patch
-Patch4:		%{name}-1.0.23-sane-config-multilib.patch
+Patch0:		%{name}-mustek-path.patch
+Patch1:		%{name}-link.patch
+Patch2:		%{name}-1.0.23-sane-config-multilib.patch
 URL:		http://www.sane-project.org/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	autoconf-archive
@@ -296,8 +294,6 @@ Sterownik SANE do urządzeń obsługiwanych przez system Video4Linux.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 %{__sed} -i -e 's/m4_esyscmd_s(\[git describe --dirty\])/[%{version}]/' configure.ac
 

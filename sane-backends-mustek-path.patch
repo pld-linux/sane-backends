@@ -1,8 +1,8 @@
 --- sane-backends-1.0.4/tools/mustek600iin-off.c.orig	Mon Aug  9 20:06:01 1999
 +++ sane-backends-1.0.4/tools/mustek600iin-off.c	Sat Feb 10 20:29:19 2001
 @@ -28,7 +28,7 @@
- #include "../include/sane/config.h"
  #include "../include/sane/sanei.h"
+ #include "../include/sane/sanei_directio.h"
  
 -#define MUSTEK_CONF	STRINGIFY(PATH_SANE_CONFIG_DIR) "/mustek.conf"
 +#define MUSTEK_CONF	"/etc/sane.d/mustek.conf"
