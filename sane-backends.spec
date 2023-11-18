@@ -71,8 +71,8 @@ BuildRequires:	texlive-makeindex
 Requires:	net-snmp-libs >= 5.6
 Requires:	setup >= 2.4.10-1
 Obsoletes:	sane
-Obsoletes:	sane-backends-sm3600
-Conflicts:	sane-backends-plustek
+Obsoletes:	sane-backends-sm3600 < 1.0.13
+Conflicts:	sane-backends-plustek < 1.0.13
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -123,8 +123,8 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	libusb-devel >= 1.0
 Requires:	libxml2-devel >= 2.0
 %{?with_resmgr:Requires:	resmgr-devel}
-Obsoletes:	sane-backends-sane-devel
-Obsoletes:	sane-backends-sane-static
+Obsoletes:	sane-backends-sane-devel < 1.0.4-3
+Obsoletes:	sane-backends-sane-static < 1.0.4-3
 
 %description devel
 Development part of SANE.
@@ -144,7 +144,7 @@ Summary(pl.UTF-8):	Statyczne biblioteki SANE
 Summary(pt_BR.UTF-8):	Ferramentas de desenvolvimento para o SANE (bibliotecas estáticas)
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
-Obsoletes:	sane-backends-sane-static
+Obsoletes:	sane-backends-sane-static < 1.0.4-3
 
 %description static
 Static SANE libraries.
@@ -252,12 +252,12 @@ Summary:	SANE backends for parallel port scanners
 Summary(pl.UTF-8):	Sterowniki SANE dla skanerów podłączanych do portu równoległego
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
-Obsoletes:	sane-backends-canon_pp
-Obsoletes:	sane-backends-hpsj5s
+Obsoletes:	sane-backends-canon_pp < 1.0.13
+Obsoletes:	sane-backends-hpsj5s < 1.0.13
 # in case sb used parport scanner
-Obsoletes:	kernel-char-plustek
-Obsoletes:	kernel-smp-char-plustek
-Obsoletes:	sane-backends-plustek
+Obsoletes:	kernel-char-plustek < 1.0.10
+Obsoletes:	kernel-smp-char-plustek < 1.0.10
+Obsoletes:	sane-backends-plustek < 1.0.13
 
 %description pp
 SANE backends for parallel port scanners. It includes the following
