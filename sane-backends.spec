@@ -4,7 +4,7 @@
 %bcond_without	lpt		# parallel port backends (which require libieee1284)
 %bcond_without	avahi		# Avahi support for saned and net backend
 %bcond_with	libusb0		# libusb 0.1.x API instead of libusb 1.0
-%bcond_without	resmgr		# without resmgr
+%bcond_without	resmgr		# resmgr support
 %bcond_without	static_libs	# static library
 #
 
@@ -19,14 +19,14 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.2.1
-Release:	2
+Version:	1.3.1
+Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 # http://www.sane-project.org/source.html is out of date atm. (20180902)
-#Source0Download: https://gitlab.com/sane-project/backends/-/tags [URLs from //gitlab.com/sane-project/backends/-/releases with JS support]
-Source0:	https://gitlab.com/sane-project/backends/uploads/110fc43336d0fb5e514f1fdc7360dd87/%{name}-%{version}.tar.gz
-# Source0-md5:	302159419ed1ee216c6e1edbe97c2a8c
+#Source0Download: https://gitlab.com/sane-project/backends/-/releases
+Source0:	https://gitlab.com/sane-project/backends/uploads/83bdbb6c9a115184c2d48f1fdc6847db/%{name}-%{version}.tar.gz
+# Source0-md5:	3cc2840dbe2e9fbbed165714f37ef2a0
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-mustek-path.patch
@@ -70,7 +70,7 @@ BuildRequires:	texlive-makeindex
 %{?with_lpt:Requires:	libieee1284 >= 0.1.5}
 Requires:	net-snmp-libs >= 5.6
 Requires:	setup >= 2.4.10-1
-Obsoletes:	sane
+Obsoletes:	sane < 1
 Obsoletes:	sane-backends-sm3600 < 1.0.13
 Conflicts:	sane-backends-plustek < 1.0.13
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -337,7 +337,7 @@ cp -p tools/mustek600iin-off $RPM_BUILD_ROOT%{_bindir}
 
 # packaged as %doc
 %{__rm} $RPM_BUILD_ROOT%{_docdir}/sane-backends/{AUTHORS,COPYING,ChangeLog,LICENSE,NEWS,PROBLEMS,PROJECTS,README*,backend-writing.txt,sane-*.html}
-%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/sane-backends/{ChangeLogs,canon,gt68xx,leo,matsushita,mustek,mustek_usb,mustek_usb2,niash,plustek,sceptre,teco,u12,umax}
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/sane-backends/{ChangeLogs,canon,gt68xx,leo,matsushita,mustek,mustek_usb,mustek_usb2,niash,plustek,sceptre,saned,teco,u12,umax}
 
 # only shared modules - shut up check-files
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/sane/libsane-*.{so,la%{?with_static_libs:,a}}
@@ -412,6 +412,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/kvs1025.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/leo.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/lexmark.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/lexmark_x2600.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/ma1509.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/matsushita.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/microtek.conf
@@ -494,6 +495,7 @@ fi
 %attr(755,root,root) %{_libdir}/sane/libsane-kvs40xx.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-leo.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-lexmark.so.*
+%attr(755,root,root) %{_libdir}/sane/libsane-lexmark_x2600.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-ma1509.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-matsushita.so.*
 %attr(755,root,root) %{_libdir}/sane/libsane-microtek.so.*
@@ -581,6 +583,7 @@ fi
 %{_mandir}/man5/sane-kvs40xx.5*
 %{_mandir}/man5/sane-leo.5*
 %{_mandir}/man5/sane-lexmark.5*
+%{_mandir}/man5/sane-lexmark_x2600.5*
 %{_mandir}/man5/sane-ma1509.5*
 %{_mandir}/man5/sane-matsushita.5*
 %{_mandir}/man5/sane-microtek.5*
@@ -642,6 +645,7 @@ fi
 
 %files saned
 %defattr(644,root,root,755)
+%doc doc/saned/saned.install.md
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/saned
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sane.d/saned.conf
 %attr(755,root,root) %{_sbindir}/saned
