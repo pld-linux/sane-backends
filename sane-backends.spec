@@ -291,9 +291,9 @@ Sterownik SANE do urządzeń obsługiwanych przez system Video4Linux.
 # kill libtool.m4 inclusion
 #grep -v '^m4_include' acinclude.m4 > acinclude.m4.tmp
 #%{__mv} acinclude.m4.tmp acinclude.m4
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
 
 %{__sed} -i -e 's/m4_esyscmd_s(\[git describe --dirty\])/[%{version}]/' configure.ac
 
