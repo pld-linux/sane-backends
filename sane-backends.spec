@@ -19,14 +19,14 @@ Summary(ko.UTF-8):	스캐너를 다루는 소프트웨어
 Summary(pl.UTF-8):	SANE - prosta obsługa skanerów lokalnych i sieciowych
 Summary(pt_BR.UTF-8):	SANE - acesso a scanners locais e em rede
 Name:		sane-backends
-Version:	1.3.1
-Release:	3
+Version:	1.4.0
+Release:	1
 License:	relaxed GPL v2+ (libraries), Public Domain (docs)
 Group:		Libraries
 # http://www.sane-project.org/source.html is out of date atm. (20180902)
 #Source0Download: https://gitlab.com/sane-project/backends/-/releases
-Source0:	https://gitlab.com/sane-project/backends/uploads/83bdbb6c9a115184c2d48f1fdc6847db/%{name}-%{version}.tar.gz
-# Source0-md5:	3cc2840dbe2e9fbbed165714f37ef2a0
+Source0:	https://gitlab.com/-/project/429008/uploads/843c156420e211859e974f78f64c3ea3/%{name}-%{version}.tar.gz
+# Source0-md5:	fddb8b164ff1b1ffb576c9ba4173610d
 Source1:	%{name}.rc-inetd
 Source2:	%{name}.m4
 Patch0:		%{name}-mustek-path.patch
